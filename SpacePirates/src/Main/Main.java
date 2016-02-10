@@ -9,11 +9,14 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+import Game.Game;
+
 public class Main extends JFrame implements Runnable
 {
 	static Dimension windowDim;
 	BufferedImage buffer;
 	long lastUpdate = 0;
+	ApplicationState currentState;
 	
 	public static void main(String args[])
 	{
@@ -35,26 +38,28 @@ public class Main extends JFrame implements Runnable
 	public Main()
 	{
 		buffer = new BufferedImage(windowDim.width, windowDim.height, BufferedImage.TYPE_INT_ARGB);
+		currentState = new Game();
 	}
 	
 	public void run()
 	{
 		for(;;)
 		{
-			
+			update();
+			repaint();
 		}
 	}
 	
 	public void update()
 	{
-		
+		currentState.update();
 	}
 	
 	public void paint(Graphics gfx)
 	{
 		Graphics2D g = (Graphics2D) buffer.getGraphics();
 		
-		
+		currentState.draw(g);
 		
 		gfx.drawImage(buffer, 0, 0, null);
 	}
