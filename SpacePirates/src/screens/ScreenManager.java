@@ -1,10 +1,10 @@
-package Screens;
+package screens;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import ResourceLoader.Resources;
+import resources.Resources;
 
 import java.util.HashMap;
 import java.util.Stack;

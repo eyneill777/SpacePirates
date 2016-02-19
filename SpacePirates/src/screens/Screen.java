@@ -1,10 +1,10 @@
-package Screens;
+package screens;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-import ResourceLoader.Resources;
+import resources.Resources;
 
 /**
  * The temples for any screen, add it to the ScreenManager, come on try it.

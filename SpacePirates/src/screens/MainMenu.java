@@ -1,11 +1,6 @@
-package Screens;
+package screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,20 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 public class MainMenu extends Screen{
 	private Container<Window> root;
 	
-	private Texture testTexture;
-	private Sprite testSprite;
-	
 	public MainMenu(){
-		//<temp>
-		Pixmap pix = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
-		pix.setColor(Color.WHITE);
-		pix.fill();
-		testTexture = new Texture(pix); //gpu
-		pix.dispose();
-		
-		testSprite = new Sprite(testTexture);
-		testSprite.setColor(Color.BLUE);
-		//</temp>
 	}
 
 	@Override
@@ -39,6 +21,12 @@ public class MainMenu extends Screen{
 		Window win = new Window("Main Menu", skin);
 		
 		TextButton newButt = new TextButton("New Game", skin);
+		newButt.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				getManager().showScreen("playing");
+			}
+		});
 		
 		TextButton loadButt = new TextButton("Load Game", skin);
 		
@@ -63,27 +51,7 @@ public class MainMenu extends Screen{
 
 	@Override
 	public void render(SpriteBatch batch, float delta) {
-		batch.begin();
 		
-		float speed = 100;
-		if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-			testSprite.setY(testSprite.getY() + speed*delta);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-			testSprite.setY(testSprite.getY() - speed*delta);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-			testSprite.setX(testSprite.getX() - speed*delta);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-			testSprite.setX(testSprite.getX() + speed*delta);
-		}
-		
-		testSprite.rotate(1);
-		testSprite.draw(batch);
-		
-		
-		batch.end();
 	}
 
 	@Override
@@ -103,6 +71,6 @@ public class MainMenu extends Screen{
 	
 	@Override
 	public void dispose() {
-		testTexture.dispose();
+		
 	}
 }
