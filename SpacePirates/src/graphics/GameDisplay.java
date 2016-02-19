@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import Game.Camera;
 import Game.GameWorld;
@@ -14,12 +16,16 @@ import Game.GameWorld;
 public class GameDisplay {
 	private FrameBuffer fbo;
 	private OrthographicCamera ortho;
+	private Vector3 mouseProj;
+	private Vector2 mouse;
 	
 	private Camera cam;
 	private GameWorld world;
 	
 	public GameDisplay(int w, int h){
 		ortho = new OrthographicCamera();
+		mouseProj = new Vector3();
+		mouse = new Vector2();
 		
 		fbo = new FrameBuffer(Format.RGBA8888, w, h, false);
 		fbo.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -36,6 +42,16 @@ public class GameDisplay {
 			fbo = new FrameBuffer(Format.RGBA8888, w, h, false);
 			fbo.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		}
+	}
+	
+	public Vector2 screenToWorld(float x, float y){
+		mouseProj.set(x, y, 0);
+		
+		Vector3 vec3 = ortho.unproject(mouseProj);
+		mouse.x = vec3.x;
+		mouse.y = vec3.y;
+		
+		return mouse;
 	}
 	
 	public void render(SpriteBatch batch, float delta){

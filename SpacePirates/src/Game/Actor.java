@@ -2,8 +2,10 @@ package Game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import resources.Resources;
+
 public abstract class Actor {
-	private Game game;
+	private GameWorld game;
 	private float x, y, width, height, rotation;
 	
 	public float getX(){
@@ -42,12 +44,20 @@ public abstract class Actor {
 		return rotation;
 	}
 	
-	public void setGame(Game game){
+	public void setRotation(float rotation){
+		this.rotation = rotation;
+	}
+	
+	public void setGame(GameWorld game){
 		this.game = game;
 	}
 	
-	public Game getGame(){
+	public GameWorld getGame(){
 		return game;
+	}
+	
+	public Resources getResources(){
+		return game.getResources();
 	}
 	
 	public abstract void update(float delta);

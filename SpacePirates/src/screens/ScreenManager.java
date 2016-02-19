@@ -1,5 +1,6 @@
 package screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -20,7 +21,7 @@ public class ScreenManager {
     private Screen currentScreen;
 
     private Resources resources;
-
+    
     /**
      * @param batch the Sprite batch all the rendering is done on
      * @param skin  the skin for the gui's, most of the time default will be used as of now
@@ -75,6 +76,7 @@ public class ScreenManager {
             screenHistory.push(currentScreen);
         }
         currentScreen = screen;
+        currentScreen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     /**

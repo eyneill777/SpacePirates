@@ -2,8 +2,10 @@ package screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
@@ -41,15 +43,24 @@ public class GameDisplayScreen extends Screen{
 		
 		if(!paused){
 			world.update(delta);
+			world.getCamrea().setRotation(world.getCamrea().getRotation() - 10*delta);
+			Vector2 mouse = display.screenToWorld(Gdx.input.getX(), Gdx.input.getY());
+			
+			world.getActor(0).setX(mouse.x);
+			world.getActor(0).setY(mouse.y);
+		
+			oldPro.set(batch.getProjectionMatrix());
+			oldView.set(batch.getTransformMatrix());
+			
+			display.render(batch, delta);
+			
+			batch.setProjectionMatrix(oldPro);
+			batch.setTransformMatrix(oldView);
 		}
 		
-		oldPro.set(batch.getProjectionMatrix());
-		oldView.set(batch.getTransformMatrix());
-		
-		display.render(batch, delta);
-		
-		batch.setProjectionMatrix(oldPro);
-		batch.setTransformMatrix(oldView);
+		if(paused){
+			batch.setColor(Color.GRAY);
+		}
 		
 		batch.begin();
 		display.draw(batch, delta, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -67,6 +78,8 @@ public class GameDisplayScreen extends Screen{
 	
 	@Override
 	public void load(Skin skin) {
+		world.setResources(getResources());
+		
 		Window win = new Window("Pause", skin);
 		
 		TextButton resumeButt = new TextButton("Resume", skin);
