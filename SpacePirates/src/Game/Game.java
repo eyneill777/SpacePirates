@@ -2,6 +2,8 @@ package Game;
 
 import java.awt.Graphics2D;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import Game.Level.Level;
 import Main.ApplicationState;
 
@@ -22,6 +24,11 @@ public class Game extends ApplicationState
 
 	@Override
 	public void draw(Graphics2D g) 
+	{
+		
+	}
+	
+	public void render(SpriteBatch batch)
 	{
 		
 	}

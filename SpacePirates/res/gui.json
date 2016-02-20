@@ -1,0 +1,70 @@
+{
+	com.badlogic.gdx.graphics.Color: {
+        white: { r: 1, g: 1, b: 1, a: 1 },
+        black: { r: 0, g: 0, b: 0, a: 1 },
+        gray: { r: 0.8, g: 0.8, b: 0.8, a: 1},
+        gray2: {hex: c6c8caff},
+  dark-gray: {r: 0.15, g: 0.15, b: 0.15, a: 1},
+        pink: {hex: ff4c3bff},
+        blue: {hex: 0072bbff},
+        yellow: {hex: ffd034ff},
+        yellow_75: {hex: ffd034bf}
+    },
+    com.badlogic.gdx.graphics.g2d.BitmapFont: {
+        medium: { file: arial26.fnt }
+    },
+    
+    com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+        frame-pink: { name: frame, color: pink },
+        frame-blue: { name: frame, color: blue },
+        frame-dark-gray: { name: frame, color: dark-gray },
+        frame-gray: { name: frame, color: gray },
+        window-gray: { name: bad-window, color: gray},
+        cursor-black: { name: cursor, color: black},
+        selection-yellow: { name: cursor, color: yellow_75}
+    },
+    
+    com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+    	default: {
+    		font: medium, fontColor: dark-gray
+    	},
+    	chat: {
+    		font: medium, fontColor: white
+    	}
+    },
+    
+    com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+    	default: {
+    		titleFont: medium, titleFontColor: dark-gray,
+    		background: window-gray
+    	}
+    },
+    
+    com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+    	default: {
+    		font: medium, fontColor: dark-gray,
+    		up: frame-blue, down: frame-pink
+    	}
+    },
+    
+    com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+    	default: {
+    		font: medium, fontColor: dark-gray,
+    		background: frame, cursor: cursor-black,
+            selection: selection-yellow
+    	}
+    },
+    
+    com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
+    	default: {
+    		font: medium, fontColorSelected: blue, fontColorUnselected: dark-gray,
+    		selection: frame
+    	} 
+    },
+    
+    com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
+    	default: {
+    		vScroll: frame-dark-gray, vScrollKnob: frame-gray
+    	}
+    }
+}

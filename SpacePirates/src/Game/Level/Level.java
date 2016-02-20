@@ -31,7 +31,7 @@ public class Level
 		createPath(map, startPathLength, width, height);
 		createPath(map, startPathLength, width, height);
 		createPath(map, startPathLength, width, height);
-		map=removeDisconnectedRooms(map, width, height);//todo
+		//map=removeDisconnectedRooms(map, width, height);//todo
 		printMap(map);
 	}
 	
