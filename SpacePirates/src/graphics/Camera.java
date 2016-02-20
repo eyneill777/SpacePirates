@@ -1,6 +1,8 @@
-package Game;
+package graphics;
 
 import com.badlogic.gdx.math.MathUtils;
+
+import Game.Actor;
 
 /**
  * @author gabek
@@ -99,7 +101,7 @@ public class Camera{
         ortho.viewportWidth = getWidth();
         ortho.viewportHeight = getHeight();
 
-        ortho.up.set(MathUtils.cosDeg(rot + 90),  -MathUtils.sinDeg(rot + 90), 0);
-        ortho.direction.set(0, 0, 1);
+        ortho.up.set(MathUtils.cosDeg(rot + 90),  MathUtils.sinDeg(rot + 90), 0);
+        ortho.direction.set(0, 0, -1);
     }
 }

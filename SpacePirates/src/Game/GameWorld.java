@@ -4,11 +4,14 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import graphics.Camera;
+import input.PlayerInput;
 import resources.Resources;
 
 public class GameWorld {
 	private Camera camera;
 	private Resources resources;
+	private PlayerInput playerInput;
 	private ArrayList<Actor> actors;
 	private ArrayList<Actor> addList;
 	
@@ -19,10 +22,15 @@ public class GameWorld {
 		
 		actors = new ArrayList<>();
 		addList = new ArrayList<>();
-		addActor(new TestActor());
-
-		//camera.setTarget(actors.get(0));
-		//camera.setTracking(true);
+		addActor(new Player());
+	}
+	
+	public void setPlayerInput(PlayerInput playerInput){
+		this.playerInput = playerInput;
+	}
+	
+	public PlayerInput getPlayerInput(){
+		return playerInput;
 	}
 	
 	public void addActor(Actor actor){

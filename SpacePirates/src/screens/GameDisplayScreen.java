@@ -16,12 +16,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import Game.GameWorld;
 import graphics.GameDisplay;
+import input.Actions;
+import input.PlayerInput;
 
 public class GameDisplayScreen extends Screen{
 	private Matrix4 oldPro, oldView;
 	private GameDisplay display;
 	private GameWorld world;
 	private Container<Window> pauseMenu;
+	private PlayerInput playerInput;
 	private boolean paused;
 	
 	public GameDisplayScreen(GameWorld world) {
@@ -33,6 +36,12 @@ public class GameDisplayScreen extends Screen{
 		
 		display = new GameDisplay(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		display.setTarget(world, world.getCamrea());
+		
+		
+		playerInput = Actions.desktopDefault();
+		playerInput.setMouseControl(display.getMouseControl());
+		
+		world.setPlayerInput(playerInput);
 	}
 	
 	@Override
@@ -43,11 +52,7 @@ public class GameDisplayScreen extends Screen{
 		
 		if(!paused){
 			world.update(delta);
-			world.getCamrea().setRotation(world.getCamrea().getRotation() - 10*delta);
-			Vector2 mouse = display.screenToWorld(Gdx.input.getX(), Gdx.input.getY());
-			
-			world.getActor(0).setX(mouse.x);
-			world.getActor(0).setY(mouse.y);
+			display.updateMouse(Gdx.input.getX(), Gdx.input.getY());
 		
 			oldPro.set(batch.getProjectionMatrix());
 			oldView.set(batch.getTransformMatrix());

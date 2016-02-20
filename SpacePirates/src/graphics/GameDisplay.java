@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-import Game.Camera;
 import Game.GameWorld;
 
 public class GameDisplay {
@@ -44,13 +43,15 @@ public class GameDisplay {
 		}
 	}
 	
-	public Vector2 screenToWorld(float x, float y){
+	public void updateMouse(float x, float y){
 		mouseProj.set(x, y, 0);
 		
 		Vector3 vec3 = ortho.unproject(mouseProj);
 		mouse.x = vec3.x;
 		mouse.y = vec3.y;
-		
+	}
+	
+	public Vector2 getMouseControl(){
 		return mouse;
 	}
 	
