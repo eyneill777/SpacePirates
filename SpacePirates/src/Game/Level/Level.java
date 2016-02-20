@@ -1,8 +1,13 @@
 package Game.Level;
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 public class Level 
 {
+	private boolean isFirstPoint = true;
 	int difficulty;
+	int startX, startY;
 	
 	public Level(int difficulty)
 	{
@@ -12,8 +17,8 @@ public class Level
 	
 	private void generateLevel()
 	{
-		int width = (int) (Math.random()*20-10)+difficulty*3;
-		int height = (int) (Math.random()*20-10)+difficulty*5;
+		int width = (int) (Math.random()*difficulty-difficulty/2.0)+difficulty;
+		int height = (int) (Math.random()*difficulty-difficulty/2.0)+difficulty*2;
 		boolean[][] map = new boolean[width][height];
 		for(int x = 0;x<width;x++)//initialize map to false
 		{
@@ -22,16 +27,26 @@ public class Level
 				map[x][y]=false;
 			}
 		}
-		int startPathLength = difficulty*10;
+		int startPathLength = difficulty;
 		createPath(map, startPathLength, width, height);
 		createPath(map, startPathLength, width, height);
 		createPath(map, startPathLength, width, height);
-		removeDisconnectedRooms();//todo
+		//map=removeDisconnectedRooms(map, width, height);//todo
 		printMap(map);
 	}
 	
-	private void removeDisconnectedRooms()
+	private boolean[][] removeDisconnectedRooms(boolean[][] originalMap, int width, int height)
 	{
+		ArrayList<Point> pointsToCheck = new ArrayList<Point>();
+		pointsToCheck.add(new Point(startX, startY));
+		boolean[][] map = new boolean[width][height];
+		for(int x = 0;x<width;x++)//initialize map to false
+		{
+			for(int y = 0;y<height;y++)
+			{
+				map[x][y]=false;
+			}
+		}
 		
 	}
 	
@@ -39,6 +54,12 @@ public class Level
 	{
 		int x = (int) (Math.random()*width);
 		int y = (int) (Math.random()*height);
+		if(isFirstPoint)
+		{
+			startX = x;
+			startY = y;
+			isFirstPoint = false;
+		}
 		for(int i = 0;i<numPoints;i++)
 		{
 			int dx=0, dy=0;
