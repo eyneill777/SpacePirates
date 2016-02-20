@@ -8,7 +8,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import Game.GameWorld;
+import Game.Game;
 import input.Actions;
 import input.PlayerInput;
 import resources.Resources;
@@ -18,7 +18,7 @@ import screens.ScreenManager;
 
 public class GdxMain implements ApplicationListener{
 
-	private GameWorld world;
+	private Game game;
 	private SpriteBatch batch;
 	private ScreenManager screenManager;
 	private Resources resources;
@@ -33,11 +33,11 @@ public class GdxMain implements ApplicationListener{
 		screenManager = new ScreenManager(batch, resources);
 		Gdx.input.setInputProcessor(screenManager.getStage());
 		
-		world = new GameWorld();
+		game = new Game();
 		
 		
 		screenManager.addScreen("main_menu", new MainMenu());
-		screenManager.addScreen("playing", new GameDisplayScreen(world));
+		screenManager.addScreen("playing", new GameDisplayScreen(game));
 		
 		screenManager.showScreen("main_menu");
 	}

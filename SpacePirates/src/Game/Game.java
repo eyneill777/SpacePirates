@@ -8,14 +8,14 @@ import graphics.Camera;
 import input.PlayerInput;
 import resources.Resources;
 
-public class GameWorld {
+public class Game {
 	private Camera camera;
 	private Resources resources;
 	private PlayerInput playerInput;
 	private ArrayList<Actor> actors;
 	private ArrayList<Actor> addList;
 	
-	public GameWorld(){
+	public Game(){
 		camera = new Camera();
 		camera.setWidth(50);
 		camera.setHeight(50);

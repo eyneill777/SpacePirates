@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-import Game.GameWorld;
+import Game.Game;
 
 public class GameDisplay {
 	private FrameBuffer fbo;
@@ -19,7 +19,7 @@ public class GameDisplay {
 	private Vector2 mouse;
 	
 	private Camera cam;
-	private GameWorld world;
+	private Game game;
 	
 	public GameDisplay(int w, int h){
 		ortho = new OrthographicCamera();
@@ -30,8 +30,8 @@ public class GameDisplay {
 		fbo.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 	}
 	
-	public void setTarget(GameWorld world, Camera camera){
-		this.world = world;
+	public void setTarget(Game world, Camera camera){
+		this.game = world;
 		this.cam = camera;
 	}
 	
@@ -67,7 +67,7 @@ public class GameDisplay {
 		
 		batch.begin();
 		
-		world.render(batch);
+		game.render(batch);
 		
 		batch.end();
 		

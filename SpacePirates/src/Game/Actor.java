@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import resources.Resources;
 
 public abstract class Actor {
-	private GameWorld game;
+	private Game game;
 	private float x, y, width, height, rotation;
 	
 	public float getX(){
@@ -48,11 +48,11 @@ public abstract class Actor {
 		this.rotation = rotation;
 	}
 	
-	public void setGame(GameWorld game){
+	public void setGame(Game game){
 		this.game = game;
 	}
 	
-	public GameWorld getGame(){
+	public Game getGame(){
 		return game;
 	}
 	
