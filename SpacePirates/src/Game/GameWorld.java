@@ -17,8 +17,8 @@ public class GameWorld {
 	
 	public GameWorld(){
 		camera = new Camera();
-		camera.setWidth(50);
-		camera.setHeight(50);
+		camera.setWidth(100);
+		camera.setHeight(100);
 		
 		actors = new ArrayList<>();
 		addList = new ArrayList<>();

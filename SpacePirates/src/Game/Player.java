@@ -3,15 +3,28 @@ package Game;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import input.Actions;
 import input.PlayerInput;
 
 public class Player extends Actor{
 	private PlayerInput playerInput;
 	private Sprite boxSprite;
+	private float speed = 20;
 	
 	@Override
 	public void update(float delta) {
-		
+		if(playerInput.isPressed(Actions.MOVE_UP)){
+			setY(getY() + speed*delta);
+		}
+		if(playerInput.isPressed(Actions.MOVE_DOWN)){
+			setY(getY() - speed*delta);
+		}
+		if(playerInput.isPressed(Actions.MOVE_LEFT)){
+			setX(getX() - speed*delta);
+		}
+		if(playerInput.isPressed(Actions.MOVE_RIGHT)){
+			setX(getX() + speed*delta);
+		}
 	}
 
 	@Override
@@ -28,8 +41,8 @@ public class Player extends Actor{
 		playerInput = getGame().getPlayerInput();
 		boxSprite = new Sprite(getResources().box);
 		
-		setWidth(20);
-		setHeight(20);
+		setWidth(10);
+		setHeight(10);
 	}
 
 	@Override
