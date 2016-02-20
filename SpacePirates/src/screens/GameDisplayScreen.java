@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-import Game.GameWorld;
+import Game.Game;
 import graphics.GameDisplay;
 import input.Actions;
 import input.PlayerInput;
@@ -22,26 +22,26 @@ import input.PlayerInput;
 public class GameDisplayScreen extends Screen{
 	private Matrix4 oldPro, oldView;
 	private GameDisplay display;
-	private GameWorld world;
+	private Game game;
 	private Container<Window> pauseMenu;
 	private PlayerInput playerInput;
 	private boolean paused;
 	
-	public GameDisplayScreen(GameWorld world) {
-		this.world = world;
+	public GameDisplayScreen(Game game) {
+		this.game = game;
 		paused = false;
 		
 		oldPro = new Matrix4();
 		oldView = new Matrix4();
 		
 		display = new GameDisplay(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		display.setTarget(world, world.getCamrea());
+		display.setTarget(game, game.getCamrea());
 		
 		
 		playerInput = Actions.desktopDefault();
 		playerInput.setMouseControl(display.getMouseControl());
 		
-		world.setPlayerInput(playerInput);
+		game.setPlayerInput(playerInput);
 	}
 	
 	@Override
@@ -51,7 +51,7 @@ public class GameDisplayScreen extends Screen{
 		}
 		
 		if(!paused){
-			world.update(delta);
+			game.update(delta);
 			display.updateMouse(Gdx.input.getX(), Gdx.input.getY());
 		
 			oldPro.set(batch.getProjectionMatrix());
@@ -83,7 +83,7 @@ public class GameDisplayScreen extends Screen{
 	
 	@Override
 	public void load(Skin skin) {
-		world.setResources(getResources());
+		game.setResources(getResources());
 		
 		Window win = new Window("Pause", skin);
 		
