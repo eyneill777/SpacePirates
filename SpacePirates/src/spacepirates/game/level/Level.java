@@ -31,7 +31,7 @@ public class Level
 		createPath(map, startPathLength, width, height);
 		createPath(map, startPathLength, width, height);
 		createPath(map, startPathLength, width, height);
-		//map=removeDisconnectedRooms(map, width, height);//todo
+		map=removeDisconnectedRooms(map, width, height);
 		printMap(map);
 	}
 	
@@ -47,7 +47,26 @@ public class Level
 				map[x][y]=false;
 			}
 		}
-		
+		while(pointsToCheck.size()>0)
+		{
+			int x=pointsToCheck.get(0).x;
+			int y=pointsToCheck.get(0).y;
+			for(int dx = -1;dx<=1;dx++)
+			{
+				for(int dy=-1;dy<=1;dy++)
+				{
+					if(x+dx>=0 && x+dx<width && y+dy>=0 && y+dy<height && !(dx==0 && dy==0) && (dx+dy == -1 || dx+dy==1))
+					{
+						if(originalMap[x+dx][y+dy] && !map[x+dx][y+dy])
+							pointsToCheck.add(new Point(x+dx, y+dy));
+					}
+				}
+			}
+			
+			map[x][y]=true;
+			pointsToCheck.remove(0);
+		}
+		return map;
 	}
 	
 	private void createPath(boolean[][] map, int numPoints, int width, int height)

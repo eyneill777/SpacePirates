@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import spacepirates.game.level.Level;
 import spacepirates.graphics.Camera;
 import spacepirates.input.PlayerInput;
 import spacepirates.resources.Resources;
@@ -19,6 +20,8 @@ public class Game {
 		camera = new Camera();
 		camera.setWidth(100);
 		camera.setHeight(100);
+		
+		Level level = new Level(5);
 		
 		actors = new ArrayList<>();
 		addList = new ArrayList<>();
