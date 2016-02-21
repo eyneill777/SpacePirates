@@ -1,7 +1,5 @@
 package Game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -18,20 +16,7 @@ public class TestActor extends Actor{
 	
 	@Override
 	public void update(float delta) {
-		if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-			setY(getY() + 20*delta);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-			setY(getY() - 20*delta);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-			setX(getX() - 20*delta);
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-			setX(getX() + 20*delta);
-		}
 		
-		//setRotation(getRotation() + 1 *delta);
 	}
 
 	@Override

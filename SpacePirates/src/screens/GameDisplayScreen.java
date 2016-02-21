@@ -68,7 +68,7 @@ public class GameDisplayScreen extends Screen{
 		}
 		
 		batch.begin();
-		display.draw(batch, delta, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		display.draw(batch, delta);
 		batch.end();
 	}
 	
