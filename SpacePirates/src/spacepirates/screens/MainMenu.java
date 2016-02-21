@@ -1,4 +1,4 @@
-package screens;
+package spacepirates.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -34,6 +34,7 @@ public class MainMenu extends Screen{
 		
 		TextButton quitButt = new TextButton("Quit", skin);
 		quitButt.addListener(new ChangeListener(){
+			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				Gdx.app.exit();
 		}});

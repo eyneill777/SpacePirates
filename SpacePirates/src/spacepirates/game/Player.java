@@ -1,10 +1,10 @@
-package Game;
+package spacepirates.game;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import input.Actions;
-import input.PlayerInput;
+import spacepirates.input.Actions;
+import spacepirates.input.PlayerInput;
 
 public class Player extends Actor{
 	private PlayerInput playerInput;

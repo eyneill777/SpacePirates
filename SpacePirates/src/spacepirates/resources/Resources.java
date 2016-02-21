@@ -1,4 +1,4 @@
-package resources;
+package spacepirates.resources;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;

@@ -1,4 +1,4 @@
-package input;
+package spacepirates.input;
 
 import com.badlogic.gdx.Input;
 

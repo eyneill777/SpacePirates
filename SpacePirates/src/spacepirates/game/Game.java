@@ -1,12 +1,12 @@
-package Game;
+package spacepirates.game;
 
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import graphics.Camera;
-import input.PlayerInput;
-import resources.Resources;
+import spacepirates.graphics.Camera;
+import spacepirates.input.PlayerInput;
+import spacepirates.resources.Resources;
 
 public class Game {
 	private Camera camera;

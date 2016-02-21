@@ -1,4 +1,4 @@
-package Game.Level;
+package spacepirates.game.level;
 
 import java.awt.Point;
 import java.util.ArrayList;

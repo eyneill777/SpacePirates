@@ -1,8 +1,8 @@
-package Game;
+package spacepirates.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import resources.Resources;
+import spacepirates.resources.Resources;
 
 public abstract class Actor {
 	private Game game;

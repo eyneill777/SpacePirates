@@ -1,20 +1,17 @@
-package Main;
+package spacepirates.main;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import Game.Game;
-import input.Actions;
-import input.PlayerInput;
-import resources.Resources;
-import screens.GameDisplayScreen;
-import screens.MainMenu;
-import screens.ScreenManager;
+import spacepirates.game.Game;
+import spacepirates.resources.Resources;
+import spacepirates.screens.GameDisplayScreen;
+import spacepirates.screens.MainMenu;
+import spacepirates.screens.ScreenManager;
 
 public class GdxMain implements ApplicationListener{
 

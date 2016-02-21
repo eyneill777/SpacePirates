@@ -1,4 +1,4 @@
-package graphics;
+package spacepirates.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-import Game.Game;
+import spacepirates.game.Game;
 
 public class GameDisplay {
 	private FrameBuffer fbo;

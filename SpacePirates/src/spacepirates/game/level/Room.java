@@ -1,4 +1,4 @@
-package Game.Level;
+package spacepirates.game.level;
 
 public class Room 
 {

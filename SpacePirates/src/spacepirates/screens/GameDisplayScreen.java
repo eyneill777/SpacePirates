@@ -1,11 +1,10 @@
-package screens;
+package spacepirates.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
@@ -14,10 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-import Game.Game;
-import graphics.GameDisplay;
-import input.Actions;
-import input.PlayerInput;
+import spacepirates.game.Game;
+import spacepirates.graphics.GameDisplay;
+import spacepirates.input.Actions;
+import spacepirates.input.PlayerInput;
 
 public class GameDisplayScreen extends Screen{
 	private Matrix4 oldPro, oldView;
