@@ -71,7 +71,6 @@ public abstract class Actor {
 		return game.getResources();
 	}
 	
-	public abstract boolean collidesWith(Actor other);
 	public abstract void update(float delta);
 	public abstract void render(SpriteBatch batch);
 	public abstract void init();

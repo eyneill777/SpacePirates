@@ -11,7 +11,7 @@ import spacepirates.input.PlayerInput;
 public class Player extends BoxActor{
 	private PlayerInput playerInput;
 	private Sprite boxSprite;
-	private float speed = 300;
+	private float speed = 6;
 	
 	public Player() {
 		super();
@@ -22,19 +22,19 @@ public class Player extends BoxActor{
 		super.update(delta);
 		float fx = 0, fy = 0;
 		if(playerInput.isPressed(Actions.MOVE_UP)){
-			fy += speed*delta;
+			fy += speed;
 		}
 		if(playerInput.isPressed(Actions.MOVE_DOWN)){
-			fy -= speed*delta;
+			fy -= speed;
 		}
 		if(playerInput.isPressed(Actions.MOVE_LEFT)){
-			fx -= speed*delta;
+			fx -= speed;
 		}
 		if(playerInput.isPressed(Actions.MOVE_RIGHT)){
-			fx += speed*delta;
+			fx += speed;
 		}
 		
-		move(fx, fy);
+		walk(fx, fy, 1);
 	}
 
 	@Override
@@ -42,6 +42,8 @@ public class Player extends BoxActor{
 		boxSprite.setX(getX());
 		boxSprite.setY(getY());
 		boxSprite.setSize(getWidth(), getHeight());
+		boxSprite.setOrigin(getWidth()/2, getHeight()/2);
+		boxSprite.setRotation(getRotation());
 		
 		boxSprite.draw(batch);
 	}
@@ -59,11 +61,6 @@ public class Player extends BoxActor{
 	@Override
 	public void remove() {
 		super.remove();
-	}
-
-	@Override
-	public boolean collidesWith(Actor other) {
-		return true;
 	}
 
 	@Override

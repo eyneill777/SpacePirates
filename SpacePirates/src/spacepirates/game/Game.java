@@ -66,7 +66,7 @@ public class Game {
 		}
 		addList.clear();
 		
-		world.step(1/60f, 6, 2);
+		world.step(delta, 6, 2);
 		
 		for(Actor actor: actors){
 			actor.update(delta);

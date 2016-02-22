@@ -2,6 +2,8 @@ package spacepirates.game;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 
@@ -21,13 +23,14 @@ public class TestActor extends BoxActor{
 	@Override
 	public void update(float delta) {
 		super.update(delta);
+		//walk(0,1, .95f);
 	}
 
 	@Override
 	public void render(SpriteBatch batch) {
 		testSprite.setX(getX());
 		testSprite.setY(getY());
-		testSprite.setRotation(getRotation());
+		testSprite.setRotation(270);
 		testSprite.draw(batch);
 	}
 
@@ -45,10 +48,22 @@ public class TestActor extends BoxActor{
 	}
 
 	@Override
-	public boolean collidesWith(Actor other) {
-		return true;
+	protected BodyDef buildBodyDef(){
+		BodyDef bodyDef = super.buildBodyDef();
+		//bodyDef.type = BodyType.StaticBody;
+		
+		return bodyDef;
 	}
-
+	
+	@Override
+	protected FixtureDef buildFixtureDef(){
+		FixtureDef fixtureDef = super.buildFixtureDef();
+		
+		fixtureDef.density = 1;
+		
+		return fixtureDef;
+	}
+	
 	@Override
 	protected Shape buildShape() {
 		PolygonShape boxShape = new PolygonShape();

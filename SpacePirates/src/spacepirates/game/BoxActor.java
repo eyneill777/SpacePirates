@@ -1,6 +1,7 @@
 package spacepirates.game;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -22,12 +23,21 @@ public abstract class BoxActor extends Actor{
 		fixtureDef.shape = shape;
 		fixture = body.createFixture(fixtureDef);
 		
+		body.setUserData(this);
+		
+		body.setLinearDamping(body.getMass()/2);
+		
 		shape.dispose();
 	}
 
 	@Override
 	public void update(float delta){
+		setRotation(MathUtils.radiansToDegrees * body.getAngle());
 		setPosition(body.getPosition().x - getWidth()/2, body.getPosition().y - getWidth()/2);
+		if(Math.abs(body.getLinearVelocity().x) < .1f && Math.abs(body.getLinearVelocity().y) < .1f && 
+				!body.getLinearVelocity().isZero()) {
+			body.setLinearVelocity(Vector2.Zero);
+		}
 	}
 	
 	@Override
@@ -35,11 +45,18 @@ public abstract class BoxActor extends Actor{
 		getGame().getWorld().destroyBody(body);
 	}
 	
-	public void move(float x, float y){
-		float diffX = x - body.getLinearVelocity().x;
-		float diffY = y - body.getLinearVelocity().y;
-		if(Math.abs(diffX) > .01 || Math.abs(diffY) > .01){
-			body.applyLinearImpulse(diffX*3, diffY*3, body.getWorldCenter().x, body.getWorldCenter().y, true);
+	public void walk(float maxX, float maxY, float acceleration){
+		float diffX = maxX - body.getLinearVelocity().x;
+		float diffY = maxY - body.getLinearVelocity().y;
+		if(Math.abs(diffX) > .1f || Math.abs(diffY) > .1f){
+			if(Math.abs(diffX) > acceleration){
+				diffX = (diffX < 0)?-acceleration:acceleration;
+			}
+			if(Math.abs(diffY) > acceleration){
+				diffY = (diffY < 0)?-acceleration:acceleration;
+			}
+			
+			body.applyLinearImpulse(diffX, diffY, body.getWorldCenter().x, body.getWorldCenter().y, true);
 		}
 	}
 	
@@ -48,7 +65,6 @@ public abstract class BoxActor extends Actor{
 		
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.fixedRotation = true;
-		bodyDef.linearDamping = .9f;
 		
 		bodyDef.position.x = getX();
 		bodyDef.position.y = getY();
@@ -59,7 +75,8 @@ public abstract class BoxActor extends Actor{
 	protected FixtureDef buildFixtureDef(){
 		FixtureDef fixtureDef = new FixtureDef();
 		
-		fixtureDef.density = 10;
+		fixtureDef.density = 1;
+		fixtureDef.friction = .5f;
 		
 		return fixtureDef;
 	}

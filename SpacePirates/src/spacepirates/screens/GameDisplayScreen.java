@@ -19,6 +19,8 @@ import spacepirates.input.Actions;
 import spacepirates.input.PlayerInput;
 
 public class GameDisplayScreen extends Screen{
+	private float updateRate = 1/60f;
+	
 	private Matrix4 oldPro, oldView;
 	private GameDisplay display;
 	private Game game;
@@ -50,9 +52,9 @@ public class GameDisplayScreen extends Screen{
 		}
 		
 		if(!paused){
-			game.update(delta);
+			game.update(updateRate);
 			display.updateMouse(Gdx.input.getX(), Gdx.input.getY());
-		
+			
 			oldPro.set(batch.getProjectionMatrix());
 			oldView.set(batch.getTransformMatrix());
 			
