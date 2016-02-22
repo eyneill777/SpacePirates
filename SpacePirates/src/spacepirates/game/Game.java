@@ -3,6 +3,8 @@ package spacepirates.game;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 
 import spacepirates.game.level.Level;
 import spacepirates.graphics.Camera;
@@ -13,19 +15,23 @@ public class Game {
 	private Camera camera;
 	private Resources resources;
 	private PlayerInput playerInput;
+	private World world;
 	private ArrayList<Actor> actors;
 	private ArrayList<Actor> addList;
 	
 	public Game(){
+		world = new World(Vector2.Zero, true);
+		
 		camera = new Camera();
-		camera.setWidth(100);
-		camera.setHeight(100);
+		camera.setWidth(10);
+		camera.setHeight(10);
 		
 		Level level = new Level(5);
 		
 		actors = new ArrayList<>();
 		addList = new ArrayList<>();
 		addActor(new Player());
+		addActor(new TestActor());
 	}
 	
 	public void setPlayerInput(PlayerInput playerInput){
@@ -60,6 +66,8 @@ public class Game {
 		}
 		addList.clear();
 		
+		world.step(1/60f, 6, 2);
+		
 		for(Actor actor: actors){
 			actor.update(delta);
 		}
@@ -76,6 +84,14 @@ public class Game {
 	
 	public Camera getCamrea(){
 		return camera;
+	}
+	
+	public World getWorld(){
+		return world;
+	}
+	
+	public void dispose(){
+		world.dispose();
 	}
 	
 }

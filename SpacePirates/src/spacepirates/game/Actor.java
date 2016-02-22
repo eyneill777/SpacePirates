@@ -6,7 +6,8 @@ import spacepirates.resources.Resources;
 
 public abstract class Actor {
 	private Game game;
-	private float x, y, width, height, rotation;
+	private float x, y, width, height,  rotation;
+	
 	
 	public float getX(){
 		return x;
@@ -25,11 +26,11 @@ public abstract class Actor {
 	}
 	
 	public float getWidth(){
-		return width;
+		return this.width;
 	}
 	
 	public float getHeight(){
-		return height;
+		return this.height;
 	}
 	
 	public void setWidth(float width){
@@ -38,6 +39,16 @@ public abstract class Actor {
 	
 	public void setHeight(float height){
 		this.height = height;
+	}
+	
+	public void setSize(float width, float height){
+		this.width = width;
+		this.height = height;
+	}
+	
+	public void setPosition(float x, float y){
+		this.x = x;
+		this.y = y;
 	}
 	
 	public float getRotation(){
@@ -60,6 +71,7 @@ public abstract class Actor {
 		return game.getResources();
 	}
 	
+	public abstract boolean collidesWith(Actor other);
 	public abstract void update(float delta);
 	public abstract void render(SpriteBatch batch);
 	public abstract void init();

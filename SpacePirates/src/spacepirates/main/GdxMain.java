@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Box2D;
 
 import spacepirates.game.Game;
 import spacepirates.resources.Resources;
@@ -22,6 +23,7 @@ public class GdxMain implements ApplicationListener{
 	
 	@Override
 	public void create() {
+		Box2D.init();
 		resources = new Resources();
 		resources.loadAll();
 		
@@ -57,6 +59,7 @@ public class GdxMain implements ApplicationListener{
 	public void dispose() {
 		batch.dispose();
 		screenManager.dispose();
+		game.dispose();
 	}
 	
 	@Override
