@@ -1,13 +1,14 @@
 package spacepirates.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.Fixture;
 
 import spacepirates.resources.Resources;
 
 public abstract class Actor {
 	private Game game;
 	private float x, y, width, height,  rotation;
-	
 	
 	public float getX(){
 		return x;
@@ -70,6 +71,9 @@ public abstract class Actor {
 	public Resources getResources(){
 		return game.getResources();
 	}
+	
+	public abstract void beginCollision(Fixture thisFixture, Fixture otherFixture, Contact contact);
+	public abstract void endCollision(Fixture thisFixture, Fixture otherFixture, Contact contact);
 	
 	public abstract void update(float delta);
 	public abstract void render(SpriteBatch batch);

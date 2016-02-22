@@ -8,10 +8,10 @@ public enum Actions {
 	public static PlayerInput desktopDefault(){
 		PlayerInput playerInputDesktop = new PlayerInput(Actions.values());
 		
-		playerInputDesktop.bind(MOVE_UP, Input.Keys.UP);
-		playerInputDesktop.bind(MOVE_DOWN, Input.Keys.DOWN);
-		playerInputDesktop.bind(MOVE_LEFT, Input.Keys.LEFT);
-		playerInputDesktop.bind(MOVE_RIGHT, Input.Keys.RIGHT);
+		playerInputDesktop.bind(MOVE_UP, Input.Keys.W);
+		playerInputDesktop.bind(MOVE_DOWN, Input.Keys.S);
+		playerInputDesktop.bind(MOVE_LEFT, Input.Keys.A);
+		playerInputDesktop.bind(MOVE_RIGHT, Input.Keys.D);
 		
 		return playerInputDesktop;
 	}

@@ -59,7 +59,7 @@ public class TestActor extends BoxActor{
 	protected FixtureDef buildFixtureDef(){
 		FixtureDef fixtureDef = super.buildFixtureDef();
 		
-		fixtureDef.density = 1;
+		fixtureDef.density = 2;
 		
 		return fixtureDef;
 	}

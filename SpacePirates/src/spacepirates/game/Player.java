@@ -1,5 +1,6 @@
 package spacepirates.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -35,15 +36,18 @@ public class Player extends BoxActor{
 		}
 		
 		walk(fx, fy, 1);
+		
+		if(getCollisions().size() > 0){
+			boxSprite.setColor(Color.BLUE);
+		} else {
+			boxSprite.setColor(Color.GREEN);
+		}
 	}
 
 	@Override
 	public void render(SpriteBatch batch) {
 		boxSprite.setX(getX());
 		boxSprite.setY(getY());
-		boxSprite.setSize(getWidth(), getHeight());
-		boxSprite.setOrigin(getWidth()/2, getHeight()/2);
-		boxSprite.setRotation(getRotation());
 		
 		boxSprite.draw(batch);
 	}
@@ -56,6 +60,9 @@ public class Player extends BoxActor{
 		
 		setWidth(1);
 		setHeight(1);
+		
+		boxSprite.setSize(getWidth(), getHeight());
+		boxSprite.setOrigin(getWidth()/2, getHeight()/2);
 	}
 
 	@Override

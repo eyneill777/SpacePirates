@@ -108,6 +108,8 @@ public class GameDisplayScreen extends Screen{
 		win.add(resumeButt).pad(10, 10, 5, 10).row();
 		win.add(exitButt).pad(5, 10, 10, 10);
 		
+		win.setMovable(false);
+		
 		pauseMenu = new Container<>(win);
 		pauseMenu.setFillParent(true);
 	}

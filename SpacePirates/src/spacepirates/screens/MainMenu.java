@@ -45,6 +45,7 @@ public class MainMenu extends Screen{
 		win.add(settingsButt).pad(5, 10, 5, 10).row();
 		win.add(quitButt).pad(5, 10, 10, 10);
 		
+		win.setMovable(false);
 		
 		root = new Container<>(win);
 		root.setFillParent(true);
