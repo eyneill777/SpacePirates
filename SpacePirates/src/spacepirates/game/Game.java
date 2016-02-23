@@ -11,15 +11,27 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 
 import spacepirates.game.level.Level;
+import spacepirates.game.level.Room;
+import spacepirates.game.level.RoomDoor;
 import spacepirates.graphics.Camera;
 import spacepirates.input.PlayerInput;
 import spacepirates.resources.Resources;
 
 public class Game implements ContactListener{
+	public static final short CAT_BOUNDARY    = 0x01;
+	public static final short CAT_AGENT       = 0x02;
+	public static final short CAT_TILE        = 0x04;
+	public static final short CAT_BULLET      = 0x08;
+	public static final short CAT_ITEM        = 0x10;
+	public static final short CAT_OPEN_PORTEL = 0x20;
+	public static final short CAT_ALL         = -1;
+	
 	private Camera camera;
 	private Resources resources;
 	private PlayerInput playerInput;
 	private World world;
+	private Room currentRoom;
+	private Room roomToLoad;
 	private ArrayList<Actor> actors;
 	private ArrayList<Actor> removeList;
 	private ArrayList<Actor> addList;
@@ -34,11 +46,37 @@ public class Game implements ContactListener{
 		
 		Level level = new Level(5);
 		
-		actors = new ArrayList<>();
+		roomToLoad = new Room();
+		
+		
+		//actors = new ArrayList<>();
 		addList = new ArrayList<>();
 		removeList = new ArrayList<>();
-		addActor(new Player());
+		
+		Player player = new Player();
+		camera.setTarget(player);
+		camera.setTracking(true);
+		
+		addActor(player);
 		addActor(new TestActor());
+	}
+	
+	private void loadRoom(Room room){
+		if(actors != null){
+			for(Actor actor: actors){
+				actor.store();
+			}
+		}
+		
+		
+		room.setGame(this);
+		currentRoom = room;
+		actors = room.getActors();
+		for(Actor actor: actors){
+			actor.setGame(this);
+			actor.init();
+		}
+		room.loadRoom();
 	}
 	
 	public void setPlayerInput(PlayerInput playerInput){
@@ -71,6 +109,12 @@ public class Game implements ContactListener{
 	}
 	
 	public void update(float delta){
+		if(roomToLoad != null){
+			loadRoom(roomToLoad);
+			roomToLoad = null;
+		}
+		
+		
 		for(Actor actor: addList){
 			actors.add(actor);
 			actor.init();
@@ -85,7 +129,7 @@ public class Game implements ContactListener{
 		
 		for(Actor actor: removeList){
 			actors.remove(actor);
-			actor.remove();
+			actor.store();
 		}
 		removeList.clear();
 		
@@ -93,6 +137,7 @@ public class Game implements ContactListener{
 	}
 	
 	public void render(SpriteBatch batch){
+		currentRoom.renderBackground(batch);
 		for(Actor actor: actors){
 			actor.render(batch);
 		}
@@ -113,8 +158,8 @@ public class Game implements ContactListener{
 
 	@Override
 	public void beginContact(Contact contact) {
-		Actor actorA = (Actor)contact.getFixtureA().getBody().getUserData();
-		Actor actorB = (Actor)contact.getFixtureB().getBody().getUserData();
+		Collidable actorA = (Collidable)contact.getFixtureA().getBody().getUserData();
+		Collidable actorB = (Collidable)contact.getFixtureB().getBody().getUserData();
 		
 		actorA.beginCollision(contact.getFixtureA(), contact.getFixtureB(), contact);
 		actorB.beginCollision(contact.getFixtureB(), contact.getFixtureA(), contact);
@@ -122,8 +167,8 @@ public class Game implements ContactListener{
 
 	@Override
 	public void endContact(Contact contact) {
-		Actor actorA = (Actor)contact.getFixtureA().getBody().getUserData();
-		Actor actorB = (Actor)contact.getFixtureB().getBody().getUserData();
+		Collidable actorA = (Collidable)contact.getFixtureA().getBody().getUserData();
+		Collidable actorB = (Collidable)contact.getFixtureB().getBody().getUserData();
 		
 		actorA.endCollision(contact.getFixtureA(), contact.getFixtureB(), contact);
 		actorB.endCollision(contact.getFixtureB(), contact.getFixtureA(), contact);

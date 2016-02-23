@@ -9,35 +9,26 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Shape;
 
-public abstract class BoxActor extends Actor{
+public abstract class BoxActor extends Actor implements Collidable{
 	private ArrayList<Collision> collisions;
 	private boolean flying = false;
 	private Body body;
-	private Fixture fixture;
 	private float groundFriction = .5f;
 	
 	@Override
 	public void init(){
 		collisions = new ArrayList<>();
 		
-		
-		Shape shape = buildShape();
 		BodyDef bodyDef = buildBodyDef();
-		FixtureDef fixtureDef = buildFixtureDef();
 		
 		body = getGame().getWorld().createBody(bodyDef);
-		fixtureDef.shape = shape;
-		fixture = body.createFixture(fixtureDef);
-		
 		body.setUserData(this);
+		buildFixtures(body);
 		
 		if(!flying){
 			body.setLinearDamping(body.getMass()*groundFriction);
 		}
-		
-		shape.dispose();
 	}
 
 	public void setFlying(boolean flying){
@@ -54,11 +45,11 @@ public abstract class BoxActor extends Actor{
 	@Override
 	public void update(float delta){
 		setRotation(MathUtils.radiansToDegrees * body.getAngle());
-		setPosition(body.getPosition().x - getWidth()/2, body.getPosition().y - getWidth()/2);
+		setPosition(body.getPosition().x - getWidth()/2, body.getPosition().y - getHeight()/2);
 	}
 	
 	@Override
-	public void remove(){
+	public void store(){
 		getGame().getWorld().destroyBody(body);
 		body = null;
 	}
@@ -84,13 +75,16 @@ public abstract class BoxActor extends Actor{
 		return collisions;
 	}
 	
+	public Body getBody(){
+		return body;
+	}
+	
 	@Override
 	public void beginCollision(Fixture thisFixture, Fixture otherFixture, Contact contact){
 		Collision col = new Collision();
 		
 		col.thisFixture = thisFixture;
 		col.otherFixture = otherFixture;
-		col.otherActor = (Actor)otherFixture.getBody().getUserData();
 		
 		collisions.add(col);
 	}
@@ -114,8 +108,8 @@ public abstract class BoxActor extends Actor{
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.fixedRotation = true;
 		
-		bodyDef.position.x = getX();
-		bodyDef.position.y = getY();
+		bodyDef.position.x = getX() + getWidth()/2;
+		bodyDef.position.y = getY() + getHeight()/2;
 		
 		return bodyDef;
 	}
@@ -129,5 +123,5 @@ public abstract class BoxActor extends Actor{
 		return fixtureDef;
 	}
 	
-	protected abstract Shape buildShape();
+	protected abstract void buildFixtures(Body body);
 }

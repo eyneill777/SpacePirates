@@ -3,6 +3,8 @@ package spacepirates.game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 
@@ -66,12 +68,31 @@ public class Player extends BoxActor{
 	}
 
 	@Override
-	public void remove() {
-		super.remove();
+	public void store() {
+		super.store();
 	}
 
 	@Override
-	protected Shape buildShape() {
+	protected FixtureDef buildFixtureDef() {
+		FixtureDef fixtureDef = super.buildFixtureDef();
+		fixtureDef.filter.categoryBits = Game.CAT_AGENT;
+		fixtureDef.filter.maskBits = Game.CAT_ALL & ~Game.CAT_OPEN_PORTEL;
+		
+		return fixtureDef;
+	}
+	
+	@Override
+	protected void buildFixtures(Body body) {
+		Shape shape = buildShape();
+		FixtureDef fixDef = buildFixtureDef();
+		fixDef.shape = shape;
+		
+		body.createFixture(fixDef);
+		
+		shape.dispose();
+	}
+	
+	private Shape buildShape() {
 		PolygonShape boxShape = new PolygonShape();
 		boxShape.setAsBox(.5f, .5f);
 		

@@ -2,6 +2,7 @@ package spacepirates.game;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -43,8 +44,8 @@ public class TestActor extends BoxActor{
 	}
 
 	@Override
-	public void remove() {
-		super.remove();
+	public void store() {
+		super.store();
 	}
 
 	@Override
@@ -60,16 +61,27 @@ public class TestActor extends BoxActor{
 		FixtureDef fixtureDef = super.buildFixtureDef();
 		
 		fixtureDef.density = 2;
+		fixtureDef.filter.categoryBits = Game.CAT_AGENT;
 		
 		return fixtureDef;
 	}
 	
-	@Override
-	protected Shape buildShape() {
+	private Shape buildShape() {
 		PolygonShape boxShape = new PolygonShape();
 		boxShape.setAsBox(1, 1);
 		
 		return boxShape;
+	}
+
+	@Override
+	protected void buildFixtures(Body body) {
+		FixtureDef fixDef = buildFixtureDef();
+		Shape shape = buildShape();
+		fixDef.shape = shape;
+		
+		body.createFixture(fixDef);
+		
+		shape.dispose();
 	}
 
 }

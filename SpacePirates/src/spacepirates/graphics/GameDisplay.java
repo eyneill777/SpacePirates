@@ -73,6 +73,7 @@ public class GameDisplay {
 	
 	public void render(SpriteBatch batch, float delta){
 		fbo.begin();
+		//Gdx.gl.glC
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		cam.apply(ortho);

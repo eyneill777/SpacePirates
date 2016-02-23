@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class Resources {
 	public Skin skin;
 	public TextureAtlas gameArt;
-	public Texture box;
+	public Texture box, circle;
 	
 	private AssetManager assets;
 	private String root;
@@ -26,15 +26,18 @@ public class Resources {
 		assets.load(root+"sprites.atlas", TextureAtlas.class);
 		
 		assets.finishLoading();
-		loadBox();
+		loadShapes();
 		
 		skin = assets.get(root+"gui.json", Skin.class);
 		gameArt = assets.get(root+ "sprites.atlas", TextureAtlas.class);
 	}
 	
-	private void loadBox(){
-		Pixmap pbox = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
+	private void loadShapes(){
+		Pixmap pbox = new Pixmap(64, 64, Pixmap.Format.RGBA8888);
 		pbox.setColor(Color.WHITE);
+		pbox.drawCircle(32, 32, 32);
+		circle = new Texture(pbox);
+		
 		pbox.fill();
 		box = new Texture(pbox);
 		pbox.dispose();
@@ -43,5 +46,6 @@ public class Resources {
 	public void dispose(){
 		assets.dispose();
 		box.dispose();
+		circle.dispose();
 	}
 }

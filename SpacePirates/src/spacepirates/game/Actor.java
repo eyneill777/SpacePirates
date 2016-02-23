@@ -72,11 +72,8 @@ public abstract class Actor {
 		return game.getResources();
 	}
 	
-	public abstract void beginCollision(Fixture thisFixture, Fixture otherFixture, Contact contact);
-	public abstract void endCollision(Fixture thisFixture, Fixture otherFixture, Contact contact);
-	
 	public abstract void update(float delta);
 	public abstract void render(SpriteBatch batch);
 	public abstract void init();
-	public abstract void remove();
+	public abstract void store();
 }
