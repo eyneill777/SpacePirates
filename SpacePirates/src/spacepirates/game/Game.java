@@ -47,7 +47,7 @@ public class Game implements ContactListener{
 		
 		Level level = new Level(5);
 		
-		roomToLoad = new Room();
+		roomToLoad = level.getStartingRoom();
 		
 		
 		//actors = new ArrayList<>();
