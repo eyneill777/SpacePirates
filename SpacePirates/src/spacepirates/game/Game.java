@@ -12,18 +12,18 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import spacepirates.game.level.Level;
 import spacepirates.game.level.Room;
-import spacepirates.game.level.RoomDoor;
+import spacepirates.game.tiles.TileMap;
 import spacepirates.graphics.Camera;
 import spacepirates.input.PlayerInput;
 import spacepirates.resources.Resources;
 
 public class Game implements ContactListener{
-	public static final short CAT_BOUNDARY    = 0x01;
-	public static final short CAT_AGENT       = 0x02;
-	public static final short CAT_TILE        = 0x04;
-	public static final short CAT_BULLET      = 0x08;
-	public static final short CAT_ITEM        = 0x10;
-	public static final short CAT_OPEN_PORTEL = 0x20;
+	public static final short CAT_BOUNDARY    = 0x0001;
+	public static final short CAT_AGENT       = 0x0002;
+	public static final short CAT_TILE        = 0x0004;
+	public static final short CAT_BULLET      = 0x0008;
+	public static final short CAT_ITEM        = 0x0010;
+	public static final short CAT_OPEN_PORTEL = 0x0020;
 	public static final short CAT_ALL         = -1;
 	
 	private Camera camera;
@@ -35,6 +35,7 @@ public class Game implements ContactListener{
 	private ArrayList<Actor> actors;
 	private ArrayList<Actor> removeList;
 	private ArrayList<Actor> addList;
+	private TileMap tiles;
 	
 	public Game(){
 		world = new World(Vector2.Zero, true);
@@ -68,7 +69,6 @@ public class Game implements ContactListener{
 			}
 		}
 		
-		
 		room.setGame(this);
 		currentRoom = room;
 		actors = room.getActors();
@@ -76,6 +76,14 @@ public class Game implements ContactListener{
 			actor.setGame(this);
 			actor.init();
 		}
+		
+		if(tiles != null){
+			tiles.store();
+		}
+		tiles = room.getTiles();
+		tiles.setGame(this);
+		tiles.init();
+		
 		room.loadRoom();
 	}
 	
@@ -109,23 +117,26 @@ public class Game implements ContactListener{
 	}
 	
 	public void update(float delta){
+		if(actors != null){
+			for(Actor actor: addList){
+				actors.add(actor);
+				actor.init();
+			}
+			addList.clear();
+		}
+		
 		if(roomToLoad != null){
 			loadRoom(roomToLoad);
 			roomToLoad = null;
 		}
-		
-		
-		for(Actor actor: addList){
-			actors.add(actor);
-			actor.init();
-		}
-		addList.clear();
 		
 		world.step(delta, 6, 2);
 		
 		for(Actor actor: actors){
 			actor.update(delta);
 		}
+		
+		tiles.update(delta);
 		
 		for(Actor actor: removeList){
 			actors.remove(actor);
@@ -137,7 +148,8 @@ public class Game implements ContactListener{
 	}
 	
 	public void render(SpriteBatch batch){
-		currentRoom.renderBackground(batch);
+		tiles.render(batch);
+		
 		for(Actor actor: actors){
 			actor.render(batch);
 		}
@@ -158,8 +170,20 @@ public class Game implements ContactListener{
 
 	@Override
 	public void beginContact(Contact contact) {
-		Collidable actorA = (Collidable)contact.getFixtureA().getBody().getUserData();
-		Collidable actorB = (Collidable)contact.getFixtureB().getBody().getUserData();
+		Collidable actorA;
+		Collidable actorB;
+		
+		if(contact.getFixtureA().getUserData() == null){
+			actorA = (Collidable)contact.getFixtureA().getBody().getUserData();
+		} else {
+			actorA = (Collidable)contact.getFixtureA().getUserData();
+		}
+		
+		if(contact.getFixtureB().getUserData() == null){
+			actorB = (Collidable)contact.getFixtureB().getBody().getUserData();
+		} else {
+			actorB = (Collidable)contact.getFixtureB().getUserData();
+		}
 		
 		actorA.beginCollision(contact.getFixtureA(), contact.getFixtureB(), contact);
 		actorB.beginCollision(contact.getFixtureB(), contact.getFixtureA(), contact);
@@ -167,8 +191,20 @@ public class Game implements ContactListener{
 
 	@Override
 	public void endContact(Contact contact) {
-		Collidable actorA = (Collidable)contact.getFixtureA().getBody().getUserData();
-		Collidable actorB = (Collidable)contact.getFixtureB().getBody().getUserData();
+		Collidable actorA;
+		Collidable actorB;
+		
+		if(contact.getFixtureA().getUserData() == null){
+			actorA = (Collidable)contact.getFixtureA().getBody().getUserData();
+		} else {
+			actorA = (Collidable)contact.getFixtureA().getUserData();
+		}
+		
+		if(contact.getFixtureB().getUserData() == null){
+			actorB = (Collidable)contact.getFixtureB().getBody().getUserData();
+		} else {
+			actorB = (Collidable)contact.getFixtureB().getUserData();
+		}
 		
 		actorA.endCollision(contact.getFixtureA(), contact.getFixtureB(), contact);
 		actorB.endCollision(contact.getFixtureB(), contact.getFixtureA(), contact);

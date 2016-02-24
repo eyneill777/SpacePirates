@@ -33,9 +33,9 @@ public class Resources {
 	}
 	
 	private void loadShapes(){
-		Pixmap pbox = new Pixmap(64, 64, Pixmap.Format.RGBA8888);
+		Pixmap pbox = new Pixmap(128, 128, Pixmap.Format.RGBA8888);
 		pbox.setColor(Color.WHITE);
-		pbox.drawCircle(32, 32, 32);
+		pbox.fillCircle(64, 64, 64 );
 		circle = new Texture(pbox);
 		
 		pbox.fill();

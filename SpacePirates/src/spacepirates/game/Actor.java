@@ -8,6 +8,7 @@ import spacepirates.resources.Resources;
 
 public abstract class Actor {
 	private Game game;
+	private boolean initialized = false;
 	private float x, y, width, height,  rotation;
 	
 	public float getX(){
@@ -74,6 +75,14 @@ public abstract class Actor {
 	
 	public abstract void update(float delta);
 	public abstract void render(SpriteBatch batch);
-	public abstract void init();
-	public abstract void store();
+	public void init(){
+		initialized = true;
+	}
+	public void store(){
+		initialized = false;
+	}
+	
+	public boolean isInitialized(){
+		return initialized;
+	}
 }

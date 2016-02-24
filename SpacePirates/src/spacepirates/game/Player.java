@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -18,6 +19,8 @@ public class Player extends BoxActor{
 	
 	public Player() {
 		super();
+		setWidth(1);
+		setHeight(1);
 	}
 	
 	@Override
@@ -58,10 +61,7 @@ public class Player extends BoxActor{
 	public void init() {
 		super.init();
 		playerInput = getGame().getPlayerInput();
-		boxSprite = new Sprite(getResources().box);
-		
-		setWidth(1);
-		setHeight(1);
+		boxSprite = new Sprite(getResources().circle);
 		
 		boxSprite.setSize(getWidth(), getHeight());
 		boxSprite.setOrigin(getWidth()/2, getHeight()/2);
@@ -76,7 +76,7 @@ public class Player extends BoxActor{
 	protected FixtureDef buildFixtureDef() {
 		FixtureDef fixtureDef = super.buildFixtureDef();
 		fixtureDef.filter.categoryBits = Game.CAT_AGENT;
-		fixtureDef.filter.maskBits = Game.CAT_ALL & ~Game.CAT_OPEN_PORTEL;
+		fixtureDef.filter.maskBits = ~Game.CAT_OPEN_PORTEL;
 		
 		return fixtureDef;
 	}
@@ -93,9 +93,10 @@ public class Player extends BoxActor{
 	}
 	
 	private Shape buildShape() {
-		PolygonShape boxShape = new PolygonShape();
-		boxShape.setAsBox(.5f, .5f);
+		CircleShape shape = new CircleShape();
 		
-		return boxShape;
+		shape.setRadius(getWidth()/2);
+		
+		return shape;
 	}
 }

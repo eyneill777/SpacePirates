@@ -18,6 +18,7 @@ public abstract class BoxActor extends Actor implements Collidable{
 	
 	@Override
 	public void init(){
+		super.init();
 		collisions = new ArrayList<>();
 		
 		BodyDef bodyDef = buildBodyDef();
@@ -33,7 +34,7 @@ public abstract class BoxActor extends Actor implements Collidable{
 
 	public void setFlying(boolean flying){
 		this.flying = flying;
-		if(body != null){
+		if(isInitialized()){
 			if(flying){
 				body.setLinearDamping(0);
 			} else {
@@ -50,6 +51,7 @@ public abstract class BoxActor extends Actor implements Collidable{
 	
 	@Override
 	public void store(){
+		super.store();
 		getGame().getWorld().destroyBody(body);
 		body = null;
 	}
