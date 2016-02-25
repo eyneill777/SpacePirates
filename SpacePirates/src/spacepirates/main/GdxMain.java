@@ -1,5 +1,8 @@
 package spacepirates.main;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
@@ -20,9 +23,12 @@ public class GdxMain implements ApplicationListener{
 	private SpriteBatch batch;
 	private ScreenManager screenManager;
 	private Resources resources;
+	private Dimension windowSize;
 	
 	@Override
 	public void create() {
+		windowSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Gdx.graphics.setDisplayMode(windowSize.width, windowSize.height, false);
 		Box2D.init();
 		resources = new Resources();
 		resources.loadAll();
