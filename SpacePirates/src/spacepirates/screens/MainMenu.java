@@ -2,6 +2,8 @@ package spacepirates.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
@@ -11,13 +13,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class MainMenu extends Screen{
+	private ShaderProgram backgroundShader;
+	private float time = 0;
 	private Container<Window> root;
 	
 	public MainMenu(){
+		
 	}
 
 	@Override
 	public void load(Skin skin) {
+		backgroundShader = SimpleBackgroundShader.buildShader();
+		
 		Window win = new Window("Main Menu", skin);
 		
 		TextButton newButt = new TextButton("New Game", skin);
@@ -53,7 +60,17 @@ public class MainMenu extends Screen{
 
 	@Override
 	public void render(SpriteBatch batch, float delta) {
+		time += delta;
 		
+		ShaderProgram oldS = batch.getShader();
+		batch.setShader(backgroundShader);
+		batch.begin();
+		
+		backgroundShader.setUniformf("time", time);
+		batch.draw(getResources().box, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
+		batch.end();
+		batch.setShader(oldS);
 	}
 
 	@Override
@@ -73,6 +90,6 @@ public class MainMenu extends Screen{
 	
 	@Override
 	public void dispose() {
-		
+		backgroundShader.dispose();
 	}
 }
