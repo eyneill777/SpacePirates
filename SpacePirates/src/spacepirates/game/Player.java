@@ -85,6 +85,7 @@ public class Player extends BoxActor{
 	protected void buildFixtures(Body body) {
 		Shape shape = buildShape();
 		FixtureDef fixDef = buildFixtureDef();
+		
 		fixDef.shape = shape;
 		
 		body.createFixture(fixDef);

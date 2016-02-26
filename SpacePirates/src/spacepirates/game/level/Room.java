@@ -30,6 +30,8 @@ public class Room
 		actors = new ArrayList<>();
 		tiles = new TileMap(10, 10);
 		tiles.setTile(new WallTile(), 2, 2);
+		tiles.setTile(new WallTile(), 1, 2);
+		tiles.setTile(new WallTile(), 0, 2);
 		tiles.setOffset(-width/2, -height/2);
 	}
 	

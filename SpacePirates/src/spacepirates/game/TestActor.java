@@ -17,8 +17,8 @@ public class TestActor extends BoxActor{
 		testSprite = new Sprite();
 		
 		setPosition(-2, -2);
-		setWidth(2);
-		setHeight(2);
+		setWidth(1.9f);
+		setHeight(1.9f);
 	}
 	
 	@Override
@@ -39,8 +39,8 @@ public class TestActor extends BoxActor{
 	public void init() {
 		super.init();
 		testSprite = getResources().gameArt.createSprite("may2015-3");
-		testSprite.setSize(2, 2);
-		testSprite.setOrigin(1, 1);
+		testSprite.setSize(getWidth(), getHeight());
+		testSprite.setOrigin(getWidth()/2, getHeight()/2);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class TestActor extends BoxActor{
 	
 	private Shape buildShape() {
 		PolygonShape boxShape = new PolygonShape();
-		boxShape.setAsBox(1, 1);
+		boxShape.setAsBox(getWidth()/2, getHeight()/2);
 		
 		return boxShape;
 	}

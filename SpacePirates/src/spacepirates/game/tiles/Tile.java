@@ -1,5 +1,7 @@
 package spacepirates.game.tiles;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -8,19 +10,34 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import spacepirates.game.Collidable;
 import spacepirates.game.Game;
+import spacepirates.game.GameObject;
 
-public abstract class Tile implements Collidable{
+public abstract class Tile implements GameObject, Collidable{
 	private int x;
 	private int y;
 	private TileMap tiles;
 	private Fixture fixture;
+	private Texture tileTexture;
+	private Color color;
 	private boolean initialized = false;
 	protected boolean hasFixture = false;
 	
 	
+	public Tile(){
+		color = Color.WHITE;
+	}
+	
+	public void setColor(Color tint){
+		color = tint;
+	}
+	
 	protected void setPosition(int x, int y){
 		this.x = x;
 		this.y = y;
+	}
+	
+	public void setTexture(Texture texture){
+		this.tileTexture = texture;
 	}
 	
 	public void setTiles(TileMap tiles){
@@ -44,7 +61,18 @@ public abstract class Tile implements Collidable{
 	}
 	
 	public abstract void update(float delta);
-	public abstract void render(SpriteBatch batch);
+	
+	public void render(SpriteBatch batch){
+		if(tileTexture != null){
+			Color oldColor = batch.getColor();
+			batch.setColor(color);
+			batch.draw(getGame().getResources().box, 
+					getTileMap().getOffsetX() + getX() * TileMap.TILE_SIZE, 
+					getTileMap().getOffsetY() + getY() * TileMap.TILE_SIZE,
+					TileMap.TILE_SIZE, TileMap.TILE_SIZE);
+			batch.setColor(oldColor);
+		}
+	}
 	
 	public boolean isInitialized(){
 		return initialized;

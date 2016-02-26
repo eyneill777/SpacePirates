@@ -3,6 +3,7 @@ package spacepirates.game;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -47,6 +48,11 @@ public abstract class BoxActor extends Actor implements Collidable{
 	public void update(float delta){
 		setRotation(MathUtils.radiansToDegrees * body.getAngle());
 		setPosition(body.getPosition().x - getWidth()/2, body.getPosition().y - getHeight()/2);
+		
+		if(!flying && Math.abs(body.getLinearVelocity().x) < .1f && Math.abs(body.getLinearVelocity().y) < .1f && 
+				!body.getLinearVelocity().isZero()) {
+			body.setLinearVelocity(Vector2.Zero);
+		}
 	}
 	
 	@Override
@@ -60,7 +66,6 @@ public abstract class BoxActor extends Actor implements Collidable{
 		float diffX = maxX - body.getLinearVelocity().x;
 		float diffY = maxY - body.getLinearVelocity().y;
 		if(Math.abs(diffX) > .1f || Math.abs(diffY) > .1f){
-			
 			//cap on force generated.
 			if(Math.abs(diffX) > acceleration){
 				diffX = (diffX < 0)?-acceleration:acceleration;

@@ -7,8 +7,9 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import spacepirates.game.Game;
+import spacepirates.game.GameObject;
 
-public class TileMap {
+public class TileMap implements GameObject{
 	public static final float TILE_SIZE = 1;
 	
 	private boolean initialized = false;

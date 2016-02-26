@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 public class WallTile extends Tile{
 
 	public WallTile() {
+		super();
 		 hasFixture = true;
 	}
 	
@@ -24,20 +25,12 @@ public class WallTile extends Tile{
 	@Override
 	public void init(){
 		super.init();
+		setTexture(getGame().getResources().box);
+		setColor(Color.BLUE);
 	}
 	
 	@Override
 	public void update(float delta) {
 		
-	}
-
-	@Override
-	public void render(SpriteBatch batch) {
-		batch.setColor(Color.CYAN);
-		batch.draw(getGame().getResources().box, 
-				getTileMap().getOffsetX() + getX() * TileMap.TILE_SIZE, 
-				getTileMap().getOffsetY() + getY() * TileMap.TILE_SIZE,
-				TileMap.TILE_SIZE, TileMap.TILE_SIZE);
-		batch.setColor(Color.WHITE);
 	}
 }

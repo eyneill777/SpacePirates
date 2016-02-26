@@ -23,12 +23,9 @@ public class GdxMain implements ApplicationListener{
 	private SpriteBatch batch;
 	private ScreenManager screenManager;
 	private Resources resources;
-	private Dimension windowSize;
 	
 	@Override
 	public void create() {
-		windowSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Gdx.graphics.setDisplayMode(windowSize.width, windowSize.height, false);
 		Box2D.init();
 		resources = new Resources();
 		resources.loadAll();
@@ -76,9 +73,15 @@ public class GdxMain implements ApplicationListener{
 	
 	public static void main(String[] args){
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 800;
-		config.height = 800;
-		//config.fullscreen=true;
+		
+		Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		config.width = windowSize.width;
+		config.height = windowSize.height;
+		config.fullscreen=true;
+		
+		//config.width = 800;
+		//config.height = 800;
 		
 		config.title = "test";
 		

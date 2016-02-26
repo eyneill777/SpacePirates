@@ -1,12 +1,9 @@
 package spacepirates.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.Fixture;
-
 import spacepirates.resources.Resources;
 
-public abstract class Actor {
+public abstract class Actor implements GameObject{
 	private Game game;
 	private boolean initialized = false;
 	private float x, y, width, height,  rotation;
