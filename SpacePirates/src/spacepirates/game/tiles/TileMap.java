@@ -31,12 +31,26 @@ public class TileMap implements GameObject{
 		
 		for(int i = 0; i < h; i++){
 			for(int j = 0; j < w; j++){
-				Tile floor = new FloorTile();
-				floor.setPosition(j, i);
-				floor.setTiles(this);
-				tiles[i][j] = floor;
+				Tile tile;
+				if(i == 0 || j == 0 || i == h-1 || j == w-1){
+					tile = new BoundaryTile();
+				} else {
+					tile = new FloorTile();
+				}
+				
+				tile.setPosition(j, i);
+				tile.setTiles(this);
+				tiles[i][j] = tile;
 			}
 		}
+	}
+	
+	public int getWidth(){
+		return w;
+	}
+	
+	public int getHeight(){
+		return h;
 	}
 	
 	public void setTile(Tile tile, int x, int y){

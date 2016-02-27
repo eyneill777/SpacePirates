@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import spacepirates.game.Actor;
 import spacepirates.game.Game;
+import spacepirates.game.TestActor;
+import spacepirates.game.tiles.FloorTile;
 import spacepirates.game.tiles.TileMap;
 import spacepirates.game.tiles.WallTile;
 
@@ -16,22 +18,37 @@ public class Room
 	private Point location;
 	
 	private float width, height;
-	RoomBoundary boundary;
+	//RoomBoundary boundary;
 	Room[] connectedRooms;
 	
 	public Room(int x, int y)
 	{
-		width = 10;
-		height = 10;
+		width = 15;
+		height = 15;
 		location = new Point(x,y);
 		
 		connectedRooms = new Room[4];
-		boundary = new RoomBoundary(-width/2, -height/2, width, height);
+		
+		//boundary = new RoomBoundary(-width/2, -height/2, width, height);
 		actors = new ArrayList<>();
-		tiles = new TileMap(10, 10);
+		actors.add(new TestActor());
+		tiles = new TileMap(15, 15);
 		tiles.setTile(new WallTile(), 2, 2);
 		tiles.setTile(new WallTile(), 1, 2);
-		tiles.setTile(new WallTile(), 0, 2);
+		
+		if(getAdjacentRoom('N') != null){
+			tiles.setTile(new FloorTile(), tiles.getWidth()/2, tiles.getHeight()-1);
+		}
+		if(getAdjacentRoom('S') != null){
+			tiles.setTile(new FloorTile(), tiles.getWidth()/2, 0);
+		}
+		if(getAdjacentRoom('E') != null){
+			tiles.setTile(new FloorTile(), tiles.getHeight()-1, tiles.getHeight()/2);
+		}
+		if(getAdjacentRoom('W') != null){
+			tiles.setTile(new FloorTile(), 0, tiles.getHeight()/2);
+		}
+		
 		tiles.setOffset(-width/2, -height/2);
 	}
 	
@@ -45,14 +62,6 @@ public class Room
 	
 	public void setGame(Game game){
 		this.game = game;
-	}
-	
-	public void loadRoom(){
-		boundary.init(game.getWorld());
-	}
-	
-	public void unloadRoom(){
-		boundary.store(game.getWorld());
 	}
 	
 	public Point getLocation()

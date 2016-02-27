@@ -31,9 +31,8 @@ public class SimpleBackgroundShader {
 			+ "uniform float time;\n"
 			+ "void main()\n"
 			+ "{\n"
-			//+ "  vec4 color0 = vec4(0.2, 0.6, 0.3, 1);\n"
-			+ "  vec4 color1 = vec4(0.2, cos(floor(v_texCoords.y*time - sin((v_texCoords.x+time/100) * time))/time * time/10), sin(floor(v_texCoords.x*time + sin(v_texCoords.y * time))/time * time/5), 1);\n"
-			+ "  gl_FragColor = v_color * texture2D(u_texture, v_texCoords) * color1;\n"
+			+ "  vec2 pos = vec2(v_texCoords.x + sin(time + v_texCoords.y*7)/5, v_texCoords.y + cos(time + v_texCoords.x*5)/5);\n"
+			+ "  gl_FragColor = v_color * texture2D(u_texture, pos);\n"
 			+ "}";
 		
 		public static ShaderProgram buildShader(){

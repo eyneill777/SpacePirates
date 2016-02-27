@@ -19,8 +19,8 @@ public class Player extends BoxActor{
 	
 	public Player() {
 		super();
-		setWidth(1);
-		setHeight(1);
+		setWidth(0.98f);
+		setHeight(0.98f);
 	}
 	
 	@Override

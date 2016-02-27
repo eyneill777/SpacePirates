@@ -18,15 +18,15 @@ import spacepirates.graphics.Camera;
 import spacepirates.input.PlayerInput;
 import spacepirates.resources.Resources;
 
-public class Game implements ContactListener{
-	public static final short CAT_BOUNDARY    = 0x0001;
-	public static final short CAT_AGENT       = 0x0002;
-	public static final short CAT_TILE        = 0x0004;
-	public static final short CAT_BULLET      = 0x0008;
-	public static final short CAT_ITEM        = 0x0010;
+public class Game implements ContactListener {
+	public static final short CAT_BOUNDARY = 0x0001;
+	public static final short CAT_AGENT = 0x0002;
+	public static final short CAT_TILE = 0x0004;
+	public static final short CAT_BULLET = 0x0008;
+	public static final short CAT_ITEM = 0x0010;
 	public static final short CAT_OPEN_PORTEL = 0x0020;
-	public static final short CAT_ALL         = -1;
-	
+	public static final short CAT_ALL = -1;
+
 	private Camera camera;
 	private Resources resources;
 	private PlayerInput playerInput;
@@ -37,153 +37,146 @@ public class Game implements ContactListener{
 	private ArrayList<Actor> removeList;
 	private ArrayList<Actor> addList;
 	private TileMap tiles;
-	
-	public Game(){
+
+	public Game() {
 		world = new World(Vector2.Zero, true);
 		world.setContactListener(this);
-		
+
 		camera = new Camera();
 		camera.setWidth(10);
 		camera.setHeight(10);
-		
+
 		Level level = new Level(5);
-		
+
 		roomToLoad = level.getStartingRoom();
-		
-		
-		//actors = new ArrayList<>();
+
+		// actors = new ArrayList<>();
 		addList = new ArrayList<>();
 		removeList = new ArrayList<>();
-		
+
 		Player player = new Player();
 		camera.setTarget(player);
 		camera.setTracking(true);
-		
+
 		addActor(player);
-		addActor(new TestActor());
 	}
-	
-	private void loadRoom(Room room){
-		if(actors != null){
-			for(Actor actor: actors){
+
+	private void loadRoom(Room room) {
+		if (actors != null) {
+			for (Actor actor : actors) {
 				actor.store();
 			}
 		}
-		
+
 		room.setGame(this);
 		currentRoom = room;
 		actors = room.getActors();
-		for(Actor actor: actors){
+		for (Actor actor : actors) {
 			actor.setGame(this);
 			actor.init();
 		}
-		
-		if(tiles != null){
+
+		if (tiles != null) {
 			tiles.store();
 		}
 		tiles = room.getTiles();
 		tiles.setGame(this);
 		tiles.init();
-		
-		room.loadRoom();
 	}
-	
-	public void setPlayerInput(PlayerInput playerInput){
+
+	public void setPlayerInput(PlayerInput playerInput) {
 		this.playerInput = playerInput;
 	}
-	
-	public PlayerInput getPlayerInput(){
+
+	public PlayerInput getPlayerInput() {
 		return playerInput;
 	}
-	
-	public void addActor(Actor actor){
+
+	public void addActor(Actor actor) {
 		addList.add(actor);
 		actor.setGame(this);
 	}
-	
-	public void removeActor(Actor actor){
+
+	public void removeActor(Actor actor) {
 		removeList.add(actor);
 	}
-	
-	public Actor getActor(int i){
+
+	public Actor getActor(int i) {
 		return actors.get(i);
 	}
-	
-	public void setResources(Resources resources){
+
+	public void setResources(Resources resources) {
 		this.resources = resources;
 	}
-	
-	public Resources getResources(){
+
+	public Resources getResources() {
 		return resources;
 	}
-	
-	public void update(float delta){
-		if(currentRoom != null){
-			for(Actor actor: addList){
+
+	public void update(float delta) {
+		if (currentRoom != null) {
+			for (Actor actor : addList) {
 				actors.add(actor);
 				actor.init();
 			}
 			addList.clear();
 		}
-		
-		if(roomToLoad != null){
+
+		if (roomToLoad != null) {
 			loadRoom(roomToLoad);
 			roomToLoad = null;
 		}
-		
-		if(currentRoom != null){
-			world.step(delta, 6, 2);
-			
-			for(Actor actor: actors){
-				actor.update(delta);
-			}
-			
-			tiles.update(delta);
-			
-			for(Actor actor: removeList){
-				actors.remove(actor);
-				actor.store();
-			}
-			removeList.clear();
-			
-			camera.update(delta);
+
+		world.step(delta, 6, 2);
+
+		for (Actor actor : actors) {
+			actor.update(delta);
 		}
+
+		tiles.update(delta);
+
+		for (Actor actor : removeList) {
+			actors.remove(actor);
+			actor.store();
+		}
+		removeList.clear();
+
+		camera.update(delta);
 	}
-	
-	public void render(SpriteBatch batch){
+
+	public void render(SpriteBatch batch) {
 		tiles.render(batch);
-		
-		for(Actor actor: actors){
+
+		for (Actor actor : actors) {
 			actor.render(batch);
 		}
 	}
-	
-	
-	public Camera getCamrea(){
+
+	public Camera getCamrea() {
 		return camera;
 	}
-	
-	public World getWorld(){
+
+	public World getWorld() {
 		return world;
 	}
-	
-	public void dispose(){
+
+	public void dispose() {
 		world.dispose();
 	}
 
-	public Collidable resolveCollidable(Fixture fixture){
-		if(fixture.getUserData() == null){
-			return (Collidable)fixture.getBody().getUserData();
+	public Collidable resolveCollidable(Fixture fixture) {
+		if (fixture.getUserData() == null) {
+			return (Collidable) fixture.getBody().getUserData();
 		} else {
-			return (Collidable)fixture.getUserData();
+			return (Collidable) fixture.getUserData();
 		}
 	}
-	
+
 	@Override
 	public void beginContact(Contact contact) {
 		Collidable actorA = resolveCollidable(contact.getFixtureA());
 		Collidable actorB = resolveCollidable(contact.getFixtureB());
-		
+
 		actorA.beginCollision(contact.getFixtureA(), contact.getFixtureB(), contact);
 		actorB.beginCollision(contact.getFixtureB(), contact.getFixtureA(), contact);
 	}
@@ -192,7 +185,7 @@ public class Game implements ContactListener{
 	public void endContact(Contact contact) {
 		Collidable actorA = resolveCollidable(contact.getFixtureA());
 		Collidable actorB = resolveCollidable(contact.getFixtureB());
-		
+
 		actorA.endCollision(contact.getFixtureA(), contact.getFixtureB(), contact);
 		actorB.endCollision(contact.getFixtureB(), contact.getFixtureA(), contact);
 	}
@@ -204,5 +197,5 @@ public class Game implements ContactListener{
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
 	}
-	
+
 }

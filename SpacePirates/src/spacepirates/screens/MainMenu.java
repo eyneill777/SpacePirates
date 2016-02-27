@@ -67,7 +67,7 @@ public class MainMenu extends Screen{
 		batch.begin();
 		
 		backgroundShader.setUniformf("time", time);
-		batch.draw(getResources().box, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(getResources().gameArt.getRegions().first(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
 		batch.end();
 		batch.setShader(oldS);
