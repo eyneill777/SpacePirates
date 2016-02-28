@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -29,6 +30,7 @@ public class GameDisplayScreen extends Screen{
 	private Container<Window> pauseMenu;
 	private PlayerInput playerInput;
 	private boolean paused;
+	//private Box2DDebugRenderer debugRender;
 	
 	public GameDisplayScreen(Game game) {
 		this.game = game;
@@ -45,6 +47,8 @@ public class GameDisplayScreen extends Screen{
 		playerInput.setMouseControl(display.getMouseControl());
 		
 		game.setPlayerInput(playerInput);
+		
+		//debugRender = new Box2DDebugRenderer(true, true, true, true, true, true);
 	}
 	
 	@Override
@@ -52,6 +56,7 @@ public class GameDisplayScreen extends Screen{
 		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
 			setPaused(true);
 		}
+		
 		
 		if(!paused){
 			game.update(updateRate);
@@ -73,6 +78,9 @@ public class GameDisplayScreen extends Screen{
 		batch.begin();
 		display.draw(batch, delta);
 		batch.end();
+		
+		
+		//debugRender.render(game.getWorld(), display.getOrtho().combined);
 	}
 	
 	public void setPaused(boolean paused){
@@ -128,6 +136,7 @@ public class GameDisplayScreen extends Screen{
 	@Override
 	public void dispose() {
 		display.dispose();
+		//debugRender.dispose();
 	}
 
 	@Override

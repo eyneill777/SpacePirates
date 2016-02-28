@@ -1,6 +1,7 @@
 package spacepirates.game.tiles;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -11,13 +12,14 @@ public class BoundaryTile extends Tile{
 
 	public BoundaryTile() {
 		super();
-		hasFixture = true;
+		setSolid(true);
 	}
 	
 	public void init(){
 		super.init();
-		setColor(Color.YELLOW);
-		setTexture(getGame().getResources().box);
+		Sprite sprite = new Sprite(getGame().getResources().box);
+		sprite.setColor(Color.YELLOW);
+		setSprite(sprite);
 	}
 	
 	@Override

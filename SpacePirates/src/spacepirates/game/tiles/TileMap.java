@@ -15,7 +15,6 @@ public class TileMap implements GameObject{
 	private boolean initialized = false;
 	private Tile[][] tiles;
 	private Body body;
-	private PolygonShape tileShape;
 	private Game game;
 	
 	private int w, h;
@@ -67,6 +66,14 @@ public class TileMap implements GameObject{
 		}
 	}
 	
+	public Tile getTile(int x, int y){
+		if(x >= 0 && y >= 0 && x < w && y < h){
+			return tiles[y][x];
+		} else {
+			return null;
+		}
+	}
+	
 	public void setOffset(float x, float y){
 		offsetX = x;
 		offsetY = y;
@@ -102,7 +109,6 @@ public class TileMap implements GameObject{
 	
 	public void init(){
 		initialized = true;
-		tileShape = new PolygonShape();
 		
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
@@ -131,8 +137,6 @@ public class TileMap implements GameObject{
 	
 	public void store(){
 		initialized = false;
-		tileShape.dispose();
-		tileShape = null;
 		
 		for(int i = 0; i < h; i++){
 			for(int j = 0; j < w; j++){
@@ -141,9 +145,5 @@ public class TileMap implements GameObject{
 		}
 		
 		game.getWorld().destroyBody(body);
-	}
-	
-	public PolygonShape getTileShape(){
-		return tileShape;
 	}
 }

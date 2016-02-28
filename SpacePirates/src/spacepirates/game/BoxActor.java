@@ -30,6 +30,7 @@ public abstract class BoxActor extends Actor implements Collidable{
 		
 		if(!flying){
 			body.setLinearDamping(body.getMass()*groundFriction);
+			//body.setAngularDamping(body.getMass() * groundFriction);
 		}
 	}
 
@@ -113,7 +114,7 @@ public abstract class BoxActor extends Actor implements Collidable{
 		BodyDef bodyDef = new BodyDef();
 		
 		bodyDef.type = BodyType.DynamicBody;
-		//bodyDef.fixedRotation = true;
+		bodyDef.fixedRotation = true;
 		
 		bodyDef.position.x = getX() - getWidth()/2;
 		bodyDef.position.y = getY() - getHeight()/2;

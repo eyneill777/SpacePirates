@@ -36,16 +36,16 @@ public class Room
 		tiles.setTile(new WallTile(), 2, 2);
 		tiles.setTile(new WallTile(), 1, 2);
 		
-		if(getAdjacentRoom('N') != null){
+		if(getAdjacentRoom(Direction.N) != null){
 			tiles.setTile(new FloorTile(), tiles.getWidth()/2, tiles.getHeight()-1);
 		}
-		if(getAdjacentRoom('S') != null){
+		if(getAdjacentRoom(Direction.S) == null){
 			tiles.setTile(new FloorTile(), tiles.getWidth()/2, 0);
 		}
-		if(getAdjacentRoom('E') != null){
+		if(getAdjacentRoom(Direction.E) != null){
 			tiles.setTile(new FloorTile(), tiles.getHeight()-1, tiles.getHeight()/2);
 		}
-		if(getAdjacentRoom('W') != null){
+		if(getAdjacentRoom(Direction.W) != null){
 			tiles.setTile(new FloorTile(), 0, tiles.getHeight()/2);
 		}
 		
@@ -69,24 +69,8 @@ public class Room
 		return location;
 	}
 	
-	public Room getAdjacentRoom(char direction)
+	public Room getAdjacentRoom(int direction)
 	{
-		if(direction == 'N')
-		{
-			return connectedRooms[0];
-		}
-		else if(direction == 'E')
-		{
-			return connectedRooms[1];
-		}
-		else if(direction == 'S')
-		{
-			return connectedRooms[2];
-		}
-		else if(direction == 'W')
-		{
-			return connectedRooms[3];
-		}
-		return null;
+		return connectedRooms[direction];
 	}
 }

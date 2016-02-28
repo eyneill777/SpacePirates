@@ -5,13 +5,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Resources {
 	public Skin skin;
 	public TextureAtlas gameArt;
-	public Texture box, circle;
+	public TextureRegion box, circle;
 	
+	private Texture shapes;
 	private AssetManager assets;
 	private String root;
 	
@@ -33,19 +35,20 @@ public class Resources {
 	}
 	
 	private void loadShapes(){
-		Pixmap pbox = new Pixmap(128, 128, Pixmap.Format.RGBA8888);
+		Pixmap pbox = new Pixmap(256, 128, Pixmap.Format.RGBA8888);
 		pbox.setColor(Color.WHITE);
-		pbox.fillCircle(64, 64, 64 );
-		circle = new Texture(pbox);
+		pbox.fillCircle(192, 64, 64);
 		
-		pbox.fill();
-		box = new Texture(pbox);
+		pbox.fillRectangle(0, 0, 128, 128);
+		shapes = new Texture(pbox);
 		pbox.dispose();
+		
+		box = new TextureRegion(shapes, 0, 0, 128, 128);
+		circle = new TextureRegion(shapes, 128, 0, 128, 128);
 	}
 	
 	public void dispose(){
 		assets.dispose();
-		box.dispose();
-		circle.dispose();
+		shapes.dispose();
 	}
 }

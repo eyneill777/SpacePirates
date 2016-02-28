@@ -38,6 +38,10 @@ public class GameDisplay {
 		this.cam = camera;
 	}
 	
+	public OrthographicCamera getOrtho(){
+		return ortho;
+	}
+	
 	public void resize(int w, int h){
 		if(w != fbo.getWidth() || h != fbo.getHeight()){
 			fbo.dispose();
