@@ -71,19 +71,19 @@ public class Room
 	
 	public Room getAdjacentRoom(char direction)
 	{
-		if(direction == 'N')
+		if(direction == 'N' || direction == 'n')
 		{
 			return connectedRooms[0];
 		}
-		else if(direction == 'E')
+		else if(direction == 'E' || direction == 'e')
 		{
 			return connectedRooms[1];
 		}
-		else if(direction == 'S')
+		else if(direction == 'S' || direction == 's')
 		{
 			return connectedRooms[2];
 		}
-		else if(direction == 'W')
+		else if(direction == 'W' || direction == 'w')
 		{
 			return connectedRooms[3];
 		}
