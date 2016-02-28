@@ -5,9 +5,8 @@ import java.util.ArrayList;
 
 public class Level 
 {
-	private boolean isFirstPoint = true;
 	int difficulty;
-	int startX, startY;
+	int startX, startY, width, height;
 	Room[][] roomMap;
 	
 	public Level(int difficulty)
@@ -17,26 +16,90 @@ public class Level
 	}
 	
 	private void generateLevel()
-	{
-		int width = (int) (Math.random()*difficulty-difficulty/2.0)+difficulty;
-		int height = (int) (Math.random()*difficulty-difficulty/2.0)+difficulty*2;
+	{		
+		width = difficulty*5;//These can be changed later to reflect differences in ship design between races
+		height = difficulty*5;
 		boolean[][] map = new boolean[width][height];
-		for(int x = 0;x<width;x++)//initialize map to false
+		
+		createPath(map, difficulty*10, width, height);
+		map = trimMap(map);
+		initializeRooms(map, width, height);
+		printMap(map);
+	}
+	
+	private boolean[][] trimMap(boolean[][] map)
+	{
+		int topLine, bottomLine, leftLine, rightLine;
+		
+		boolean foundPoint = false;
+		int x = 0;
+		while(!foundPoint)
 		{
 			for(int y = 0;y<height;y++)
 			{
-				map[x][y]=false;
+				if(map[x][y])
+					foundPoint = true;
+			}
+			if(!foundPoint)
+				x++;
+		}
+		leftLine = x;
+		
+		foundPoint = false;
+		x = width-1;
+		while(!foundPoint)
+		{
+			for(int y = 0;y<height;y++)
+			{
+				if(map[x][y])
+					foundPoint = true;
+			}
+			if(!foundPoint)
+				x--;
+		}
+		rightLine = x;
+		
+		foundPoint = false;
+		int y = 0;
+		while(!foundPoint)
+		{
+			for(x = 0;x<width;x++)
+			{
+				if(map[x][y])
+					foundPoint = true;
+			}
+			if(!foundPoint)
+				y++;
+		}
+		topLine = y;
+		
+		foundPoint = false;
+		y = height-1;
+		while(!foundPoint)
+		{
+			for(x = 0;x<width;x++)
+			{
+				if(map[x][y])
+					foundPoint = true;
+			}
+			if(!foundPoint)
+				y--;
+		}
+		bottomLine = y;
+		
+		boolean[][] newMap = new boolean[rightLine-leftLine+1][bottomLine-topLine+1];
+		for(int dx = 0;dx<newMap.length;dx++)
+		{
+			for(int dy=0;dy<newMap[0].length;dy++)
+			{
+				newMap[dx][dy]=map[dx+leftLine][dy+topLine];
 			}
 		}
-		int startPathLength = difficulty*2;
-		createPath(map, startPathLength, width, height);
-		createPath(map, startPathLength, width, height);
-		createPath(map, startPathLength, width, height);
-		printMap(map);
-		System.out.println();
-		map=removeDisconnectedRooms(map, width, height);
-		initializeRooms(map, width, height);
-		printMap(map);
+		startX-=leftLine;
+		startY-=topLine;
+		width = newMap.length;
+		height = newMap[0].length;
+		return newMap;
 	}
 	
 	private void initializeRooms(boolean[][] map,int width, int height)
@@ -77,68 +140,50 @@ public class Level
 		}
 	}
 	
-	private boolean[][] removeDisconnectedRooms(boolean[][] originalMap, int width, int height)
-	{
-		boolean[][] map = new boolean[width][height];
-		ArrayList<Point> pointsToCheck = new ArrayList<Point>();
-		pointsToCheck.add(new Point(startX, startY));
-		
-		while(!pointsToCheck.isEmpty())
-		{
-			System.out.println(pointsToCheck.get(0).x+" "+pointsToCheck.get(0).y);
-			Point p = pointsToCheck.get(0);
-			if(originalMap[p.x][p.y])
-			{
-				map[p.x][p.y] = true;
-			}
-			pointsToCheck.remove(p);
-		}
-		
-		return map;
-	}
-	
 	private void createPath(boolean[][] map, int numPoints, int width, int height)
 	{
 		int x = (int) (Math.random()*width);
 		int y = (int) (Math.random()*height);
-		if(isFirstPoint)
-		{
-			startX = x;
-			startY = y;
-			isFirstPoint = false;
-		}
+		startX = x;
+		startY = y;
+		map[startX][startY] = true;
+		
 		for(int i = 0;i<numPoints;i++)
 		{
-			int dx=0, dy=0;
-			int breakCount = 0;
-			while((dx==0 && dy==0) || x+dx<0 || y+dy < 0 || x+dx>=width || y+dy>=height || map[x+dx][y+dy]==true)
+			boolean isValidPoint = false;
+			while(!isValidPoint)
 			{
-				breakCount++;
+				int dx=0,dy=0;
 				double seed = Math.random();
 				if(seed<=.25)
 				{
-					dx = -1;dy = 0;
+					dx=0;
+					dy=-1;
 				}
-				else if(seed<=.5)
+				else if(seed <=.5)
 				{
-					dy = -1;dx = 0;
+					dx=1;
+					dy=0;
 				}
-				else if(seed<=.75)
+				else if(seed <=.75)
 				{
-					dx=1;dy=0;
+					dx=0;
+					dy=1;
 				}
 				else
 				{
-					dx=0;dy=1;
+					dx=-1;
+					dy=0;
 				}
-				if(breakCount>50)
-					break;
+				
+				if(x+dx >= 0 && x+dx < width && y+dy >=0 && y+dy < height)
+				{
+					isValidPoint = true;
+					x+=dx;
+					y+=dy;
+					map[x][y]=true;
+				}
 			}
-			try{
-			map[x+dx][y+dy] = true;}
-			catch(Exception e){};
-			x=x+dx;
-			y=y+dy;
 		}
 	}
 	
@@ -148,7 +193,7 @@ public class Level
 		{
 			for(int x = 0;x<map.length;x++)
 			{
-				if(map[x][y] && x != startX && y != startY)
+				if(map[x][y] && !(x == startX && y == startY))
 					System.out.print("0");
 				else if( x == startX && y == startY)
 					System.out.print("S");
