@@ -1,5 +1,6 @@
 package spacepirates.game.level;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -7,12 +8,27 @@ public class Level
 {
 	int difficulty;
 	int startX, startY, width, height;
-	Room[][] roomMap;
+	private Room[][] roomMap;
 	
 	public Level(int difficulty)
 	{
 		this.difficulty = difficulty;
 		generateLevel();
+	}
+	
+	public Room getStartingRoom()
+	{
+		return roomMap[startX][startY];
+	}
+	
+	public Room[][] getMap()
+	{
+		return roomMap;
+	}
+	
+	public Dimension getSize()
+	{
+		return new Dimension(width, height);
 	}
 	
 	private void generateLevel()
@@ -202,10 +218,5 @@ public class Level
 			}
 			System.out.println();
 		}
-	}
-	
-	public Room getStartingRoom()
-	{
-		return roomMap[startX][startY];
 	}
 }
