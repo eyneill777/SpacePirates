@@ -6,12 +6,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import spacepirates.game.Game;
 import spacepirates.graphics.GameDisplay;
@@ -89,18 +91,16 @@ public class GameDisplayScreen extends Screen{
 		Window win = new Window("Pause", skin);
 		
 		TextButton resumeButt = new TextButton("Resume", skin);
-		resumeButt.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+		resumeButt.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y) {
 				setPaused(false);
 			}
 		});
 		
 		
 		TextButton exitButt = new TextButton("Exit", skin);
-		exitButt.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+		exitButt.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y) {
 				getManager().popScreen();
 			}
 		});

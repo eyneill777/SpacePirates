@@ -31,7 +31,7 @@ public class TestActor extends BoxActor{
 	public void render(SpriteBatch batch) {
 		testSprite.setX(getX());
 		testSprite.setY(getY());
-		testSprite.setRotation(270);
+		testSprite.setRotation(getRotation());
 		testSprite.draw(batch);
 	}
 

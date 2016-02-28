@@ -2,18 +2,18 @@ package spacepirates.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.Shader;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class MainMenu extends Screen{
-	private Container<Window> root;
+	private static final float BUTT_WIDTH = 220;
+	private static final float PAD = 5;
+	
+	private Table root;
 	
 	public MainMenu(){
 		
@@ -21,12 +21,11 @@ public class MainMenu extends Screen{
 
 	@Override
 	public void load(Skin skin) {
-		Window win = new Window("Main Menu", skin);
+		root = new Table(skin);
 		
 		TextButton newButt = new TextButton("New Game", skin);
-		newButt.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+		newButt.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y) {
 				getManager().showScreen("playing");
 			}
 		});
@@ -34,23 +33,24 @@ public class MainMenu extends Screen{
 		TextButton loadButt = new TextButton("Load Game", skin);
 		
 		TextButton settingsButt = new TextButton("Settings", skin);
+		settingsButt.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y) {
+				getManager().showScreen("settings");
+			}
+		});
 		
 		TextButton quitButt = new TextButton("Quit", skin);
-		quitButt.addListener(new ChangeListener(){
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+		quitButt.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y) {
 				Gdx.app.exit();
 		}});
 		
+		root.add("Space Pirates!", "title").pad(20).row();
+		root.add(newButt).pad(PAD).prefWidth(BUTT_WIDTH).row();
+		root.add(loadButt).pad(PAD).prefWidth(BUTT_WIDTH).row();
+		root.add(settingsButt).pad(PAD).prefWidth(BUTT_WIDTH).row();
+		root.add(quitButt).pad(PAD).prefWidth(BUTT_WIDTH);
 		
-		win.add(newButt).pad(10, 10, 5, 10).row();
-		win.add(loadButt).pad(5, 10, 5, 10).row();
-		win.add(settingsButt).pad(5, 10, 5, 10).row();
-		win.add(quitButt).pad(5, 10, 10, 10);
-		
-		win.setMovable(false);
-		
-		root = new Container<>(win);
 		root.setFillParent(true);
 	}
 

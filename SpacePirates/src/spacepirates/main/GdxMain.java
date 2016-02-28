@@ -7,15 +7,18 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.utils.Json;
 
 import spacepirates.game.Game;
 import spacepirates.resources.Resources;
 import spacepirates.screens.GameDisplayScreen;
 import spacepirates.screens.MainMenu;
 import spacepirates.screens.ScreenManager;
+import spacepirates.screens.SettingsScreen;
 
 public class GdxMain implements ApplicationListener{
 
@@ -24,11 +27,21 @@ public class GdxMain implements ApplicationListener{
 	private ScreenManager screenManager;
 	private Resources resources;
 	
+	private GeneralSettings settings;
+	
 	@Override
 	public void create() {
 		Box2D.init();
 		resources = new Resources();
 		resources.loadAll();
+		
+		FileHandle settingsFile = Gdx.files.external("settings.json");
+		if(settingsFile.exists()){
+			settings = new Json().fromJson(GeneralSettings.class, settingsFile);
+		} else {
+			settings = new GeneralSettings();
+		}
+		
 		
 		batch = new SpriteBatch();
 		
@@ -39,6 +52,7 @@ public class GdxMain implements ApplicationListener{
 		
 		
 		screenManager.addScreen("main_menu", new MainMenu());
+		screenManager.addScreen("settings", new SettingsScreen(settings, settingsFile));
 		screenManager.addScreen("playing", new GameDisplayScreen(game));
 		
 		screenManager.showScreen("main_menu");
