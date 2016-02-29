@@ -105,6 +105,12 @@ public class GameDisplayScreen extends Screen{
 			}
 		});
 		
+		TextButton settingsButt = new TextButton("Settings", skin);
+		settingsButt.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y){
+				getManager().showScreen("settings");
+			}
+		});
 		
 		TextButton exitButt = new TextButton("Exit", skin);
 		exitButt.addListener(new ClickListener(){
@@ -113,18 +119,19 @@ public class GameDisplayScreen extends Screen{
 			}
 		});
 		
-		win.add(resumeButt).pad(10, 10, 5, 10).row();
-		win.add(exitButt).pad(5, 10, 10, 10);
+		win.add(resumeButt).pad(5).prefWidth(180).row();
+		win.add(settingsButt).pad(5).prefWidth(180).row();
+		win.add(exitButt).pad(5).prefWidth(180);
 		
 		win.setMovable(false);
 		
 		pauseMenu = new Container<>(win);
 		pauseMenu.setFillParent(true);
+		pauseMenu.setVisible(false);
 	}
 
 	@Override
 	public void show(Stage stage) {
-		setPaused(false);
 		stage.addActor(pauseMenu);
 	}
 

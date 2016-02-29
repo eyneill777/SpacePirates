@@ -14,14 +14,21 @@ bad-window
   index: -1
 box
   rotate: false
-  xy: 161, 46
+  xy: 229, 46
   size: 17, 14
   orig: 17, 14
   offset: 0, 0
   index: -1
+checked
+  rotate: false
+  xy: 161, 28
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 cursor
   rotate: false
-  xy: 161, 20
+  xy: 229, 20
   size: 2, 24
   orig: 2, 24
   offset: 0, 0
@@ -32,5 +39,12 @@ frame
   size: 43, 43
   split: 6, 6, 6, 6
   orig: 43, 43
+  offset: 0, 0
+  index: -1
+unchecked
+  rotate: false
+  xy: 195, 28
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1

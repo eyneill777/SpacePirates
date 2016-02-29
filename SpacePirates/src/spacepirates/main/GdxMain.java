@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -90,14 +91,16 @@ public class GdxMain implements ApplicationListener{
 		
 		Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		config.width = windowSize.width;
-		config.height = windowSize.height;
-		config.fullscreen=true;
+		//config.width = windowSize.width;
+		//config.height = windowSize.height;
+		//config.fullscreen=true;
 		
 		//config.width = 800;
 		//config.height = 800;
 		
-		config.title = "test";
+		config.addIcon("res/icon.png", FileType.Internal);
+		
+		config.title = "SP";
 		
 		
 		new LwjglApplication(new GdxMain(), config);

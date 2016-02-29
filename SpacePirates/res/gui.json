@@ -52,6 +52,14 @@
     	}
     },
     
+    com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
+    	default: {
+    		font: medium, fontColor: gray,
+    		checkboxOff: unchecked,
+    		checkboxOn: checked
+    	}
+    },
+    
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
     	default: {
     		font: medium, fontColor: dark-gray,
@@ -70,6 +78,14 @@
     com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
     	default: {
     		vScroll: frame-dark-gray, vScrollKnob: frame-gray
+    	}
+    },
+    
+    com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
+    	default: {
+    		font: medium, fontColor: dark-gray,
+    		listStyle: default, scrollStyle: default,
+    		background: frame-gray
     	}
     }
 }
