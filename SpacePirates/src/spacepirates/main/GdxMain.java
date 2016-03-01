@@ -36,13 +36,13 @@ public class GdxMain implements ApplicationListener{
 		resources = new Resources();
 		resources.loadAll();
 		
-		FileHandle settingsFile = Gdx.files.external("settings.json");
+		FileHandle settingsFile = Gdx.files.local("settings.json");
 		if(settingsFile.exists()){
 			settings = new Json().fromJson(GeneralSettings.class, settingsFile);
 		} else {
 			settings = new GeneralSettings();
 		}
-		
+		settings.updateDisplayMode();
 		
 		batch = new SpriteBatch();
 		

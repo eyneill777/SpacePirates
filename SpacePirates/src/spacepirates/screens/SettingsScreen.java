@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 
 import javafx.scene.control.ToggleButton;
 import spacepirates.main.GeneralSettings;
@@ -26,6 +27,7 @@ public class SettingsScreen extends Screen {
 	private static final float PAD = 5;
 	private GeneralSettings settings;
 	private FileHandle settingFile;
+	private Json json;
 	
 	private ButtonGroup<TextButton> catButtions;
 	private Table root;
@@ -34,10 +36,12 @@ public class SettingsScreen extends Screen {
 	private Table bottemPane;
 	
 	private CheckBox fullscreenCheck;
+	private TextButton videoButt, audioButt, inputButt;
 	
 	public SettingsScreen(GeneralSettings settings, FileHandle settingFile) {
 		this.settings = settings;
 		this.settingFile = settingFile;
+		json = new Json();
 	}
 	
 	@Override
@@ -49,21 +53,21 @@ public class SettingsScreen extends Screen {
 		settingPane = new Table(skin);
 		bottemPane = new Table(skin);
 		
-		TextButton videoButt = new TextButton("Video", skin, "toggle");
+		videoButt = new TextButton("Video", skin, "toggle");
 		videoButt.addListener(new ClickListener(){
 			public void clicked(InputEvent e, float x, float y){
 				switchToVideo();
 			}
 		});
 		
-		TextButton audioButt = new TextButton("Audio", skin, "toggle");
+		audioButt = new TextButton("Audio", skin, "toggle");
 		audioButt.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y) {
 		        switchAudio();
 		    }
 		});
 		
-		TextButton inputButt = new TextButton("Input", skin, "toggle");
+		inputButt = new TextButton("Input", skin, "toggle");
 		inputButt.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y) {
 		        switchInput();
@@ -78,6 +82,11 @@ public class SettingsScreen extends Screen {
 		});
 		
 		TextButton applyButt = new TextButton("Apply", skin);
+		applyButt.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y) {
+		        apply();
+		    }
+		});
 		
 		catButtions = new ButtonGroup<>(videoButt, audioButt, inputButt);
 		catButtions.setMinCheckCount(1);
@@ -93,13 +102,14 @@ public class SettingsScreen extends Screen {
 		bottemPane.add(applyButt);
 		
 		root.add(categoryPane);
-		root.setDebug(true, true);
+		//root.setDebug(true, true);
 		root.add(settingPane).prefSize(500).row();
 		root.add(bottemPane).colspan(2);
 	}
 
 	public void loadVideo(Skin skin){
 		fullscreenCheck = new CheckBox("Fullscreen", skin);
+		fullscreenCheck.setChecked(settings.fullscreen);
 	}
 	
 	private void switchToVideo(){
@@ -113,6 +123,25 @@ public class SettingsScreen extends Screen {
 	
 	private void switchInput(){
 		settingPane.clear();
+	}
+	
+	private void apply(){
+		boolean needsSave = false;
+		TextButton cat = catButtions.getChecked();
+		if(cat == videoButt){
+			if(fullscreenCheck.isChecked() != settings.fullscreen){
+				settings.fullscreen = fullscreenCheck.isChecked();
+				settings.updateDisplayMode();
+				needsSave = true;
+			}
+		} else if(cat == audioButt){
+			
+		} else if(cat == inputButt){
+			
+		}
+		if(needsSave){
+			json.toJson(settings, settingFile);
+		}
 	}
 	
 	@Override
