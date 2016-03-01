@@ -29,20 +29,18 @@ public class GdxMain implements ApplicationListener{
 	private Resources resources;
 	
 	private GeneralSettings settings;
+	private FileHandle settingsFile;
+	
+	public GdxMain(GeneralSettings settings, FileHandle settingsFile){
+		this.settings = settings;
+		this.settingsFile = settingsFile;
+	}
 	
 	@Override
 	public void create() {
 		Box2D.init();
 		resources = new Resources();
 		resources.loadAll();
-		
-		FileHandle settingsFile = Gdx.files.local("settings.json");
-		if(settingsFile.exists()){
-			settings = new Json().fromJson(GeneralSettings.class, settingsFile);
-		} else {
-			settings = new GeneralSettings();
-		}
-		settings.updateDisplayMode();
 		
 		batch = new SpriteBatch();
 		
@@ -91,18 +89,27 @@ public class GdxMain implements ApplicationListener{
 		
 		Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		//config.width = windowSize.width;
-		//config.height = windowSize.height;
-		//config.fullscreen=true;
+		FileHandle settingsFile = new FileHandle("settings.json");
+		GeneralSettings settings;
+		if(settingsFile.exists()){
+			settings = new Json().fromJson(GeneralSettings.class, settingsFile);
+		} else {
+			settings = new GeneralSettings();
+		}
 		
-		//config.width = 800;
-		//config.height = 800;
+		if(settings.fullscreen){
+			config.width = windowSize.width;
+			config.height = windowSize.height;
+			config.fullscreen = true;
+		} else {
+			config.width = settings.width;
+			config.height = settings.height;
+		}
 		
 		config.addIcon("res/icon.png", FileType.Internal);
 		
-		config.title = "SP";
+		config.title = "Space Pirates";
 		
-		
-		new LwjglApplication(new GdxMain(), config);
+		new LwjglApplication(new GdxMain(settings, settingsFile), config);
 	}
 }

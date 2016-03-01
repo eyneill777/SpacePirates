@@ -98,13 +98,13 @@ public class SettingsScreen extends Screen {
 		categoryPane.add(audioButt).prefWidth(BUTT_WIDTH).pad(PAD).row();
 		categoryPane.add(inputButt).prefWidth(BUTT_WIDTH).pad(PAD);
 		
-		bottemPane.add(backButt).padRight(100);
-		bottemPane.add(applyButt);
+		bottemPane.add(backButt).expandX();
+		bottemPane.add(applyButt).expandX();
 		
-		root.add(categoryPane);
+		root.add(categoryPane).fillY().right();
+		root.add(settingPane).fill().prefSize(800, 800).row();
+		root.add(bottemPane).colspan(2).fillX();
 		//root.setDebug(true, true);
-		root.add(settingPane).prefSize(500).row();
-		root.add(bottemPane).colspan(2);
 	}
 
 	public void loadVideo(Skin skin){
@@ -126,22 +126,23 @@ public class SettingsScreen extends Screen {
 	}
 	
 	private void apply(){
-		boolean needsSave = false;
 		TextButton cat = catButtions.getChecked();
 		if(cat == videoButt){
 			if(fullscreenCheck.isChecked() != settings.fullscreen){
 				settings.fullscreen = fullscreenCheck.isChecked();
-				settings.updateDisplayMode();
-				needsSave = true;
+				if(settings.fullscreen){
+					DisplayMode desktop = Gdx.graphics.getDesktopDisplayMode();
+					Gdx.graphics.setDisplayMode(desktop.width, desktop.height, true);
+				} else {
+					Gdx.graphics.setDisplayMode(settings.width, settings.height, false);
+				}
 			}
 		} else if(cat == audioButt){
 			
 		} else if(cat == inputButt){
 			
 		}
-		if(needsSave){
-			json.toJson(settings, settingFile);
-		}
+		json.toJson(settings, settingFile);
 	}
 	
 	@Override
