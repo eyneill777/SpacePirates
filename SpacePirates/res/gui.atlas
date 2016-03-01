@@ -12,13 +12,6 @@ bad-window
   orig: 112, 58
   offset: 0, 0
   index: -1
-box
-  rotate: false
-  xy: 229, 46
-  size: 17, 14
-  orig: 17, 14
-  offset: 0, 0
-  index: -1
 checked
   rotate: false
   xy: 161, 28
@@ -28,7 +21,7 @@ checked
   index: -1
 cursor
   rotate: false
-  xy: 229, 20
+  xy: 229, 36
   size: 2, 24
   orig: 2, 24
   offset: 0, 0

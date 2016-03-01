@@ -36,10 +36,14 @@ public class Room
 		tiles.setTile(new WallTile(), 2, 2);
 		tiles.setTile(new WallTile(), 1, 2);
 		
+		tiles.setOffset(-width/2, -height/2);
+	}
+	
+	protected void createContents(){
 		if(getAdjacentRoom('N') != null){
 			tiles.setTile(new FloorTile(), tiles.getWidth()/2, tiles.getHeight()-1);
 		}
-		if(getAdjacentRoom('S') == null){
+		if(getAdjacentRoom('S') != null){
 			tiles.setTile(new FloorTile(), tiles.getWidth()/2, 0);
 		}
 		if(getAdjacentRoom('E') != null){
@@ -48,8 +52,6 @@ public class Room
 		if(getAdjacentRoom('W') != null){
 			tiles.setTile(new FloorTile(), 0, tiles.getHeight()/2);
 		}
-		
-		tiles.setOffset(-width/2, -height/2);
 	}
 	
 	public ArrayList<Actor> getActors(){

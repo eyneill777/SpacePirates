@@ -154,6 +154,10 @@ public class Level
 				r.connectedRooms[2] = roomMap[x][y+1];
 			}
 		}
+		
+		for(Room r :roomsToCheck){
+			r.createContents();
+		}
 	}
 	
 	private void createPath(boolean[][] map, int numPoints, int width, int height)
