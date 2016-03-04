@@ -17,20 +17,17 @@ public class PlayerInput {
 		}
 	}
 	
-	public void bind(int action, int buttion){
-		keyBindings[action] = buttion;
+	public void bind(int action, int button){
+		keyBindings[action] = button;
 	}
 	
-	public boolean isPressed(int action){
-		if(keyBindings[action] == -1){
-			return false;
-		}
-		
-		return Gdx.input.isKeyPressed(keyBindings[action]);
+	public boolean isPressed(int action) {
+		return keyBindings[action] != -1 && Gdx.input.isKeyPressed(keyBindings[action]);
+
 	}
 	
-	public void bind(Enum<?> action, int buttion){
-		bind(action.ordinal(), buttion);
+	public void bind(Enum<?> action, int button){
+		bind(action.ordinal(), button);
 	}
 	
 	public boolean isPressed(Enum<?> action){

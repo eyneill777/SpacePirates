@@ -23,6 +23,11 @@ public class WallTile extends Tile{
 	}
 
 	@Override
+	public boolean shouldCollide(Fixture thisFixture, Fixture otherFixture) {
+		return (thisFixture.getFilterData().maskBits & otherFixture.getFilterData().categoryBits) != 0;
+	}
+
+	@Override
 	public void init(){
 		super.init();
 		Sprite sprite = new Sprite(getGame().getResources().box);

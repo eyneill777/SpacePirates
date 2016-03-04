@@ -3,11 +3,7 @@ package spacepirates.game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.*;
 
 import spacepirates.input.Actions;
 import spacepirates.input.PlayerInput;
@@ -99,5 +95,10 @@ public class Player extends BoxActor{
 		shape.setRadius(getWidth()/2);
 		
 		return shape;
+	}
+
+	@Override
+	public boolean shouldCollide(Fixture thisFixture, Fixture otherFixture) {
+		return (thisFixture.getFilterData().maskBits & otherFixture.getFilterData().categoryBits) != 0;
 	}
 }

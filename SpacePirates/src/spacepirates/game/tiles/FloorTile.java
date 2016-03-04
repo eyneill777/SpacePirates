@@ -33,4 +33,9 @@ public class FloorTile extends Tile{
 	public void endCollision(Fixture thisFixture, Fixture otherFixture, Contact contact) {
 		
 	}
+
+	@Override
+	public boolean shouldCollide(Fixture thisFixture, Fixture otherFixture) {
+		return (thisFixture.getFilterData().maskBits & otherFixture.getFilterData().categoryBits) != 0;
+	}
 }

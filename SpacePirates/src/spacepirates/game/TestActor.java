@@ -2,11 +2,7 @@ package spacepirates.game;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.*;
 
 public class TestActor extends BoxActor{
 
@@ -50,10 +46,9 @@ public class TestActor extends BoxActor{
 
 	@Override
 	protected BodyDef buildBodyDef(){
-		BodyDef bodyDef = super.buildBodyDef();
 		//bodyDef.type = BodyType.StaticBody;
 		
-		return bodyDef;
+		return super.buildBodyDef();
 	}
 	
 	@Override
@@ -84,4 +79,8 @@ public class TestActor extends BoxActor{
 		shape.dispose();
 	}
 
+	@Override
+	public boolean shouldCollide(Fixture thisFixture, Fixture otherFixture) {
+		return (thisFixture.getFilterData().maskBits & otherFixture.getFilterData().categoryBits) != 0;
+	}
 }

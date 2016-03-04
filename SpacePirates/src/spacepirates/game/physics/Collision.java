@@ -1,4 +1,4 @@
-package spacepirates.game;
+package spacepirates.game.physics;
 
 import com.badlogic.gdx.physics.box2d.Fixture;
 

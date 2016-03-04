@@ -4,21 +4,17 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 
 import spacepirates.game.level.Level;
 import spacepirates.game.level.Room;
+import spacepirates.game.physics.Collidable;
 import spacepirates.game.tiles.TileMap;
 import spacepirates.graphics.Camera;
 import spacepirates.input.PlayerInput;
 import spacepirates.resources.Resources;
 
-public class Game implements ContactListener {
+public class Game implements ContactListener, ContactFilter {
 	public static final short CAT_BOUNDARY = 0x0001;
 	public static final short CAT_AGENT = 0x0002;
 	public static final short CAT_TILE = 0x0004;
@@ -127,13 +123,13 @@ public class Game implements ContactListener {
 			roomToLoad = null;
 		}
 
-		world.step(delta, 6, 2);
-
 		for (Actor actor : actors) {
 			actor.update(delta);
 		}
 
 		tiles.update(delta);
+
+		world.step(delta, 6, 2);
 
 		for (Actor actor : removeList) {
 			actors.remove(actor);
@@ -152,7 +148,7 @@ public class Game implements ContactListener {
 		}
 	}
 
-	public Camera getCamrea() {
+	public Camera getCamera() {
 		return camera;
 	}
 
@@ -174,21 +170,21 @@ public class Game implements ContactListener {
 
 	@Override
 	public void beginContact(Contact contact) {
-		Collidable actorA = resolveCollidable(contact.getFixtureA());
-		Collidable actorB = resolveCollidable(contact.getFixtureB());
-
-		actorA.beginCollision(contact.getFixtureA(), contact.getFixtureB(), contact);
-		actorB.beginCollision(contact.getFixtureB(), contact.getFixtureA(), contact);
+        resolveCollidable(contact.getFixtureA()).beginCollision(contact.getFixtureA(), contact.getFixtureB(), contact);
+        resolveCollidable(contact.getFixtureB()).beginCollision(contact.getFixtureB(), contact.getFixtureA(), contact);
 	}
 
 	@Override
 	public void endContact(Contact contact) {
-		Collidable actorA = resolveCollidable(contact.getFixtureA());
-		Collidable actorB = resolveCollidable(contact.getFixtureB());
-
-		actorA.endCollision(contact.getFixtureA(), contact.getFixtureB(), contact);
-		actorB.endCollision(contact.getFixtureB(), contact.getFixtureA(), contact);
+        resolveCollidable(contact.getFixtureA()).endCollision(contact.getFixtureA(), contact.getFixtureB(), contact);
+        resolveCollidable(contact.getFixtureB()).endCollision(contact.getFixtureB(), contact.getFixtureA(), contact);
 	}
+
+    @Override
+    public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
+        return resolveCollidable(fixtureA).shouldCollide(fixtureA, fixtureB) &&
+                resolveCollidable(fixtureB).shouldCollide(fixtureB, fixtureA);
+    }
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
@@ -197,5 +193,4 @@ public class Game implements ContactListener {
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
 	}
-
 }

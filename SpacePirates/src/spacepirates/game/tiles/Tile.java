@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import spacepirates.game.Collidable;
+import spacepirates.game.physics.Collidable;
 import spacepirates.game.Game;
 import spacepirates.game.GameObject;
 import spacepirates.game.level.Direction;
@@ -192,9 +192,9 @@ public abstract class Tile implements GameObject, Collidable{
 	public void store() {
 		initialized = false;
 		if(solid){
-			for(int i = 0; i < fixtures.length;i++){
-				if(fixtures[i] != null){
-					tiles.getBody().destroyFixture(fixtures[i]);
+			for (Fixture fixture : fixtures) {
+				if (fixture != null) {
+					tiles.getBody().destroyFixture(fixture);
 				}
 			}
 		}

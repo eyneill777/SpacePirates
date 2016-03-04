@@ -10,8 +10,10 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import spacepirates.game.physics.Collidable;
+import spacepirates.game.physics.Collision;
 
-public abstract class BoxActor extends Actor implements Collidable{
+public abstract class BoxActor extends Actor implements Collidable {
 	private ArrayList<Collision> collisions;
 	private boolean flying = false;
 	private Body body;
