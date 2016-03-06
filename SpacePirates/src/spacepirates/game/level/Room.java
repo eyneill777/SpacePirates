@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import spacepirates.game.Actor;
 import spacepirates.game.Game;
 import spacepirates.game.TestActor;
+import spacepirates.game.tiles.DoorTile;
 import spacepirates.game.tiles.FloorTile;
 import spacepirates.game.tiles.TileMap;
 import spacepirates.game.tiles.WallTile;
@@ -41,16 +42,16 @@ public class Room
 	
 	protected void createContents(){
 		if(getAdjacentRoom('N') != null){
-			tiles.setTile(new FloorTile(), tiles.getWidth()/2, tiles.getHeight()-1);
+			tiles.setTile(new DoorTile(getAdjacentRoom('N')), tiles.getWidth()/2, tiles.getHeight()-1);
 		}
 		if(getAdjacentRoom('S') != null){
-			tiles.setTile(new FloorTile(), tiles.getWidth()/2, 0);
+			tiles.setTile(new DoorTile(getAdjacentRoom('S')), tiles.getWidth()/2, 0);
 		}
 		if(getAdjacentRoom('E') != null){
-			tiles.setTile(new FloorTile(), tiles.getHeight()-1, tiles.getHeight()/2);
+			tiles.setTile(new DoorTile(getAdjacentRoom('E')), tiles.getHeight()-1, tiles.getHeight()/2);
 		}
 		if(getAdjacentRoom('W') != null){
-			tiles.setTile(new FloorTile(), 0, tiles.getHeight()/2);
+			tiles.setTile(new DoorTile(getAdjacentRoom('W')), 0, tiles.getHeight()/2);
 		}
 	}
 	

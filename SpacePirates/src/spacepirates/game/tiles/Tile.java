@@ -2,9 +2,7 @@ package spacepirates.game.tiles;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.*;
 import spacepirates.game.physics.Collidable;
 import spacepirates.game.Game;
 import spacepirates.game.GameObject;
@@ -44,14 +42,22 @@ public abstract class Tile implements GameObject, Collidable{
 		this.tiles = tiles;
 	}
 	
-	public int getX(){
+	public int getTileX(){
 		return x;
 	}
 	
-	public int getY(){
+	public int getTileY(){
 		return y;
 	}
-	
+
+	public float getX(){
+		return x * TileMap.TILE_SIZE;
+	}
+
+	public float getY(){
+		return y * TileMap.TILE_SIZE;
+	}
+
 	public TileMap getTileMap(){
 		return tiles;
 	}
@@ -192,11 +198,22 @@ public abstract class Tile implements GameObject, Collidable{
 	public void store() {
 		initialized = false;
 		if(solid){
+            Body body = getTileMap().getBody();
 			for (Fixture fixture : fixtures) {
 				if (fixture != null) {
-					tiles.getBody().destroyFixture(fixture);
+					body.destroyFixture(fixture);
 				}
 			}
 		}
 	}
+
+    @Override
+    public void collision(Fixture thisFixture, Fixture otherFixture, Contact contact) {
+
+    }
+
+    @Override
+    public boolean shouldCollide(Fixture thisFixture, Fixture otherFixture) {
+        return (thisFixture.getFilterData().maskBits & otherFixture.getFilterData().categoryBits) != 0;
+    }
 }

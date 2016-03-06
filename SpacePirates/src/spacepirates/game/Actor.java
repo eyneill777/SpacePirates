@@ -1,27 +1,31 @@
 package spacepirates.game;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import spacepirates.game.physics.Collidable;
+import spacepirates.game.physics.PhysicsComponent;
 import spacepirates.resources.Resources;
 
-public abstract class Actor implements GameObject{
+public abstract class Actor implements GameObject, Collidable{
 	private Game game;
 	private boolean initialized = false;
-	private float x, y, width, height,  rotation;
-	
+	private PhysicsComponent physicsComponent;
+    private float width, height;
+
 	public float getX(){
-		return x;
+		return physicsComponent.getX();
 	}
 	
 	public float getY(){
-		return y;
+		return physicsComponent.getY();
 	}
 	
 	public void setX(float x){
-		this.x = x;
+		physicsComponent.setX(x);
 	}
 	
 	public void setY(float y){
-		this.y = y;
+		physicsComponent.setY(y);
 	}
 	
 	public float getWidth(){
@@ -46,16 +50,15 @@ public abstract class Actor implements GameObject{
 	}
 	
 	public void setPosition(float x, float y){
-		this.x = x;
-		this.y = y;
+		physicsComponent.setPosition(x, y);
 	}
 	
 	public float getRotation(){
-		return rotation;
+		return physicsComponent.getRotation();
 	}
 	
 	public void setRotation(float rotation){
-		this.rotation = rotation;
+		physicsComponent.setRotation(rotation);
 	}
 	
 	public void setGame(Game game){
@@ -69,17 +72,43 @@ public abstract class Actor implements GameObject{
 	public Resources getResources(){
 		return game.getResources();
 	}
-	
-	public abstract void update(float delta);
-	public abstract void render(SpriteBatch batch);
+
+    @Override
 	public void init(){
 		initialized = true;
+        physicsComponent.init();
 	}
+
+    @Override
 	public void store(){
 		initialized = false;
+        physicsComponent.store();
 	}
-	
-	public boolean isInitialized(){
+
+    @Override
+    public void update(float delta) {
+        physicsComponent.update(delta);
+    }
+
+    public PhysicsComponent getPhysicsComponent() {
+        return physicsComponent;
+    }
+
+    public void setPhysicsComponent(PhysicsComponent physicsComponent) {
+        this.physicsComponent = physicsComponent;
+    }
+
+    public boolean isInitialized(){
 		return initialized;
 	}
+
+    @Override
+    public void collision(Fixture thisFixture, Fixture otherFixture, Contact contact) {
+        physicsComponent.collision(thisFixture, otherFixture, contact);
+    }
+
+    @Override
+    public boolean shouldCollide(Fixture thisFixture, Fixture otherFixture) {
+        return true;
+    }
 }

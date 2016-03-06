@@ -3,13 +3,16 @@ package spacepirates.game;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
+import spacepirates.game.physics.SBPhysicsComponent;
 
-public class TestActor extends BoxActor{
+public class TestActor extends Actor{
 
 	private Sprite testSprite;
-	
+	private SBPhysicsComponent pComponent;
+
 	public TestActor() {
 		super();
+		setPhysicsComponent(pComponent = new SBPhysicsComponent(this));
 		testSprite = new Sprite();
 		
 		setPosition(-2, -2);
@@ -23,6 +26,11 @@ public class TestActor extends BoxActor{
 		//walk(0,1, .95f);
 	}
 
+    @Override
+    public SBPhysicsComponent getPhysicsComponent(){
+        return pComponent;
+    }
+
 	@Override
 	public void render(SpriteBatch batch) {
 		testSprite.setX(getX());
@@ -34,53 +42,9 @@ public class TestActor extends BoxActor{
 	@Override
 	public void init() {
 		super.init();
+        pComponent.addRectangle(getWidth(), getHeight(), 2);
 		testSprite = getResources().gameArt.createSprite("may2015-3");
 		testSprite.setSize(getWidth(), getHeight());
 		testSprite.setOrigin(getWidth()/2, getHeight()/2);
-	}
-
-	@Override
-	public void store() {
-		super.store();
-	}
-
-	@Override
-	protected BodyDef buildBodyDef(){
-		//bodyDef.type = BodyType.StaticBody;
-		
-		return super.buildBodyDef();
-	}
-	
-	@Override
-	protected FixtureDef buildFixtureDef(){
-		FixtureDef fixtureDef = super.buildFixtureDef();
-		
-		fixtureDef.density = 2;
-		fixtureDef.filter.categoryBits = Game.CAT_AGENT;
-		
-		return fixtureDef;
-	}
-	
-	private Shape buildShape() {
-		PolygonShape boxShape = new PolygonShape();
-		boxShape.setAsBox(getWidth()/2, getHeight()/2);
-		
-		return boxShape;
-	}
-
-	@Override
-	protected void buildFixtures(Body body) {
-		FixtureDef fixDef = buildFixtureDef();
-		Shape shape = buildShape();
-		fixDef.shape = shape;
-		
-		body.createFixture(fixDef);
-		
-		shape.dispose();
-	}
-
-	@Override
-	public boolean shouldCollide(Fixture thisFixture, Fixture otherFixture) {
-		return (thisFixture.getFilterData().maskBits & otherFixture.getFilterData().categoryBits) != 0;
 	}
 }

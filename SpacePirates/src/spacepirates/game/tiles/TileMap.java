@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import spacepirates.game.Game;
 import spacepirates.game.GameObject;
 
-public class TileMap implements GameObject{
+public class TileMap{
 	public static final float TILE_SIZE = 1;
 	
 	private boolean initialized = false;
@@ -52,7 +52,7 @@ public class TileMap implements GameObject{
 	}
 	
 	public void setTile(Tile tile, int x, int y){
-		if(isInitialized()){
+		if(initialized){
 			tiles[y][x].store();
 		}
 		
@@ -60,7 +60,7 @@ public class TileMap implements GameObject{
 		tile.setPosition(x, y);
 		tiles[y][x] = tile;
 		
-		if(isInitialized()){
+		if(initialized){
 			tile.init();
 		}
 	}

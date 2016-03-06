@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 import spacepirates.game.Game;
+import spacepirates.game.GameObject;
 
 public class BoundaryTile extends Tile{
 
@@ -29,16 +30,6 @@ public class BoundaryTile extends Tile{
 		fixtureDef.filter.categoryBits = Game.CAT_BOUNDARY | Game.CAT_TILE;
 		
 		return fixtureDef;
-	}
-	
-	@Override
-	public void beginCollision(Fixture thisFixture, Fixture otherFixture, Contact contact) {
-		
-	}
-
-	@Override
-	public void endCollision(Fixture thisFixture, Fixture otherFixture, Contact contact) {
-		
 	}
 
 	@Override

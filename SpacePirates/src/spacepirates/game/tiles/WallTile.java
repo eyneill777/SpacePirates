@@ -4,27 +4,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import spacepirates.game.GameObject;
 
 public class WallTile extends Tile{
 
 	public WallTile() {
 		super();
 		setSolid(true);
-	}
-	
-	@Override
-	public void beginCollision(Fixture thisFixture, Fixture otherFixture, Contact contact) {
-		
-	}
-
-	@Override
-	public void endCollision(Fixture thisFixture, Fixture otherFixture, Contact contact) {
-		
-	}
-
-	@Override
-	public boolean shouldCollide(Fixture thisFixture, Fixture otherFixture) {
-		return (thisFixture.getFilterData().maskBits & otherFixture.getFilterData().categoryBits) != 0;
 	}
 
 	@Override

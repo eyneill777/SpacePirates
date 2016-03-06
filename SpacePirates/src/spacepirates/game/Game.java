@@ -14,7 +14,7 @@ import spacepirates.graphics.Camera;
 import spacepirates.input.PlayerInput;
 import spacepirates.resources.Resources;
 
-public class Game implements ContactListener, ContactFilter {
+public class Game implements ContactFilter {
 	public static final short CAT_BOUNDARY = 0x0001;
 	public static final short CAT_AGENT = 0x0002;
 	public static final short CAT_TILE = 0x0004;
@@ -36,7 +36,7 @@ public class Game implements ContactListener, ContactFilter {
 
 	public Game() {
 		world = new World(Vector2.Zero, true);
-		world.setContactListener(this);
+		world.setContactFilter(this);
 
 		camera = new Camera();
 		camera.setWidth(10);
@@ -78,6 +78,14 @@ public class Game implements ContactListener, ContactFilter {
 		tiles = room.getTiles();
 		tiles.setGame(this);
 		tiles.init();
+	}
+
+    public void setRoomToLoad(Room roomToLoad){
+        this.roomToLoad = roomToLoad;
+    }
+
+	public TileMap getTiles(){
+		return tiles;
 	}
 
 	public void setPlayerInput(PlayerInput playerInput) {
@@ -131,6 +139,11 @@ public class Game implements ContactListener, ContactFilter {
 
 		world.step(delta, 6, 2);
 
+        for(Contact contact: world.getContactList()){
+            resolveCollidable(contact.getFixtureA()).collision(contact.getFixtureA(), contact.getFixtureB(), contact);
+            resolveCollidable(contact.getFixtureB()).collision(contact.getFixtureB(), contact.getFixtureA(), contact);
+        }
+
 		for (Actor actor : removeList) {
 			actors.remove(actor);
 			actor.store();
@@ -161,23 +174,7 @@ public class Game implements ContactListener, ContactFilter {
 	}
 
 	public Collidable resolveCollidable(Fixture fixture) {
-		if (fixture.getUserData() == null) {
-			return (Collidable) fixture.getBody().getUserData();
-		} else {
-			return (Collidable) fixture.getUserData();
-		}
-	}
-
-	@Override
-	public void beginContact(Contact contact) {
-        resolveCollidable(contact.getFixtureA()).beginCollision(contact.getFixtureA(), contact.getFixtureB(), contact);
-        resolveCollidable(contact.getFixtureB()).beginCollision(contact.getFixtureB(), contact.getFixtureA(), contact);
-	}
-
-	@Override
-	public void endContact(Contact contact) {
-        resolveCollidable(contact.getFixtureA()).endCollision(contact.getFixtureA(), contact.getFixtureB(), contact);
-        resolveCollidable(contact.getFixtureB()).endCollision(contact.getFixtureB(), contact.getFixtureA(), contact);
+        return (Collidable) fixture.getUserData();
 	}
 
     @Override
@@ -185,12 +182,4 @@ public class Game implements ContactListener, ContactFilter {
         return resolveCollidable(fixtureA).shouldCollide(fixtureA, fixtureB) &&
                 resolveCollidable(fixtureB).shouldCollide(fixtureB, fixtureA);
     }
-
-	@Override
-	public void postSolve(Contact contact, ContactImpulse impulse) {
-	}
-
-	@Override
-	public void preSolve(Contact contact, Manifold oldManifold) {
-	}
 }
