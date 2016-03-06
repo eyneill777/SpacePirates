@@ -140,8 +140,10 @@ public class Game implements ContactFilter {
 		world.step(delta, 6, 2);
 
         for(Contact contact: world.getContactList()){
-            resolveCollidable(contact.getFixtureA()).collision(contact.getFixtureA(), contact.getFixtureB(), contact);
-            resolveCollidable(contact.getFixtureB()).collision(contact.getFixtureB(), contact.getFixtureA(), contact);
+            if(contact.isTouching()){
+                resolveCollidable(contact.getFixtureA()).collision(contact.getFixtureA(), contact.getFixtureB(), contact);
+                resolveCollidable(contact.getFixtureB()).collision(contact.getFixtureB(), contact.getFixtureA(), contact);
+            }
         }
 
 		for (Actor actor : removeList) {

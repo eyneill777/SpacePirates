@@ -3,6 +3,8 @@ package spacepirates.game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import spacepirates.game.physics.SBPhysicsComponent;
 import spacepirates.input.Actions;
 import spacepirates.input.PlayerInput;
@@ -43,9 +45,16 @@ public class Player extends Actor{
 		//} else {
 		//	boxSprite.setColor(Color.GREEN);
 		//}
+        boxSprite.setColor(Color.GREEN);
 	}
 
-	@Override
+    @Override
+    public void collision(Fixture thisFixture, Fixture otherFixture, Contact contact) {
+        super.collision(thisFixture, otherFixture, contact);
+        boxSprite.setColor(Color.BLUE);
+    }
+
+    @Override
 	public void render(SpriteBatch batch) {
 		boxSprite.setX(getX());
 		boxSprite.setY(getY());

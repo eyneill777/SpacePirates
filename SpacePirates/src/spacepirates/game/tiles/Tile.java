@@ -115,17 +115,19 @@ public abstract class Tile implements GameObject, Collidable{
 			if(n){
 				edge.set(x1, y2, x2, y2);
 				if(w){
-					edge.setVertex0(x1, y1);
+					//edge.setVertex0(x1, y1);
 				} else {
+                    edge.setHasVertex0(true);
 					edge.setVertex0(x1 - TileMap.TILE_SIZE, y2);
 				}
 				if(e){
-					edge.setVertex3(x2, y1);
+					//edge.setVertex3(x2, y1);
 				} else {
+                    edge.setHasVertex3(true);
 					edge.setVertex3(x2 + TileMap.TILE_SIZE, y2);
 				}
-				edge.setHasVertex0(true);
-				edge.setHasVertex3(true);
+				//edge.setHasVertex0(true);
+				//edge.setHasVertex3(true);
 				fixtures[Direction.N] = getTileMap().getBody().createFixture(fixterDef);
 				fixtures[Direction.N].setUserData(this);
 			}
@@ -133,17 +135,19 @@ public abstract class Tile implements GameObject, Collidable{
 			if(s){
 				edge.set(x2, y1, x1, y1);
 				if(e){
-					edge.setVertex0(x2, y2);
+					//edge.setVertex0(x2, y2);
 				} else {
+                    edge.setHasVertex0(true);
 					edge.setVertex0(x2 + TileMap.TILE_SIZE, y1);
 				}
 				if(w){
-					edge.setVertex3(x1, y2);
+					//edge.setVertex3(x1, y2);
 				} else {
+                    edge.setHasVertex3(true);
 					edge.setVertex3(x1 - TileMap.TILE_SIZE, y1);
 				}
-				edge.setHasVertex0(true);
-				edge.setHasVertex3(true);
+				//edge.setHasVertex0(true);
+				//edge.setHasVertex3(true);
 				fixtures[Direction.S] = getTileMap().getBody().createFixture(fixterDef);
 				fixtures[Direction.S].setUserData(this);
 			}
@@ -151,17 +155,19 @@ public abstract class Tile implements GameObject, Collidable{
 			if(e){
 				edge.set(x2, y2, x2, y1);
 				if(n){
-					edge.setVertex0(x1, y2);
+					//edge.setVertex0(x1, y2);
 				} else {
+                    edge.setHasVertex0(true);
 					edge.setVertex0(x2, y2 + TileMap.TILE_SIZE);
 				}
 				if(s){
-					edge.setVertex3(x1, y1);
+					//edge.setVertex3(x1, y1);
 				} else {
+                    edge.setHasVertex3(true);
 					edge.setVertex3(x2, y1 - TileMap.TILE_SIZE);
 				}
-				edge.setHasVertex0(true);
-				edge.setHasVertex3(true);
+				//edge.setHasVertex0(true);
+				//edge.setHasVertex3(true);
 				fixtures[Direction.E] = getTileMap().getBody().createFixture(fixterDef);
 				fixtures[Direction.E].setUserData(this);
 			}
@@ -169,17 +175,19 @@ public abstract class Tile implements GameObject, Collidable{
 			if(w){
 				edge.set(x1, y1, x1, y2);
 				if(s){
-					edge.setVertex0(x2, y1);
+					//edge.setVertex0(x2, y1);
 				} else {
+                    edge.setHasVertex0(true);
 					edge.setVertex0(x1, y1 - TileMap.TILE_SIZE);
 				}
 				if(n){
-					edge.setVertex3(x2, y2);
+					//edge.setVertex3(x2, y2);
 				} else {
+                    edge.setHasVertex3(true);
 					edge.setVertex3(x1, y2 + TileMap.TILE_SIZE);
 				}
-				edge.setHasVertex0(true);
-				edge.setHasVertex3(true);
+				//edge.setHasVertex0(true);
+				//edge.setHasVertex3(true);
 				fixtures[Direction.W] = getTileMap().getBody().createFixture(fixterDef);
 				fixtures[Direction.W].setUserData(this);
 			}
