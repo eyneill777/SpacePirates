@@ -21,6 +21,7 @@ public interface PhysicsComponent{
 
     void update(float delta);
 
-    void collision(Fixture thisFixture, Fixture otherFixture, Contact contact);
+    void beginCollision(Collision collision);
+    void endCollision(Collision collision);
     boolean shouldCollide(Fixture thisFixture, Fixture otherFixture);
 }

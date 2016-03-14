@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import spacepirates.game.physics.Collision;
 import spacepirates.game.physics.SBPhysicsComponent;
 import spacepirates.input.Actions;
 import spacepirates.input.PlayerInput;
@@ -14,7 +15,8 @@ public class Player extends Actor{
 	private PlayerInput playerInput;
 	private Sprite boxSprite;
 	private float speed = 6;
-	
+	private int count = 0;
+
 	public Player() {
         setPhysicsComponent(pComponent = new SBPhysicsComponent(this));
 		setWidth(0.98f);
@@ -40,18 +42,23 @@ public class Player extends Actor{
 		
 		pComponent.walk(fx, fy, 1);
 		
-		//if(pComponent.getCollisions().size() > 0){
-		//	boxSprite.setColor(Color.BLUE);
-		//} else {
-		//	boxSprite.setColor(Color.GREEN);
-		//}
-        boxSprite.setColor(Color.GREEN);
+		if(count > 0){
+			boxSprite.setColor(Color.BLUE);
+		} else {
+			boxSprite.setColor(Color.GREEN);
+		}
 	}
 
     @Override
-    public void collision(Fixture thisFixture, Fixture otherFixture, Contact contact) {
-        super.collision(thisFixture, otherFixture, contact);
-        boxSprite.setColor(Color.BLUE);
+    public void beginCollision(Collision collision) {
+        super.beginCollision(collision);
+        count++;
+    }
+
+    @Override
+    public void endCollision(Collision collision) {
+        super.endCollision(collision);
+        count--;
     }
 
     @Override

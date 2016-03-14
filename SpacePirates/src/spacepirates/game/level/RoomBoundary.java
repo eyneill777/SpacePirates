@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import spacepirates.game.GameObject;
 import spacepirates.game.physics.Collidable;
 import spacepirates.game.Game;
+import spacepirates.game.physics.Collision;
 
 public class RoomBoundary implements Collidable{
 	private Body body;
@@ -60,7 +61,12 @@ public class RoomBoundary implements Collidable{
 	}
 
 	@Override
-	public void collision(Fixture thisFixture, Fixture otherFixture, Contact contact) {
+	public void beginCollision(Collision collision) {
+
+	}
+
+	@Override
+	public void endCollision(Collision collision) {
 
 	}
 

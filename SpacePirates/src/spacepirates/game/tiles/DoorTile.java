@@ -14,7 +14,6 @@ public class DoorTile extends Tile{
 
     public DoorTile(Room targetRoom){
         super();
-        setSolid(true);
         this.targetRoom = targetRoom;
     }
 

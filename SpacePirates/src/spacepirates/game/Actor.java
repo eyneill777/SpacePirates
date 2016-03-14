@@ -3,6 +3,7 @@ package spacepirates.game;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import spacepirates.game.physics.Collidable;
+import spacepirates.game.physics.Collision;
 import spacepirates.game.physics.PhysicsComponent;
 import spacepirates.resources.Resources;
 
@@ -103,8 +104,13 @@ public abstract class Actor implements GameObject, Collidable{
 	}
 
     @Override
-    public void collision(Fixture thisFixture, Fixture otherFixture, Contact contact) {
-        physicsComponent.collision(thisFixture, otherFixture, contact);
+    public void beginCollision(Collision collision) {
+        physicsComponent.beginCollision(collision);
+    }
+
+    @Override
+    public void endCollision(Collision collision) {
+        physicsComponent.endCollision(collision);
     }
 
     @Override

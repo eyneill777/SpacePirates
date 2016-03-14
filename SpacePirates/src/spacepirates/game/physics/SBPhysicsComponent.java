@@ -5,17 +5,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import spacepirates.game.Actor;
 
-import java.util.ArrayList;
-
 /**
  * @author gabek
+ * Single body physics component
  */
 public class SBPhysicsComponent implements PhysicsComponent {
     private Body body;
     private boolean flying;
     private float groundFriction = .5f;
     private boolean isInitialized;
-    private float x, y, width, height,  rotation;
+    private float x, y, rotation;
     private Actor master;
 
     public SBPhysicsComponent(Actor master){
@@ -64,7 +63,12 @@ public class SBPhysicsComponent implements PhysicsComponent {
     }
 
     @Override
-    public void collision(Fixture thisFixture, Fixture otherFixture, Contact contact) {
+    public void beginCollision(Collision collision) {
+
+    }
+
+    @Override
+    public void endCollision(Collision collision) {
 
     }
 

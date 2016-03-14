@@ -9,12 +9,13 @@ import com.badlogic.gdx.physics.box2d.*;
 import spacepirates.game.level.Level;
 import spacepirates.game.level.Room;
 import spacepirates.game.physics.Collidable;
+import spacepirates.game.physics.Collision;
 import spacepirates.game.tiles.TileMap;
 import spacepirates.graphics.Camera;
 import spacepirates.input.PlayerInput;
 import spacepirates.resources.Resources;
 
-public class Game implements ContactFilter {
+public class Game implements ContactFilter, ContactListener {
 	public static final short CAT_BOUNDARY = 0x0001;
 	public static final short CAT_AGENT = 0x0002;
 	public static final short CAT_TILE = 0x0004;
@@ -29,13 +30,13 @@ public class Game implements ContactFilter {
 	private World world;
 	private Room currentRoom;
 	private Room roomToLoad;
-	private ArrayList<Actor> actors;
 	private ArrayList<Actor> removeList;
 	private ArrayList<Actor> addList;
-	private TileMap tiles;
+    private ArrayList<Collision> collisions;
 
 	public Game() {
 		world = new World(Vector2.Zero, true);
+        world.setContactListener(this);
 		world.setContactFilter(this);
 
 		camera = new Camera();
@@ -49,6 +50,7 @@ public class Game implements ContactFilter {
 		// actors = new ArrayList<>();
 		addList = new ArrayList<>();
 		removeList = new ArrayList<>();
+		collisions = new ArrayList<>();
 
 		Player player = new Player();
 		camera.setTarget(player);
@@ -58,26 +60,22 @@ public class Game implements ContactFilter {
 	}
 
 	private void loadRoom(Room room) {
-		if (actors != null) {
-			for (Actor actor : actors) {
-				actor.store();
-			}
+		if (currentRoom != null) {
+			for(Actor actor: getActors()){
+                actor.store();
+            }
+            getTiles().store();
 		}
 
 		room.setGame(this);
 		currentRoom = room;
-		actors = room.getActors();
-		for (Actor actor : actors) {
+		for (Actor actor : currentRoom.getActors()) {
 			actor.setGame(this);
 			actor.init();
 		}
 
-		if (tiles != null) {
-			tiles.store();
-		}
-		tiles = room.getTiles();
-		tiles.setGame(this);
-		tiles.init();
+		getTiles().setGame(this);
+		getTiles().init();
 	}
 
     public void setRoomToLoad(Room roomToLoad){
@@ -85,8 +83,12 @@ public class Game implements ContactFilter {
     }
 
 	public TileMap getTiles(){
-		return tiles;
+		return currentRoom.getTiles();
 	}
+
+    public ArrayList<Actor> getActors(){
+        return currentRoom.getActors();
+    }
 
 	public void setPlayerInput(PlayerInput playerInput) {
 		this.playerInput = playerInput;
@@ -106,7 +108,7 @@ public class Game implements ContactFilter {
 	}
 
 	public Actor getActor(int i) {
-		return actors.get(i);
+		return currentRoom.getActors().get(i);
 	}
 
 	public void setResources(Resources resources) {
@@ -120,7 +122,7 @@ public class Game implements ContactFilter {
 	public void update(float delta) {
 		if (currentRoom != null) {
 			for (Actor actor : addList) {
-				actors.add(actor);
+				getActors().add(actor);
 				actor.init();
 			}
 			addList.clear();
@@ -131,23 +133,25 @@ public class Game implements ContactFilter {
 			roomToLoad = null;
 		}
 
-		for (Actor actor : actors) {
+		for (Actor actor : getActors()) {
 			actor.update(delta);
 		}
 
-		tiles.update(delta);
+		getTiles().update(delta);
 
 		world.step(delta, 6, 2);
 
-        for(Contact contact: world.getContactList()){
-            if(contact.isTouching()){
-                resolveCollidable(contact.getFixtureA()).collision(contact.getFixtureA(), contact.getFixtureB(), contact);
-                resolveCollidable(contact.getFixtureB()).collision(contact.getFixtureB(), contact.getFixtureA(), contact);
+        for(Collision col: collisions){
+            if(col.isBegin()){
+                resolveCollidable(col.getThisFixture()).beginCollision(col);
+            } else {
+                resolveCollidable(col.getThisFixture()).endCollision(col);
             }
         }
+        collisions.clear();
 
 		for (Actor actor : removeList) {
-			actors.remove(actor);
+			getActors().remove(actor);
 			actor.store();
 		}
 		removeList.clear();
@@ -156,9 +160,9 @@ public class Game implements ContactFilter {
 	}
 
 	public void render(SpriteBatch batch) {
-		tiles.render(batch);
+		getTiles().render(batch);
 
-		for (Actor actor : actors) {
+		for (Actor actor : getActors()) {
 			actor.render(batch);
 		}
 	}
@@ -183,5 +187,27 @@ public class Game implements ContactFilter {
     public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
         return resolveCollidable(fixtureA).shouldCollide(fixtureA, fixtureB) &&
                 resolveCollidable(fixtureB).shouldCollide(fixtureB, fixtureA);
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        collisions.add(new Collision(contact.getFixtureA(), contact.getFixtureB(), contact, true));
+        collisions.add(new Collision(contact.getFixtureB(), contact.getFixtureA(), contact, true));
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+        collisions.add(new Collision(contact.getFixtureA(), contact.getFixtureB(), contact, false));
+        collisions.add(new Collision(contact.getFixtureB(), contact.getFixtureA(), contact, false));
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold manifold) {
+
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse contactImpulse) {
+
     }
 }

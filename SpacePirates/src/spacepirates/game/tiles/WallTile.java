@@ -5,12 +5,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import spacepirates.game.GameObject;
+import spacepirates.game.physics.RectWallComponent;
 
 public class WallTile extends Tile{
 
 	public WallTile() {
 		super();
-		setSolid(true);
+        setSolid(true);
+		setTilePhysics(new RectWallComponent(this));
 	}
 
 	@Override

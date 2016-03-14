@@ -2,18 +2,15 @@ package spacepirates.game.tiles;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-
-import spacepirates.game.Game;
-import spacepirates.game.GameObject;
+import spacepirates.game.physics.RectWallComponent;
 
 public class BoundaryTile extends Tile{
 
 	public BoundaryTile() {
 		super();
-		setSolid(true);
+        setSolid(true);
+		setTilePhysics(new RectWallComponent(this));
 	}
 	
 	public void init(){
@@ -22,14 +19,11 @@ public class BoundaryTile extends Tile{
 		sprite.setColor(Color.YELLOW);
 		setSprite(sprite);
 	}
-	
+
 	@Override
-	public FixtureDef buildFixtureDef(){
-		FixtureDef fixtureDef = super.buildFixtureDef();
-		
-		fixtureDef.filter.categoryBits = Game.CAT_BOUNDARY | Game.CAT_TILE;
-		
-		return fixtureDef;
+	public void store() {
+		super.store();
+
 	}
 
 	@Override
