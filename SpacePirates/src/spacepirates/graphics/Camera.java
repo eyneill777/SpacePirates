@@ -20,6 +20,9 @@ public class Camera{
         relative_rotation = false;
     }
 
+    public Actor getTarget(){
+        return target;
+    }
 
     public void update(float delta) {
     	if(tracking){
@@ -29,8 +32,8 @@ public class Camera{
                 rot = target_rot;
             }
 
-            x = target.getX() + target.getWidth()/2;
-            y = target.getY() + target.getHeight()/2;
+            x += MathUtils.clamp((target.getX() + target.getWidth()/2) - x, -.5f, .5f);
+            y += MathUtils.clamp((target.getY() + target.getHeight()/2) - y, -.5f, .5f);
         } else {
             rot = target_rot;
             x = target_x;
@@ -68,13 +71,13 @@ public class Camera{
     }
 
     public void setX(float x){
-    	target_x = x;
+    	this.x = x;
     }
     
     public void setY(float y){
-    	target_y = y;
+    	this.y = y;
     }
-    
+
     public void setRotation(float rotation){
     	target_rot = rotation;
     }

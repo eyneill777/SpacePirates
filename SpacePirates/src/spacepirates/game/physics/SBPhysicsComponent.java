@@ -13,7 +13,7 @@ public class SBPhysicsComponent implements PhysicsComponent {
     private Body body;
     private boolean flying;
     private float groundFriction = .5f;
-    private boolean isInitialized;
+    private boolean initialized;
     private float x, y, rotation;
     private Actor master;
 
@@ -22,22 +22,24 @@ public class SBPhysicsComponent implements PhysicsComponent {
     }
 
     public void init(){
-        isInitialized = true;
+        if(!initialized){
+            initialized = true;
 
-        BodyDef bodyDef = buildBodyDef();
+            BodyDef bodyDef = buildBodyDef();
 
-        body = master.getGame().getWorld().createBody(bodyDef);
+            body = master.getGame().getWorld().createBody(bodyDef);
+        }
     }
 
     private void updateDrag(){
-        if(isInitialized && !flying){
+        if(initialized && !flying){
             body.setLinearDamping(body.getMass() * groundFriction);
             body.setAngularDamping(body.getMass() * groundFriction);
         }
     }
 
     public boolean isInitialized(){
-        return isInitialized;
+        return initialized;
     }
 
     public void setFlying(boolean flying){
@@ -53,8 +55,8 @@ public class SBPhysicsComponent implements PhysicsComponent {
 
     public void update(float delta){
         rotation = MathUtils.radiansToDegrees * body.getAngle();
-        x = body.getPosition().x - master.getWidth()/2;
-        y = body.getPosition().y - master.getHeight()/2;
+        x = body.getPosition().x;// - master.getWidth()/2;
+        y = body.getPosition().y;// - master.getHeight()/2;
 
         if(!flying && Math.abs(body.getLinearVelocity().x) < .1f && Math.abs(body.getLinearVelocity().y) < .1f &&
                 !body.getLinearVelocity().isZero()) {
@@ -73,9 +75,11 @@ public class SBPhysicsComponent implements PhysicsComponent {
     }
 
     public void store(){
-        isInitialized = false;
-        master.getGame().getWorld().destroyBody(body);
-        body = null;
+        if(initialized){
+            initialized = false;
+            master.getGame().getWorld().destroyBody(body);
+            body = null;
+        }
     }
 
     public void walk(float maxX, float maxY, float acceleration) {
@@ -105,8 +109,9 @@ public class SBPhysicsComponent implements PhysicsComponent {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         //bodyDef.fixedRotation = true;
 
-        bodyDef.position.x = getX() - master.getWidth()/2;
-        bodyDef.position.y = getY() - master.getHeight()/2;
+        bodyDef.position.x = x;
+        bodyDef.position.y = y;
+        bodyDef.angle = rotation * MathUtils.degRad;
 
         return bodyDef;
     }
@@ -158,7 +163,7 @@ public class SBPhysicsComponent implements PhysicsComponent {
     @Override
     public void setX(float x) {
         this.x = x;
-        if(isInitialized){
+        if(initialized){
             body.setTransform(x, body.getPosition().y, body.getAngle());
         }
     }
@@ -166,7 +171,7 @@ public class SBPhysicsComponent implements PhysicsComponent {
     @Override
     public void setY(float y) {
         this.y = y;
-        if(isInitialized){
+        if(initialized){
             body.setTransform(body.getPosition().x, y, body.getAngle());
         }
     }
@@ -174,7 +179,7 @@ public class SBPhysicsComponent implements PhysicsComponent {
     @Override
     public void setRotation(float rotation) {
         this.rotation = rotation;
-        if(isInitialized){
+        if(initialized){
             body.setTransform(body.getPosition(), rotation * MathUtils.degRad);
         }
     }
@@ -183,7 +188,7 @@ public class SBPhysicsComponent implements PhysicsComponent {
     public void setPosition(float x, float y) {
         this.x = x;
         this.y = y;
-        if(isInitialized){
+        if(initialized){
             body.setTransform(x, y, body.getAngle());
         }
     }

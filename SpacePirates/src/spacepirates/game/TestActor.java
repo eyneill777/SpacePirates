@@ -33,8 +33,8 @@ public class TestActor extends Actor{
 
 	@Override
 	public void render(SpriteBatch batch) {
-		testSprite.setX(getX());
-		testSprite.setY(getY());
+		testSprite.setX(getX() - getWidth()/2);
+		testSprite.setY(getY() - getHeight()/2);
 		testSprite.setRotation(getRotation());
 		testSprite.draw(batch);
 	}

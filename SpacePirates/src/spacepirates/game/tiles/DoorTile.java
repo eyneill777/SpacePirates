@@ -2,19 +2,28 @@ package spacepirates.game.tiles;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import spacepirates.game.Game;
+import spacepirates.game.Player;
 import spacepirates.game.level.Room;
+import spacepirates.game.physics.Collidable;
+import spacepirates.game.physics.Collision;
+import spacepirates.game.physics.RectWallComponent;
 
 /**
  * @author gabek
  */
 public class DoorTile extends Tile{
     private Room targetRoom;
+    private Player player;
 
     public DoorTile(Room targetRoom){
         super();
         this.targetRoom = targetRoom;
+        setSolid(true);
+        setTilePhysics(new RectWallComponent(this));
     }
 
     public void init(){
@@ -33,25 +42,34 @@ public class DoorTile extends Tile{
         return fixtureDef;
     }
 
-    /*
+
     @Override
-    public void beginCollision(Fixture thisFixture, Fixture otherFixture, Contact contact) {
-        if(((Collidable)otherFixture.getBody().getUserData()).getMaster() instanceof Player){
-            getGame().setRoomToLoad(targetRoom);
-
-            Player player = (Player) ((Collidable)otherFixture.getBody().getUserData()).getMaster();
-
-            player.store();
-            getGame().removeActor(player);
-
-            player.setPosition(0, 0);
-            targetRoom.getActors().add(player);
+    public void beginCollision(Collision collision) {
+        super.beginCollision(collision);
+        if(collision.getOther() instanceof Player){
+            player = (Player) collision.getOther();
         }
     }
-    */
+
 
     @Override
     public void update(float delta) {
+        super.update(delta);
+        if(player != null){
+            getGame().setRoomToLoad(targetRoom);
 
+            getGame().removeActor(player);
+
+
+
+            player.setPosition(7 + targetRoom.getXOffset(), 7 + targetRoom.getYOffset());
+            targetRoom.getActors().add(player);
+            player = null;
+        }
+    }
+
+    @Override
+    public boolean isConnected(Tile other) {
+        return other instanceof BoundaryTile || other instanceof DoorTile;
     }
 }

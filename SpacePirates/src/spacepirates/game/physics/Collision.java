@@ -16,6 +16,10 @@ public class Collision {
         this.begin = begin;
     }
 
+    public Collidable getOther(){
+        return (Collidable)otherFixture.getUserData();
+    }
+
 	@Override
 	public boolean equals(Object obj) {
         return obj instanceof Collision && ((Collision) obj).contact.equals(contact);

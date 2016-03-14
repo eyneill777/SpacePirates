@@ -27,25 +27,44 @@ public class Room
 		width = 15;
 		height = 15;
 		location = new Point(x,y);
-		
+
 		connectedRooms = new Room[4];
 		
 		//boundary = new RoomBoundary(-width/2, -height/2, width, height);
 		actors = new ArrayList<>();
-		actors.add(new TestActor());
+		TestActor testActor = new TestActor();
+		testActor.setPosition(7 + getXOffset(), 4 + getYOffset());
+		actors.add(testActor);
+
 		tiles = new TileMap(15, 15);
-		tiles.setTile(new WallTile(), 5, 5);
+        tiles.setOffset(getXOffset(), getYOffset());
+
+        tiles.setTile(new WallTile(), 5, 5);
 		tiles.setTile(new WallTile(), 2, 2);
-		
-		tiles.setOffset(-width/2, -height/2);
 	}
-	
+
+    public float getWidth(){
+        return width;
+    }
+
+    public float getHeight(){
+        return height;
+    }
+
+    public float getXOffset(){
+        return location.x * width;
+    }
+
+    public float getYOffset(){
+        return location.y * height;
+    }
+
 	protected void createContents(){
-		if(getAdjacentRoom('N') != null){
-			tiles.setTile(new DoorTile(getAdjacentRoom('N')), tiles.getWidth()/2, tiles.getHeight()-1);
-		}
 		if(getAdjacentRoom('S') != null){
-			tiles.setTile(new DoorTile(getAdjacentRoom('S')), tiles.getWidth()/2, 0);
+			tiles.setTile(new DoorTile(getAdjacentRoom('S')), tiles.getWidth()/2, tiles.getHeight()-1);
+		}
+		if(getAdjacentRoom('N') != null){
+			tiles.setTile(new DoorTile(getAdjacentRoom('N')), tiles.getWidth()/2, 0);
 			//tiles.setTile(new FloorTile(), tiles.getWidth()/2, 0);
 		}
 		if(getAdjacentRoom('E') != null){

@@ -30,6 +30,10 @@ public abstract class Tile implements GameObject, Collidable{
 				TileMap.TILE_SIZE, TileMap.TILE_SIZE);
 	}
 
+    public Sprite getSprite(){
+        return sprite;
+    }
+
     public void setTilePhysics(PhysicsComponent tilePhysics){
         this.tilePhysics = tilePhysics;
     }
@@ -107,6 +111,8 @@ public abstract class Tile implements GameObject, Collidable{
             tilePhysics.store();
         }
 	}
+
+	public abstract boolean isConnected(Tile other);
 
     @Override
     public void beginCollision(Collision collision) {

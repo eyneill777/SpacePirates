@@ -53,11 +53,16 @@ public class Game implements ContactFilter, ContactListener {
 		collisions = new ArrayList<>();
 
 		Player player = new Player();
+        player.setPosition(7 + roomToLoad.getXOffset(), 7 + roomToLoad.getYOffset());
 		camera.setTarget(player);
 		camera.setTracking(true);
 
 		addActor(player);
 	}
+
+    public Room getCurrentRoom(){
+        return currentRoom;
+    }
 
 	private void loadRoom(Room room) {
 		if (currentRoom != null) {
@@ -65,7 +70,10 @@ public class Game implements ContactFilter, ContactListener {
                 actor.store();
             }
             getTiles().store();
-		}
+		} else {
+            camera.setX(camera.getTarget().getX());
+            camera.setY(camera.getTarget().getY());
+        }
 
 		room.setGame(this);
 		currentRoom = room;
@@ -143,18 +151,24 @@ public class Game implements ContactFilter, ContactListener {
 
         for(Collision col: collisions){
             if(col.isBegin()){
-                resolveCollidable(col.getThisFixture()).beginCollision(col);
+                Collidable collidable = resolveCollidable(col.getThisFixture());
+                if(collidable != null) {
+                    collidable.beginCollision(col);
+                }
             } else {
-                resolveCollidable(col.getThisFixture()).endCollision(col);
+                Collidable collidable = resolveCollidable(col.getThisFixture());
+                if(collidable != null){
+                    collidable.endCollision(col);
+                }
             }
         }
         collisions.clear();
 
-		for (Actor actor : removeList) {
-			getActors().remove(actor);
-			actor.store();
-		}
-		removeList.clear();
+        for (Actor actor : removeList) {
+            getActors().remove(actor);
+            actor.store();
+        }
+        removeList.clear();
 
 		camera.update(delta);
 	}

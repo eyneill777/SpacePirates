@@ -63,8 +63,8 @@ public class Player extends Actor{
 
     @Override
 	public void render(SpriteBatch batch) {
-		boxSprite.setX(getX());
-		boxSprite.setY(getY());
+		boxSprite.setX(getX() - getWidth()/2);
+		boxSprite.setY(getY() - getHeight()/2);
 		boxSprite.setRotation(getRotation());
 
 		boxSprite.draw(batch);

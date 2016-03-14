@@ -20,19 +20,9 @@ public class BoundaryTile extends Tile{
 		setSprite(sprite);
 	}
 
-	@Override
-	public void store() {
-		super.store();
-
-	}
 
 	@Override
-	public void update(float delta) {
-		
-	}
-
-	@Override
-	public boolean shouldCollide(Fixture thisFixture, Fixture otherFixture) {
-		return (thisFixture.getFilterData().maskBits & otherFixture.getFilterData().categoryBits) != 0;
+	public boolean isConnected(Tile other) {
+		return other instanceof BoundaryTile;
 	}
 }
