@@ -41,6 +41,10 @@ public class Room
 
         tiles.setTile(new WallTile(), 5, 5);
 		tiles.setTile(new WallTile(), 2, 2);
+        tiles.setTile(new WallTile(), 5, 9);
+        tiles.setTile(new WallTile(), 4, 9);
+        tiles.setTile(new WallTile(), 3, 9);
+        tiles.setTile(new WallTile(), 2, 9);
 	}
 
     public float getWidth(){

@@ -84,11 +84,11 @@ public class RectWallComponent implements PhysicsComponent {
             edge.set(x1, y2, x2, y2);
             if(w){
                 edge.setHasVertex0(true);
-                //edge.setVertex0(x1 - TileMap.TILE_SIZE, y2);
+                edge.setVertex0(x1 - TileMap.TILE_SIZE, y2);
             }
             if(e){
                 edge.setHasVertex3(true);
-                //edge.setVertex3(x2 + TileMap.TILE_SIZE, y2);
+                edge.setVertex3(x2 + TileMap.TILE_SIZE, y2);
             }
             fixtures[Direction.N] = map.getBody().createFixture(fixterDef);
             fixtures[Direction.N].setUserData(master);
