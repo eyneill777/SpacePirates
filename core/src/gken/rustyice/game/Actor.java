@@ -111,9 +111,4 @@ public abstract class Actor implements GameObject, Collidable {
     public void endCollision(Collision collision) {
         physicsComponent.endCollision(collision);
     }
-
-    @Override
-    public boolean shouldCollide(Fixture thisFixture, Fixture otherFixture) {
-        return physicsComponent.shouldCollide(thisFixture, otherFixture);
-    }
 }

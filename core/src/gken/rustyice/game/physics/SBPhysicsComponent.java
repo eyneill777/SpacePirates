@@ -116,11 +116,6 @@ public class SBPhysicsComponent implements PhysicsComponent {
         return bodyDef;
     }
 
-    @Override
-    public boolean shouldCollide(Fixture thisFixture, Fixture otherFixture) {
-        return true;
-    }
-
     public Fixture addRectangle(float width, float height, float density){
         PolygonShape rect = new PolygonShape();
         rect.setAsBox(width/2, height/2);

@@ -164,9 +164,4 @@ public class RectWallComponent implements PhysicsComponent {
     public void endCollision(Collision collision) {
 
     }
-
-    @Override
-    public boolean shouldCollide(Fixture thisFixture, Fixture otherFixture) {
-        return true;
-    }
 }

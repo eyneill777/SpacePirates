@@ -115,9 +115,4 @@ public abstract class Tile implements GameObject, Collidable {
     public void endCollision(Collision collision) {
         tilePhysics.endCollision(collision);
     }
-
-    @Override
-    public boolean shouldCollide(Fixture thisFixture, Fixture otherFixture) {
-        return tilePhysics.shouldCollide(thisFixture, otherFixture);
-    }
 }

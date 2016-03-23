@@ -22,5 +22,4 @@ public interface PhysicsComponent{
 
     void beginCollision(Collision collision);
     void endCollision(Collision collision);
-    boolean shouldCollide(Fixture thisFixture, Fixture otherFixture);
 }

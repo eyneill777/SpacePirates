@@ -1,5 +1,7 @@
 package gken.rustyice.screens;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -20,26 +22,29 @@ import gken.rustyice.graphics.GameDisplay;
 
 public class GameDisplayScreen extends Screen{
 	private float updateRate = 1/60f;
-	
-	private Matrix4 oldPro, oldView;
+
+    private Matrix4 oldPro, oldView;
 	private GameDisplay display;
 	private Game game;
 	private Container<Window> pauseMenu;
 	private PlayerInput playerInput;
+    private RayHandler rayHandler;
 	private boolean paused;
 	//private Box2DDebugRenderer debugRender;
 	
 	public GameDisplayScreen(Game game) {
 		this.game = game;
 		paused = false;
-		
-		oldPro = new Matrix4();
-		oldView = new Matrix4();
-		
+
+        oldPro = new Matrix4();
+        oldView = new Matrix4();
+
 		display = new GameDisplay(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		display.setTarget(game, game.getCamera());
-		
-		
+		display.setFillParent(true);
+
+        rayHandler = game.getRayHandler();
+
 		playerInput = Actions.desktopDefault();
 		playerInput.setMouseControl(display.getMouseControl());
 		
@@ -58,24 +63,25 @@ public class GameDisplayScreen extends Screen{
 		if(!paused){
 			game.update(updateRate);
 			display.updateMouse(Gdx.input.getX(), Gdx.input.getY());
-			
-			oldPro.set(batch.getProjectionMatrix());
-			oldView.set(batch.getTransformMatrix());
-			
-			display.render(batch, delta);
-			
-			batch.setProjectionMatrix(oldPro);
-			batch.setTransformMatrix(oldView);
+
+            oldPro.set(batch.getProjectionMatrix());
+            oldView.set(batch.getTransformMatrix());
+
+            display.render(batch, delta);
+
+            batch.setProjectionMatrix(oldPro);
+            batch.setTransformMatrix(oldView);
 		}
 		
-		if(paused){
-			batch.setColor(Color.GRAY);
-		}
-		
-		batch.begin();
-		display.draw(batch, delta);
-		batch.end();
-		
+		//if(paused){
+		//	batch.setColor(Color.GRAY);
+		//}
+        batch.begin();
+        display.draw(batch, 1);
+        batch.end();
+
+        rayHandler.setCombinedMatrix(display.getOrtho());
+        rayHandler.updateAndRender();
 		
 		//debugRender.render(game.getWorld(), display.getOrtho().combined);
 	}
@@ -129,6 +135,7 @@ public class GameDisplayScreen extends Screen{
 
 	@Override
 	public void show(Stage stage) {
+		//stage.addActor(display);
 		stage.addActor(pauseMenu);
 	}
 
@@ -145,6 +152,7 @@ public class GameDisplayScreen extends Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		display.resize(width, height);
+		display.setSize(width, height);
+        rayHandler.resizeFBO(width/2, height/2);
 	}
 }

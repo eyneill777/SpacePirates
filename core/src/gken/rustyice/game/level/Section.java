@@ -32,11 +32,9 @@ public class Section
 		//boundary = new RoomBoundary(-width/2, -height/2, width, height);
 		actors = new ArrayList<>();
 		TestActor testActor = new TestActor();
-		testActor.setPosition(7 + getXOffset(), 4 + getYOffset());
 		actors.add(testActor);
 
 		tiles = new TileMap(15, 15);
-        tiles.setOffset(getXOffset(), getYOffset());
 
         tiles.setTile(new WallTile(), 5, 5);
 		tiles.setTile(new WallTile(), 2, 2);
@@ -52,14 +50,6 @@ public class Section
 
     public float getHeight(){
         return height;
-    }
-
-    public float getXOffset(){
-        return location.x * width;
-    }
-
-    public float getYOffset(){
-        return location.y * height;
     }
 
 	protected void createContents(){

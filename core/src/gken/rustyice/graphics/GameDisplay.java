@@ -5,21 +5,22 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import gken.rustyice.game.Game;
 
-public class GameDisplay {
+public class GameDisplay extends Widget{
 	private FrameBuffer fbo;
 	private OrthographicCamera ortho;
 	private Vector3 mouseProj;
 	private Vector2 mouse;
-	
-	private Rectangle screenLocation;
+
 	private Camera cam;
 	private Game game;
 	
@@ -27,7 +28,8 @@ public class GameDisplay {
 		ortho = new OrthographicCamera();
 		mouseProj = new Vector3();
 		mouse = new Vector2();
-		screenLocation = new Rectangle(0, 0, w, h);
+		setWidth(w);
+		setHeight(h);
 		
 		fbo = new FrameBuffer(Format.RGBA8888, w, h, false);
 		fbo.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -42,14 +44,12 @@ public class GameDisplay {
 		return ortho;
 	}
 	
-	public void resize(int w, int h){
-		if(w != fbo.getWidth() || h != fbo.getHeight()){
+	private void resize(){
+		if(getWidth() != fbo.getWidth() || getHeight() != fbo.getHeight()){
 			fbo.dispose();
-			fbo = new FrameBuffer(Format.RGBA8888, w, h, false);
+			fbo = new FrameBuffer(Format.RGBA8888, (int)getWidth(), (int)getHeight(), false);
 			fbo.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		}
-		screenLocation.width = w;
-		screenLocation.height = h;
 	}
 	
 	public void updateMouse(float x, float y){
@@ -65,8 +65,8 @@ public class GameDisplay {
 	}
 	
 	private void fitOrtho(){
-		float xScale = screenLocation.width/ortho.viewportWidth;
-		float yScale = screenLocation.height/ortho.viewportHeight;
+		float xScale = getWidth()/ortho.viewportWidth;
+		float yScale = getHeight()/ortho.viewportHeight;
 		
 		if(xScale < yScale){
 			ortho.viewportHeight *= (yScale/xScale);
@@ -76,6 +76,8 @@ public class GameDisplay {
 	}
 	
 	public void render(SpriteBatch batch, float delta){
+		resize();
+
 		fbo.begin();
 		//Gdx.gl.glC
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -95,9 +97,11 @@ public class GameDisplay {
 		
 		fbo.end();
 	}
-	
-	public void draw(SpriteBatch batch, float delta){
-		batch.draw(fbo.getColorBufferTexture(), screenLocation.x, screenLocation.y, screenLocation.width, screenLocation.height,
+
+
+	@Override
+	public void draw(Batch batch, float parentAlpha){
+		batch.draw(fbo.getColorBufferTexture(), getX(), getY(), getWidth(), getHeight(),
 				0, 0, fbo.getWidth(), fbo.getHeight(), false, true);
 	}
 	

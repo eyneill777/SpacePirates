@@ -32,8 +32,8 @@ public class Camera{
                 rot = target_rot;
             }
 
-            x += MathUtils.clamp((target.getX() + target.getWidth()/2) - x, -.5f, .5f);
-            y += MathUtils.clamp((target.getY() + target.getHeight()/2) - y, -.5f, .5f);
+            x += MathUtils.clamp(target.getX() - x, -.5f, .5f);
+            y += MathUtils.clamp(target.getY() - y, -.5f, .5f);
         } else {
             rot = target_rot;
             x = target_x;

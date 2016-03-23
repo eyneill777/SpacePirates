@@ -48,7 +48,7 @@ public class DoorTile extends Tile{
 
 
 
-            player.setPosition(7 + targetSection.getXOffset(), 7 + targetSection.getYOffset());
+            player.setPosition(7, 7);
             targetSection.getActors().add(player);
             player = null;
         }
