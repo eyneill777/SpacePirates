@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -38,16 +39,18 @@ public class Resources {
 	}
 	
 	private void loadShapes(){
-		Pixmap pbox = new Pixmap(256, 128, Pixmap.Format.RGBA8888);
+		Pixmap pbox = new Pixmap(136, 128, Pixmap.Format.RGBA8888);
 		pbox.setColor(Color.WHITE);
-		pbox.fillCircle(192, 64, 64);
+		pbox.fillCircle(64, 64, 64);
 		
-		pbox.fillRectangle(0, 0, 128, 128);
+		pbox.fillRectangle(129, 0, 4, 4);
 		shapes = new Texture(pbox);
 		pbox.dispose();
 		
-		box = new TextureRegion(shapes, 0, 0, 128, 128);
-		circle = new TextureRegion(shapes, 128, 0, 128, 128);
+		shapes.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		circle = new TextureRegion(shapes, 0, 0, 128, 128);
+		box = new TextureRegion(shapes, 129, 0, 4, 4);
 	}
 	
 	public void dispose(){

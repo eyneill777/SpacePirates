@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.esotericsoftware.kryo.Kryo;
+
+import gken.rustyice.editor.EditorScreen;
 import gken.rustyice.game.Game;
 import gken.rustyice.resources.Resources;
 import gken.rustyice.screens.GameDisplayScreen;
@@ -46,6 +48,7 @@ public class GdxMain implements ApplicationListener{
 		screenManager.addScreen("main_menu", new MainMenu());
 		screenManager.addScreen("settings", new SettingsScreen(settings, settingsFile));
 		screenManager.addScreen("playing", new GameDisplayScreen(game));
+		screenManager.addScreen("editor", new EditorScreen());
 		
 		screenManager.showScreen("main_menu");
 	}

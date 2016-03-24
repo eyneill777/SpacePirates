@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import gken.rustyice.game.physics.Collidable;
 import gken.rustyice.game.physics.Collision;
 import gken.rustyice.graphics.Camera;
+import gken.rustyice.graphics.GraphicsUtils;
 import gken.rustyice.resources.Resources;
 import gken.rustyice.game.level.Level;
 import gken.rustyice.game.level.Section;
@@ -29,8 +30,6 @@ public class Game implements ContactListener {
 	private ArrayList<Actor> removeList;
 	private ArrayList<Actor> addList;
     private ArrayList<Collision> collisions;
-
-    private PointLight testLight;
 
 	public Game() {
 		world = new World(Vector2.Zero, true);
@@ -71,7 +70,7 @@ public class Game implements ContactListener {
         return rayHandler;
     }
 
-	private void loadRoom(Section section) {
+	private void loadSection(Section section) {
 		if (currentSection != null) {
 			for(Actor actor: getActors()){
                 actor.store();
@@ -83,11 +82,6 @@ public class Game implements ContactListener {
             camera.setY(camera.getTarget().getY());
         }
 
-        if(testLight != null){
-            testLight.remove(true);
-        }
-        testLight = new PointLight(rayHandler, 500, new Color(0, 1, 1, .8f), 10,
-                7, 7);
         //testLight.setStaticLight(true);
 
 		section.setGame(this);
@@ -152,7 +146,7 @@ public class Game implements ContactListener {
 		}
 
 		if (sectionToLoad != null) {
-			loadRoom(sectionToLoad);
+			loadSection(sectionToLoad);
 			sectionToLoad = null;
 		}
 
@@ -196,6 +190,10 @@ public class Game implements ContactListener {
 		for (Actor actor : getActors()) {
 			actor.render(batch);
 		}
+		
+		batch.setColor(Color.RED);
+		GraphicsUtils.drawLine(batch, getResources(), 0, 0, playerInput.getMouseX(), playerInput.getMouseY(), .5f);
+		batch.setColor(Color.WHITE);
 	}
 
 	public Camera getCamera() {

@@ -1,6 +1,5 @@
 package gken.rustyice.game;
 
-import com.badlogic.gdx.physics.box2d.Fixture;
 import gken.rustyice.game.physics.Collidable;
 import gken.rustyice.game.physics.Collision;
 import gken.rustyice.game.physics.PhysicsComponent;

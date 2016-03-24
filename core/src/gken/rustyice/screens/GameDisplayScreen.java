@@ -5,11 +5,13 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
@@ -19,6 +21,7 @@ import gken.rustyice.game.Game;
 import gken.rustyice.input.Actions;
 import gken.rustyice.input.PlayerInput;
 import gken.rustyice.graphics.GameDisplay;
+import gken.rustyice.graphics.GraphicsUtils;
 
 public class GameDisplayScreen extends Screen{
 	private float updateRate = 1/60f;
@@ -28,8 +31,9 @@ public class GameDisplayScreen extends Screen{
 	private Game game;
 	private Container<Window> pauseMenu;
 	private PlayerInput playerInput;
-    private RayHandler rayHandler;
 	private boolean paused;
+	
+	private Label fpsLable;
 	//private Box2DDebugRenderer debugRender;
 	
 	public GameDisplayScreen(Game game) {
@@ -43,13 +47,10 @@ public class GameDisplayScreen extends Screen{
 		display.setTarget(game, game.getCamera());
 		display.setFillParent(true);
 
-        rayHandler = game.getRayHandler();
-
 		playerInput = Actions.desktopDefault();
 		playerInput.setMouseControl(display.getMouseControl());
 		
 		game.setPlayerInput(playerInput);
-		
 		//debugRender = new Box2DDebugRenderer(true, true, true, true, true, true);
 	}
 	
@@ -62,8 +63,9 @@ public class GameDisplayScreen extends Screen{
 		
 		if(!paused){
 			game.update(updateRate);
+			display.updateProjection();
 			display.updateMouse(Gdx.input.getX(), Gdx.input.getY());
-
+			
             oldPro.set(batch.getProjectionMatrix());
             oldView.set(batch.getTransformMatrix());
 
@@ -77,12 +79,13 @@ public class GameDisplayScreen extends Screen{
 		//	batch.setColor(Color.GRAY);
 		//}
         batch.begin();
-        display.draw(batch, 1);
+        display.draw(batch, 1f);
         batch.end();
 
-        rayHandler.setCombinedMatrix(display.getOrtho());
-        rayHandler.updateAndRender();
+        game.getRayHandler().setCombinedMatrix(display.getOrtho());
+        game.getRayHandler().updateAndRender();
 		
+        fpsLable.setText(Integer.toString(Gdx.graphics.getFramesPerSecond()));
 		//debugRender.render(game.getWorld(), display.getOrtho().combined);
 	}
 	
@@ -131,12 +134,18 @@ public class GameDisplayScreen extends Screen{
 		pauseMenu = new Container<>(win);
 		pauseMenu.setFillParent(true);
 		pauseMenu.setVisible(false);
+		
+		fpsLable = new Label("", skin, "fps");
+		fpsLable.setColor(Color.WHITE);
 	}
 
 	@Override
 	public void show(Stage stage) {
 		//stage.addActor(display);
 		stage.addActor(pauseMenu);
+		stage.addActor(fpsLable);
+		fpsLable.setPosition(Gdx.graphics.getWidth()-50,
+				Gdx.graphics.getHeight()-50);
 	}
 
 	@Override
@@ -153,6 +162,8 @@ public class GameDisplayScreen extends Screen{
 	@Override
 	public void resize(int width, int height) {
 		display.setSize(width, height);
-        rayHandler.resizeFBO(width/2, height/2);
+		game.getRayHandler().resizeFBO(width/2, height/2);
+		fpsLable.setPosition(width-fpsLable.getWidth() - 50,
+				height-fpsLable.getHeight() - 50);
 	}
 }

@@ -3,8 +3,11 @@ package gken.rustyice.game.level;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
+
 import gken.rustyice.game.Actor;
 import gken.rustyice.game.Game;
+import gken.rustyice.game.SimpleLight;
 import gken.rustyice.game.tiles.DoorTile;
 import gken.rustyice.game.tiles.TileMap;
 import gken.rustyice.game.tiles.WallTile;
@@ -23,8 +26,8 @@ public class Section
 	
 	public Section(int x, int y)
 	{
-		width = 15;
-		height = 15;
+		width = 30;
+		height = 30;
 		location = new Point(x,y);
 
 		connectedSections = new Section[4];
@@ -33,8 +36,14 @@ public class Section
 		actors = new ArrayList<>();
 		TestActor testActor = new TestActor();
 		actors.add(testActor);
-
-		tiles = new TileMap(15, 15);
+		
+		for(int i = 0; i < 4;i++){
+			SimpleLight light = new SimpleLight();
+			light.setPosition(2+ (i/2)*15, 2 + (i%2)*15);
+			actors.add(light);
+		}
+		
+		tiles = new TileMap(30, 30);
 
         tiles.setTile(new WallTile(), 5, 5);
 		tiles.setTile(new WallTile(), 2, 2);

@@ -45,7 +45,7 @@ public class MainMenu extends Screen{
 				Gdx.app.exit();
 		}});
 		
-		root.add("Space Pirates!", "title").pad(20).row();
+		root.add("Rusty Ice", "title").pad(20).row();
 		root.add(newButt).pad(PAD).prefWidth(BUTT_WIDTH).row();
 		root.add(loadButt).pad(PAD).prefWidth(BUTT_WIDTH).row();
 		root.add(settingsButt).pad(PAD).prefWidth(BUTT_WIDTH).row();

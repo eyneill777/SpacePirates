@@ -82,10 +82,6 @@ public class GameDisplay extends Widget{
 		//Gdx.gl.glC
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		cam.apply(ortho);
-		fitOrtho();
-		ortho.update();
-		
 		batch.setProjectionMatrix(ortho.projection);
 		batch.setTransformMatrix(ortho.view);
 		
@@ -97,7 +93,12 @@ public class GameDisplay extends Widget{
 		
 		fbo.end();
 	}
-
+	
+	public void updateProjection(){
+		cam.apply(ortho);
+		fitOrtho();
+		ortho.update();
+	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha){

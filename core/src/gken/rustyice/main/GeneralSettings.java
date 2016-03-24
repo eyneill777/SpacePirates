@@ -1,6 +1,6 @@
 package gken.rustyice.main;
 
 public class GeneralSettings {
-	public int width = 800, height = 800;
+	public int width = 600, height = 600;
 	public boolean fullscreen = false;
 }

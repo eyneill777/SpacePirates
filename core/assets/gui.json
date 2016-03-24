@@ -30,7 +30,10 @@
     		font: medium, fontColor: dark-gray
     	},
     	title: {
-    		font: titleFont, fontColor: gray2
+    		font: titleFont, fontColor: pink
+    	},
+    	fps: {
+    		font: medium, fontColor: gray
     	}
     },
     
