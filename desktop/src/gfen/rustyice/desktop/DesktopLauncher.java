@@ -37,7 +37,10 @@ public class DesktopLauncher {
         }
 
         config.addIcon("icon.png", Files.FileType.Internal);
-
+        
+        //config.vSyncEnabled = false;
+        //config.foregroundFPS = 0;
+        
 		new LwjglApplication(new GdxMain(settings, settingsFile), config);
 	}
 }

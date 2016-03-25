@@ -68,8 +68,8 @@ public class GameDisplayScreen extends Screen{
 			
             oldPro.set(batch.getProjectionMatrix());
             oldView.set(batch.getTransformMatrix());
-
-            display.render(batch, delta);
+            
+            display.render(batch, game.getRayHandler(), delta);
 
             batch.setProjectionMatrix(oldPro);
             batch.setTransformMatrix(oldView);
@@ -82,8 +82,7 @@ public class GameDisplayScreen extends Screen{
         display.draw(batch, 1f);
         batch.end();
 
-        game.getRayHandler().setCombinedMatrix(display.getOrtho());
-        game.getRayHandler().updateAndRender();
+        //game.getRayHandler().setShadows(false);
 		
         fpsLable.setText(Integer.toString(Gdx.graphics.getFramesPerSecond()));
 		//debugRender.render(game.getWorld(), display.getOrtho().combined);
@@ -144,8 +143,8 @@ public class GameDisplayScreen extends Screen{
 		//stage.addActor(display);
 		stage.addActor(pauseMenu);
 		stage.addActor(fpsLable);
-		fpsLable.setPosition(Gdx.graphics.getWidth()-50,
-				Gdx.graphics.getHeight()-50);
+		//fpsLable.setPosition(Gdx.graphics.getWidth()-75,
+		//		Gdx.graphics.getHeight()-50);
 	}
 
 	@Override
@@ -161,9 +160,9 @@ public class GameDisplayScreen extends Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		display.setSize(width, height);
+		display.setSize(width/2, height);
 		game.getRayHandler().resizeFBO(width/2, height/2);
-		fpsLable.setPosition(width-fpsLable.getWidth() - 50,
+		fpsLable.setPosition(width-fpsLable.getWidth() - 100,
 				height-fpsLable.getHeight() - 50);
 	}
 }

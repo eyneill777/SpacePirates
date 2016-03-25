@@ -39,7 +39,7 @@ public class Section
 		
 		for(int i = 0; i < 4;i++){
 			SimpleLight light = new SimpleLight();
-			light.setPosition(2+ (i/2)*15, 2 + (i%2)*15);
+			light.setPosition(4 + (i/2)*15, 4 + (i%2)*15);
 			actors.add(light);
 		}
 		

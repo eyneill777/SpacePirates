@@ -191,9 +191,9 @@ public class Game implements ContactListener {
 			actor.render(batch);
 		}
 		
-		batch.setColor(Color.RED);
-		GraphicsUtils.drawLine(batch, getResources(), 0, 0, playerInput.getMouseX(), playerInput.getMouseY(), .5f);
-		batch.setColor(Color.WHITE);
+		//batch.setColor(Color.RED);
+		//GraphicsUtils.drawLine(batch, getResources(), 0, 0, playerInput.getMouseX(), playerInput.getMouseY(), .5f);
+		//batch.setColor(Color.WHITE);
 	}
 
 	public Camera getCamera() {

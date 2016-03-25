@@ -50,7 +50,7 @@ public class GdxMain implements ApplicationListener{
 		screenManager.addScreen("playing", new GameDisplayScreen(game));
 		screenManager.addScreen("editor", new EditorScreen());
 		
-		screenManager.showScreen("main_menu");
+		screenManager.showScreen("playing");
 	}
 
 	@Override
