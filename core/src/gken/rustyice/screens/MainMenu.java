@@ -39,6 +39,13 @@ public class MainMenu extends Screen{
 			}
 		});
 		
+		TextButton editorButt = new TextButton("Level Edit", skin);
+		editorButt.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y) {
+				getManager().showScreen("editor");
+			}
+		});
+		
 		TextButton quitButt = new TextButton("Quit", skin);
 		quitButt.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y) {
@@ -49,6 +56,7 @@ public class MainMenu extends Screen{
 		root.add(newButt).pad(PAD).prefWidth(BUTT_WIDTH).row();
 		root.add(loadButt).pad(PAD).prefWidth(BUTT_WIDTH).row();
 		root.add(settingsButt).pad(PAD).prefWidth(BUTT_WIDTH).row();
+		root.add(editorButt).pad(PAD).prefWidth(BUTT_WIDTH).row();
 		root.add(quitButt).pad(PAD).prefWidth(BUTT_WIDTH);
 		
 		root.setFillParent(true);

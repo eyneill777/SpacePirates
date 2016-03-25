@@ -1,4 +1,4 @@
-package gfen.rustyice.desktop;
+package gken.rustyice.desktop;
 
 
 import com.badlogic.gdx.Files;

@@ -41,7 +41,7 @@ public class Game implements ContactListener {
 		Camera camera = new Camera();
 		camera.setWidth(10);
 		camera.setHeight(10);
-
+		
 		Level level = new Level(5);
 
 		sectionToLoad = level.getStartingRoom();
@@ -196,8 +196,8 @@ public class Game implements ContactListener {
 		//batch.setColor(Color.WHITE);
 	}
 
-	public Camera getCamera() {
-		return cameras.get(0);
+	public Camera getCamera(int playerId) {
+		return cameras.get(playerId);
 	}
 
 	public World getWorld() {

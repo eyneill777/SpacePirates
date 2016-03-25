@@ -44,7 +44,7 @@ public class GameDisplayScreen extends Screen{
         oldView = new Matrix4();
 
 		display = new GameDisplay(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		display.setTarget(game, game.getCamera());
+		display.setTarget(game, game.getCamera(0));
 		display.setFillParent(true);
 
 		playerInput = Actions.desktopDefault();
@@ -78,9 +78,6 @@ public class GameDisplayScreen extends Screen{
 		//if(paused){
 		//	batch.setColor(Color.GRAY);
 		//}
-        batch.begin();
-        display.draw(batch, 1f);
-        batch.end();
 
         //game.getRayHandler().setShadows(false);
 		
@@ -140,7 +137,7 @@ public class GameDisplayScreen extends Screen{
 
 	@Override
 	public void show(Stage stage) {
-		//stage.addActor(display);
+		stage.addActor(display);
 		stage.addActor(pauseMenu);
 		stage.addActor(fpsLable);
 		//fpsLable.setPosition(Gdx.graphics.getWidth()-75,
@@ -160,7 +157,7 @@ public class GameDisplayScreen extends Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		display.setSize(width/2, height);
+		display.setSize(width, height);
 		game.getRayHandler().resizeFBO(width/2, height/2);
 		fpsLable.setPosition(width-fpsLable.getWidth() - 100,
 				height-fpsLable.getHeight() - 50);

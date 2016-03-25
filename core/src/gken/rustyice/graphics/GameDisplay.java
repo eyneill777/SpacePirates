@@ -46,7 +46,7 @@ public class GameDisplay extends Widget{
 		fbo = new FrameBuffer(Format.RGBA8888, w, h, false);
 		fbo.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		lightSharder = ShadowShader.createShadowShader();
+		lightSharder = DiffuseShader.createShadowShader();
 		lightMesh = createMesh();
 	}
 	
@@ -106,15 +106,14 @@ public class GameDisplay extends Widget{
 		game.render(batch);
 		batch.end();
 		
-		Color c = new Color(.2f, .3f, .2f, .2f);
+		Color c = new Color(.05f, .05f, .05f, 1);
 		
 		rayHandler.getLightMapTexture().bind(0);
 		
 		Gdx.gl20.glEnable(GL20.GL_BLEND);
 		lightSharder.begin();
-		rayHandler.shadowBlendFunc.apply();
-		lightSharder.setUniformf("ambient", c.r * c.a, c.g * c.a,
-				c.b * c.a, 1f - c.a);
+		rayHandler.diffuseBlendFunc.apply();
+		lightSharder.setUniformf("ambient", c.r, c.b, c.g, c.a);
 		
 		lightMesh.render(lightSharder, GL20.GL_TRIANGLE_FAN);
 		

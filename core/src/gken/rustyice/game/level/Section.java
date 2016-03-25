@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 
 import gken.rustyice.game.Actor;
 import gken.rustyice.game.Game;
@@ -37,9 +38,11 @@ public class Section
 		TestActor testActor = new TestActor();
 		actors.add(testActor);
 		
+		Color[] colors = {Color.RED, Color.CYAN, Color.GOLD, Color.CORAL};
 		for(int i = 0; i < 4;i++){
 			SimpleLight light = new SimpleLight();
 			light.setPosition(4 + (i/2)*15, 4 + (i%2)*15);
+			light.setColor(colors[i]);
 			actors.add(light);
 		}
 		
