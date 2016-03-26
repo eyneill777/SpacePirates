@@ -8,11 +8,12 @@
         pink: {hex: ff4c3bff},
         blue: {hex: 0072bbff},
         yellow: {hex: ffd034ff},
-        yellow_75: {hex: ffd034bf}
+        yellow_75: {hex: ffd034bf},
+        rust: {hex: b7410eff}
     },
     com.badlogic.gdx.graphics.g2d.BitmapFont: {
-        medium: { file: ms32.fnt },
-        titleFont: { file: ms55.fnt }
+        medium: { file: con32.fnt },
+        titleFont: { file: lc70.fnt }
     },
     
     com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
@@ -30,7 +31,7 @@
     		font: medium, fontColor: dark-gray
     	},
     	title: {
-    		font: titleFont, fontColor: pink
+    		font: titleFont, fontColor: rust
     	},
     	fps: {
     		font: medium, fontColor: gray
