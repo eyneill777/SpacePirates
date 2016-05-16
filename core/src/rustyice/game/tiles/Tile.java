@@ -2,110 +2,116 @@ package rustyice.game.tiles;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.*;
-
-import rustyice.game.Game;
 import rustyice.game.GameObject;
+import rustyice.game.Section;
 import rustyice.game.physics.Collidable;
 import rustyice.game.physics.Collision;
-import rustyice.game.physics.PhysicsComponent;
+import rustyice.game.physics.components.PhysicsComponent;
+import rustyice.resources.Resources;
 
 public abstract class Tile implements GameObject, Collidable {
-	private int x;
-	private int y;
-	private TileMap tiles;
-	private boolean initialized = false;
-	private Sprite sprite;
-	private PhysicsComponent tilePhysics;
-	private boolean solid;
 
-	protected void setPosition(int x, int y){
-		this.x = x;
-		this.y = y;
-	}
+    TileMap tiles;
 
-	public void setSprite(Sprite sprite){
-		this.sprite = sprite;
-		sprite.setBounds(getX() * TileMap.TILE_SIZE + getTileMap().getOffsetX(),
-				getY() * TileMap.TILE_SIZE + getTileMap().getOffsetY(),
-				TileMap.TILE_SIZE, TileMap.TILE_SIZE);
-	}
+    private transient boolean initialized = false;
+    private transient Sprite sprite;
+    private PhysicsComponent tilePhysics;
+    private boolean solid;
+    private int x, y;
 
-    public Sprite getSprite(){
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+        sprite.setBounds(getX() * TileMap.TILE_SIZE, getY() * TileMap.TILE_SIZE, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
+    }
+
+    public Sprite getSprite() {
         return sprite;
     }
 
-    public void setTilePhysics(PhysicsComponent tilePhysics){
+    public void setTilePhysics(PhysicsComponent tilePhysics) {
         this.tilePhysics = tilePhysics;
     }
 
-	public void setTiles(TileMap tiles){
-		this.tiles = tiles;
-	}
-	
-	public int getTileX(){
-		return x;
-	}
-	
-	public int getTileY(){
-		return y;
-	}
+    void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
-	public float getX(){
-		return x * TileMap.TILE_SIZE;
-	}
+    public int getTileX() {
+        return x;
+    }
 
-	public float getY(){
-		return y * TileMap.TILE_SIZE;
-	}
+    public int getTileY() {
+        return y;
+    }
 
-	public TileMap getTileMap(){
-		return tiles;
-	}
+    @Override
+    public float getX() {
+        return x * TileMap.TILE_SIZE;
+    }
 
-	public Game getGame(){
-		return tiles.getGame();
-	}
-	
-	public void update(float delta){
-        if(tilePhysics != null){
+    @Override
+    public float getY() {
+        return y * TileMap.TILE_SIZE;
+    }
+
+    public TileMap getTileMap() {
+        return tiles;
+    }
+
+    @Override
+    public Section getSection() {
+        return tiles.getSection();
+    }
+
+    public Resources getResources() {
+        return tiles.getSection().getResources();
+    }
+
+    @Override
+    public void update(float delta) {
+        if (tilePhysics != null) {
             tilePhysics.update(delta);
         }
     }
-	
-	public void render(SpriteBatch batch){
-		if(sprite != null){
-			sprite.draw(batch);
-		}
-	}
-	
-	public boolean isInitialized(){
-		return initialized;
-	}
 
-	public boolean isSolid(){
-		return solid;
-	}
+    @Override
+    public void render(SpriteBatch batch) {
+        if (sprite != null) {
+            sprite.draw(batch);
+        }
+    }
 
-	public void setSolid(boolean solid){
-		this.solid = solid;
-	}
-	
-	public void init() {
-		initialized = true;
-        if(tilePhysics != null){
+    @Override
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    public boolean isSolid() {
+        return solid;
+    }
+
+    public void setSolid(boolean solid) {
+        this.solid = solid;
+    }
+
+    @Override
+    public void init() {
+        initialized = true;
+        if (tilePhysics != null) {
             tilePhysics.init();
         }
-	}
+    }
 
-	public void store() {
-		initialized = false;
-        if(tilePhysics != null){
+    @Override
+    public void store() {
+        initialized = false;
+        if (tilePhysics != null) {
             tilePhysics.store();
         }
-	}
+    }
 
-	public abstract boolean isConnected(Tile other);
+    public abstract boolean isConnected(Tile other);
 
     @Override
     public void beginCollision(Collision collision) {

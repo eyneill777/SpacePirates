@@ -14,7 +14,7 @@ allprojects {
         appName = "RustyIce"
         gdxVersion = '1.9.2'
         roboVMVersion = '1.12.0'
-        box2DLightsVersion = '1.4'
+        box2DLightsVersion = '1.5-SNAPSHOT'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
         kryoVersion = '3.0.3'
@@ -35,7 +35,7 @@ project(":desktop") {
 
     dependencies {
         compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"

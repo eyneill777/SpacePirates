@@ -1,11 +1,13 @@
-attribute vec2 a_position;
-attribute vec4 a_color;
+#version 150
+
+in vec2 a_position;
+in vec4 a_color;
 
 //our camera matrix
 uniform mat4 u_projTrans;
 
 //send the color out to the fragment shader
-varying vec4 vColor;
+out vec4 vColor;
 
 void main() {
     vColor = a_color;

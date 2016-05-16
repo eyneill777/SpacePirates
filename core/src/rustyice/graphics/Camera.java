@@ -2,109 +2,118 @@ package rustyice.graphics;
 
 import com.badlogic.gdx.math.MathUtils;
 
-import rustyice.game.Actor;
+import rustyice.game.actors.Actor;
 
 /**
  * @author gabek
  */
-public class Camera{
-	private Actor target;
+public class Camera {
+
+    private Actor target;
     private boolean tracking;
     private boolean relative_rotation;
     private float x, y, rot, target_x, target_y, target_rot;
     private float width, height;
+    private float halfRenderSize;
 
     public Camera() {
-        target = null;
-        tracking = false;
-        relative_rotation = false;
+        this.target = null;
+        this.tracking = false;
+        this.relative_rotation = false;
     }
 
-    public Actor getTarget(){
-        return target;
+    public Actor getTarget() {
+        return this.target;
     }
 
     public void update(float delta) {
-    	if(tracking){
-            if(relative_rotation){
-                rot = target.getRotation() + target_rot;
+        if (this.tracking) {
+            if (this.relative_rotation) {
+                this.rot = this.target.getRotation() + this.target_rot;
             } else {
-                rot = target_rot;
+                this.rot = this.target_rot;
             }
 
-            x += MathUtils.clamp(target.getX() - x, -.5f, .5f);
-            y += MathUtils.clamp(target.getY() - y, -.5f, .5f);
+            this.x += MathUtils.clamp(this.target.getX() - this.x, -.5f, .5f);
+            this.y += MathUtils.clamp(this.target.getY() - this.y, -.5f, .5f);
         } else {
-            rot = target_rot;
-            x = target_x;
-            y = target_y;
+            this.rot = this.target_rot;
+            this.x = this.target_x;
+            this.y = this.target_y;
         }
     }
 
-    public void setTracking(boolean tracking){
+    public void setTracking(boolean tracking) {
         this.tracking = tracking;
     }
 
-    public boolean isTracking(){
-        return tracking;
+    public boolean isTracking() {
+        return this.tracking;
     }
 
-    public void setTarget(Actor target){
+    public void setTarget(Actor target) {
         this.target = target;
     }
 
-    public void setRelativeRotation(boolean relative){
-        relative_rotation = relative;
+    public void setRelativeRotation(boolean relative) {
+        this.relative_rotation = relative;
     }
-
 
     public float getRotation() {
-		return rot;
-	}
-
-    public float getX(){
-    	return x;
-    }
-    
-    public float getY(){
-    	return y;
+        return this.rot;
     }
 
-    public void setX(float x){
-    	this.x = x;
-    }
-    
-    public void setY(float y){
-    	this.y = y;
+    public float getX() {
+        return this.x;
     }
 
-    public void setRotation(float rotation){
-    	target_rot = rotation;
+    public float getY() {
+        return this.y;
     }
-    
-    public float getWidth(){
-    	return width;
+
+    public void setX(float x) {
+        this.x = x;
     }
-    
-    public float getHeight(){
-    	return height;
+
+    public void setY(float y) {
+        this.y = y;
     }
-    
-    public void setWidth(float width){
-    	this.width = width;
+
+    public void setRotation(float rotation) {
+        this.target_rot = rotation;
     }
-    
-    public void setHeight(float height){
-    	this.height = height;
+
+    public float getWidth() {
+        return this.width;
     }
-    
-	public void apply(com.badlogic.gdx.graphics.Camera ortho){
-        ortho.position.x = x;
-        ortho.position.y = y;
+
+    public float getHeight() {
+        return this.height;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public void apply(com.badlogic.gdx.graphics.Camera ortho) {
+        ortho.position.x = this.x;
+        ortho.position.y = this.y;
         ortho.viewportWidth = getWidth();
         ortho.viewportHeight = getHeight();
 
-        ortho.up.set(MathUtils.cosDeg(rot + 90),  MathUtils.sinDeg(rot + 90), 0);
+        ortho.up.set(MathUtils.cosDeg(this.rot + 90), MathUtils.sinDeg(this.rot + 90), 0);
         ortho.direction.set(0, 0, -1);
+    }
+
+    void setHalfRenderSize(float hsize) {
+        this.halfRenderSize = hsize;
+    }
+
+    public float getHalfRenderSize() {
+        return this.halfRenderSize;
     }
 }

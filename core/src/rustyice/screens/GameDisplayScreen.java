@@ -1,161 +1,178 @@
 package rustyice.screens;
 
+import aurelienribon.tweenengine.BaseTween;
+import aurelienribon.tweenengine.Tween;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
-
 import rustyice.game.Game;
 import rustyice.graphics.GameDisplay;
 import rustyice.input.Actions;
 import rustyice.input.PlayerInput;
+import rustyice.screens.menus.effects.GuiAccessor;
+import rustyice.screens.menus.effects.GuiEffects;
 
-public class GameDisplayScreen extends Screen{
-	private float updateRate = 1/60f;
+public class GameDisplayScreen extends Screen {
+    private GameDisplay display;
+    private GameDisplay display2, display3, display4;
+    private Game game;
+    private VisWindow pauseWindow;
+    private Container<VisWindow> pauseMenu;
+    private VisTable root;
+    private PlayerInput playerInput;
+    private boolean paused;
+    // private Box2DDebugRenderer debugRender;
 
-    private Matrix4 oldPro, oldView;
-	private GameDisplay display;
-	private Game game;
-	private Container<VisWindow> pauseMenu;
-	private PlayerInput playerInput;
-	private boolean paused;
-	
-	private Label fpsLable;
-	//private Box2DDebugRenderer debugRender;
-	
-	public GameDisplayScreen(Game game) {
-		this.game = game;
-		paused = false;
+    public GameDisplayScreen(Game game) {
+        this.game = game;
+        paused = false;
 
-        oldPro = new Matrix4();
-        oldView = new Matrix4();
+        display = new GameDisplay();
+        display.setTarget(game, game.getCamera(0));
 
-		display = new GameDisplay(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		display.setTarget(game, game.getCamera(0));
-		display.setFillParent(true);
+        playerInput = Actions.desktopDefault();
 
-		playerInput = Actions.desktopDefault();
-		playerInput.setMouseControl(display.getMouseControl());
-		
-		game.setPlayerInput(playerInput);
-		//debugRender = new Box2DDebugRenderer(true, true, true, true, true, true);
-	}
-	
-	@Override
-	public void render(SpriteBatch batch, float delta) {
-		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
-			setPaused(true);
-		}
-		
-		
-		if(!paused){
-			game.update(updateRate);
-			display.updateProjection();
-			display.updateMouse(Gdx.input.getX(), Gdx.input.getY());
-			
-            oldPro.set(batch.getProjectionMatrix());
-            oldView.set(batch.getTransformMatrix());
-            
-            display.render(batch, game.getRayHandler(), delta);
+        game.setPlayerInput(playerInput);
+        
+        display2 = new GameDisplay();
+        display2.setTarget(game, game.getCamera(0));
+        
+        display3 = new GameDisplay();
+        display3.setTarget(game, game.getCamera(0));
+        
+        display4 = new GameDisplay();
+        display4.setTarget(game, game.getCamera(0));
+    }
 
-            batch.setProjectionMatrix(oldPro);
-            batch.setTransformMatrix(oldView);
-		}
-		
-		//if(paused){
-		//	batch.setColor(Color.GRAY);
-		//}
+    @Override
+    public void render(SpriteBatch batch, float delta) {
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            setPaused(true);
+        }
 
-        //game.getRayHandler().setShadows(false);
-		
-        fpsLable.setText(Integer.toString(Gdx.graphics.getFramesPerSecond()));
-		//debugRender.render(game.getWorld(), display.getOrtho().combined);
-	}
-	
-	public void setPaused(boolean paused){
-		this.paused = paused;
-		pauseMenu.setVisible(paused);
-	}
-	
-	public boolean isPaused(){
-		return paused;
-	}
-	
-	@Override
-	public void load() {
-		game.setResources(getResources());
-		
-		VisWindow win = new VisWindow("Pause");
-		
-		VisTextButton resumeButt = new VisTextButton("Resume");
-		resumeButt.addListener(new ClickListener(){
-			public void clicked(InputEvent event, float x, float y) {
-				setPaused(false);
-			}
-		});
-		
-		VisTextButton settingsButt = new VisTextButton("Settings");
-		settingsButt.addListener(new ClickListener(){
-			public void clicked(InputEvent event, float x, float y){
-				getManager().showScreen("settings");
-			}
-		});
-		
-		VisTextButton exitButt = new VisTextButton("Exit");
-		exitButt.addListener(new ClickListener(){
-			public void clicked(InputEvent event, float x, float y) {
-				getManager().popScreen();
-			}
-		});
-		
-		win.add(resumeButt).pad(5).prefWidth(180).row();
-		win.add(settingsButt).pad(5).prefWidth(180).row();
-		win.add(exitButt).pad(5).prefWidth(180);
-		
-		win.setMovable(false);
-		
-		pauseMenu = new Container<>(win);
-		pauseMenu.setFillParent(true);
-		pauseMenu.setVisible(false);
-		
-		fpsLable = new VisLabel();
-		fpsLable.setColor(Color.WHITE);
-	}
+        if (!paused) {
+            game.update(delta);
+            display.render(batch, delta);
+            display2.render(batch, delta);
+            display3.render(batch, delta);
+            display4.render(batch, delta);
+        }
+    }
 
-	@Override
-	public void show(Stage stage) {
-		stage.addActor(display);
-		stage.addActor(pauseMenu);
-		stage.addActor(fpsLable);
-		//fpsLable.setPosition(Gdx.graphics.getWidth()-75,
-		//		Gdx.graphics.getHeight()-50);
-	}
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+        
+        if(paused){
+            pauseMenu.setVisible(true);
+            pauseWindow.getColor().a = 0;
+            Tween.to(pauseWindow, GuiAccessor.ALPHA, 0.5f).target(1).start(getTweenManager());
+        } else {
+            Tween.to(pauseWindow, GuiAccessor.ALPHA, 0.5f).target(0).setCallback(
+                    (int flag, BaseTween<?> arg1) ->{pauseMenu.setVisible(false);}
+                    ).start(getTweenManager());
+            }
+        }
 
-	@Override
-	public void hide(Stage stage) {
-		stage.clear();
-	}
+    public boolean isPaused() {
+        return paused;
+    }
 
-	@Override
-	public void dispose() {
-		display.dispose();
-		//debugRender.dispose();
-	}
+    @Override
+    public void load() {
+        super.load();
 
-	@Override
-	public void resize(int width, int height) {
-		display.setSize(width, height);
-		game.getRayHandler().resizeFBO(width/2, height/2);
-		fpsLable.setPosition(width-fpsLable.getWidth() - 100,
-				height-fpsLable.getHeight() - 50);
-	}
+        pauseWindow = new VisWindow("Pause");
+
+        VisTextButton resumeButt = new VisTextButton("Resume");
+        resumeButt.addListener(new ClickListener() {
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                setPaused(false);
+            }
+        });
+
+        VisTextButton settingsButt = new VisTextButton("Settings");
+        settingsButt.addListener(new ClickListener() {
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                getManager().showScreen("settings");
+            }
+        });
+
+        VisTextButton exitButt = new VisTextButton("Exit");
+        exitButt.addListener(new ClickListener() {
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                getManager().popScreen();
+            }
+        });
+
+        pauseWindow.add(resumeButt).pad(5).prefWidth(180).row();
+        pauseWindow.add(settingsButt).pad(5).prefWidth(180).row();
+        pauseWindow.add(exitButt).pad(5).prefWidth(180);
+
+        pauseWindow.setMovable(false);
+
+        pauseMenu = new Container<>(pauseWindow);
+        pauseMenu.setFillParent(true);
+        pauseMenu.setVisible(false);
+        
+        root = new VisTable();
+        root.add(display).grow();
+        root.add(display2).grow();
+        root.row();
+        root.add(display3).grow();
+        root.add(display4).grow();
+        
+        root.setFillParent(true);
+    }
+
+    @Override
+    public void show(Stage stage) {
+        // VisWindow window = new VisWindow("Test");
+        // window.setFillParent(true);
+        // window.add(this.display).grow();
+        // window.setResizable(true);
+        stage.addActor(root);
+        stage.addActor(pauseMenu);
+        
+        root.pack();
+        
+        GuiEffects.fadeIn(root, 0.5f).start(getTweenManager());
+        GuiEffects.fadeIn(pauseMenu, 0.5f).start(getTweenManager());
+    }
+
+    @Override
+    public void hide(Stage stage) {
+        
+        GuiEffects.fadeOut(root, 0.5f, () ->{
+            getStage().getActors().removeValue(root, true);
+        }).start(getTweenManager());
+        
+        GuiEffects.fadeOut(pauseMenu, 0.5f, () ->{
+            getStage().getActors().removeValue(pauseMenu, true);
+        }).start(getTweenManager());
+    }
+
+    @Override
+    public void dispose() {
+        display.dispose();
+        display2.dispose();
+        // debugRender.dispose();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        // this.display.setSize(width, height);
+    }
 }

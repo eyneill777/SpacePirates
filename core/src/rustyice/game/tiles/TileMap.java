@@ -4,144 +4,215 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.esotericsoftware.minlog.Log;
 
-import rustyice.game.Game;
+import rustyice.game.Section;
+import rustyice.graphics.Camera;
 
-public class TileMap{
-	public static final float TILE_SIZE = 1;
-	
-	private boolean initialized = false;
-	private Tile[][] tiles;
-	private Body body;
-	private Game game;
-	
-	private int w, h;
-	private float offsetX, offsetY;
-	
-	public TileMap(int w, int h){
-		this.w = w;
-		this.h = h;
-		offsetX = 0;
-		offsetY = 0;
-		
-		tiles = new Tile[h][w];
-		
-		for(int i = 0; i < h; i++){
-			for(int j = 0; j < w; j++){
-				Tile tile;
-				if(i == 0 || j == 0 || i == h-1 || j == w-1){
-					tile = new BoundaryTile();
-				} else {
-					tile = new FloorTile();
-				}
-				
-				tile.setPosition(j, i);
-				tile.setTiles(this);
-				tiles[i][j] = tile;
-			}
-		}
-	}
-	
-	public int getWidth(){
-		return w;
-	}
-	
-	public int getHeight(){
-		return h;
-	}
-	
-	public void setTile(Tile tile, int x, int y){
-		if(initialized){
-			tiles[y][x].store();
-		}
-		
-		tile.setTiles(this);
-		tile.setPosition(x, y);
-		tiles[y][x] = tile;
-		
-		if(initialized){
-			tile.init();
-		}
-	}
-	
-	public Tile getTile(int x, int y){
-		if(x >= 0 && y >= 0 && x < w && y < h){
-			return tiles[y][x];
-		} else {
-			return null;
-		}
-	}
-	
-	public void setOffset(float x, float y){
-		offsetX = x;
-		offsetY = y;
-	}
-	
-	public float getOffsetX(){
-		return offsetX;
-	}
-	
-	public float getOffsetY(){
-		return offsetY;
-	}
-	
-	public Body getBody(){
-		return body;
-	}
-	
-	public void render(SpriteBatch batch){
-		for(int i = 0; i < h; i++){
-			for(int j = 0; j < w; j++){
-				tiles[i][j].render(batch);
-			}
-		}
-	}
-	
-	public void update(float delta){
-		for(int i = 0; i < h; i++){
-			for(int j = 0; j < w; j++){
-				tiles[i][j].update(delta);
-			}
-		}
-	}
-	
-	public void init(){
-		initialized = true;
-		
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.StaticBody;
-		bodyDef.position.set(offsetX, offsetY);
-		
-		body = game.getWorld().createBody(bodyDef);
-		
-		for(int i = 0; i < h; i++){
-			for(int j = 0; j < w; j++){
-				tiles[i][j].init();
-			}
-		}
-	}
-	
-	public boolean isInitialized(){
-		return initialized;
-	}
-	
-	public Game getGame(){
-		return game;
-	}
-	
-	public void setGame(Game game){
-		this.game = game;
-	}
-	
-	public void store(){
-		initialized = false;
-		
-		for(int i = 0; i < h; i++){
-			for(int j = 0; j < w; j++){
-				tiles[i][j].init();
-			}
-		}
-		
-		game.getWorld().destroyBody(body);
-	}
+public class TileMap {
+
+    public static final float TILE_SIZE = 1;
+
+    private transient boolean initialized = false;
+    private transient Body body;
+
+    private Tile[] tileMap;
+    private Section section;
+
+    private int mapW, mapH;
+    private int offsetX, offsetY;
+
+    public TileMap() {
+        this.tileMap = new Tile[0];
+
+        resize(-5, -5, 35, 35);
+        for (int i = 0; i < 30; i++) {
+            for (int j = 0; j < 30; j++) {
+                Tile tile = new BoundaryTile();
+                if (i == 0 || j == 0 || i == 29 || j == 29) {
+                    tile = new BoundaryTile();
+                } else {
+                    tile = new FloorTile();
+                }
+                setTile(tile, j - 5, i - 5);
+            }
+        }
+    }
+
+    public void setTile(Tile tile, int x, int y) {
+    	int minX, minY, w, h;
+        if(x < offsetX){
+        	minX = x;
+        	w = mapW + offsetX - x;
+        } else {
+        	minX = offsetX;
+        	w = mapW;
+        }
+        
+        if(y < offsetY){
+        	minY = y;
+        	h = mapH + offsetY - y;
+        } else {
+        	minY = offsetY;
+        	h = mapH;
+        }
+        w = x - minX + 1 > w ? x - minX + 1 : w;
+        h = y - minY + 1 > h ? y - minY + 1 : h;
+
+        if (x < offsetX || y < offsetY || w > mapW || h > mapH) {
+            resize(minX, minY, w, h);
+        }
+
+        int index = getIndex(x, y);
+
+        if (this.initialized) {
+            Tile oldTile = this.tileMap[index];
+            if (oldTile != null) {
+                oldTile.store();
+            }
+        }
+
+        tile.tiles = this;
+        tile.setPosition(x, y);
+        this.tileMap[index] = tile;
+
+        if (this.initialized) {
+            tile.init();
+            refreshArea(x, y);
+        }
+    }
+
+    private void refreshArea(int x, int y){
+        Tile tile = getTile(x-1, y);
+        if(tile != null){
+            tile.store();
+            tile.init();
+        }
+        
+        tile = getTile(x+1, y);
+        if(tile != null){
+            tile.store();
+            tile.init();
+        }
+        
+        tile = getTile(x, y-1);
+        if(tile != null){
+            tile.store();
+            tile.init();
+        }
+        
+        tile = getTile(x, y+1);
+        if(tile != null){
+            tile.store();
+            tile.init();
+        }
+    }
+    
+    private void resize(int minX, int minY, int w, int h) {
+    	Log.debug(String.format("resize %d %d %d %d", minX, minY, w, h));
+        Tile map[] = new Tile[w * h];
+
+        for (int i = 0; i < mapH; i++) {
+            for (int j = 0; j < mapW; j++) {
+                int oldIndex = i * mapW + j;
+                int newIndex = (i + offsetY - minY) * w + (j + offsetX - minX);
+                map[newIndex] = tileMap[oldIndex];
+            }
+        }
+
+        offsetX = minX;
+        offsetY = minY;
+        mapW = w;
+        mapH = h;
+
+        tileMap = map;
+    }
+
+    public Tile getTile(int x, int y) {
+        if (x >= this.offsetX && y >= this.offsetY && x < this.mapW + this.offsetX && y < this.mapH + this.offsetY) {
+            return this.tileMap[getIndex(x, y)];
+        } else {
+            return null;
+        }
+    }
+
+    public float getOffsetX() {
+        return this.offsetX;
+    }
+
+    public float getOffsetY() {
+        return this.offsetY;
+    }
+
+    public Body getBody() {
+        return this.body;
+    }
+
+    public void render(SpriteBatch batch, Camera camera) {
+        int startX = (int) (camera.getX() - camera.getHalfRenderSize()) - 1;
+        int startY = (int) (camera.getY() - camera.getHalfRenderSize()) - 1;
+        int endX = (int) (camera.getX() + camera.getHalfRenderSize()) + 1;
+        int endY = (int) (camera.getY() + camera.getHalfRenderSize()) + 1;
+
+        for (int i = startY; i < endY; i++) {
+            for (int j = startX; j < endX; j++) {
+                Tile tile = getTile(j, i);
+                if (tile != null) {
+                    tile.render(batch);
+                }
+            }
+        }
+
+    }
+
+    public void update(float delta) {
+        for (Tile tile : this.tileMap) {
+           if (tile != null) {
+                tile.update(delta);
+            }
+        }
+    }
+
+    public void init() {
+        this.initialized = true;
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyType.StaticBody;
+
+        this.body = this.section.getWorld().createBody(bodyDef);
+
+        for (Tile tile : this.tileMap) {
+            if (tile != null) {
+                tile.init();
+            }
+        }
+    }
+
+    public boolean isInitialized() {
+        return this.initialized;
+    }
+
+    public Section getSection() {
+        return this.section;
+    }
+
+    public void setSection(Section section) {
+        this.section = section;
+    }
+
+    public void store() {
+        this.initialized = false;
+
+        for (Tile tile : this.tileMap) {
+            if (tile != null) {
+                tile.store();
+            }
+        }
+
+        this.section.getWorld().destroyBody(this.body);
+    }
+
+    private int getIndex(int x, int y) {
+        return (y - this.offsetY) * this.mapW + (x - this.offsetX);
+    }
 }

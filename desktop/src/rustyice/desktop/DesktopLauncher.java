@@ -1,47 +1,35 @@
 package rustyice.desktop;
 
-
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 
 import rustyice.main.GdxMain;
 import rustyice.main.GeneralSettings;
 
-import java.awt.*;
-
-
 public class DesktopLauncher {
-	public static void main (String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        //config.useGL30 = true;
+	public static void main(String[] arg) {
 
-		Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
-
+	    Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+	    //config.useOpenGL3(true, 3, 2);
+	    
 		FileHandle settingsFile = new FileHandle("settings.json");
 		GeneralSettings settings;
-		if(settingsFile.exists()){
+		if (settingsFile.exists()) {
 			settings = new Json().fromJson(GeneralSettings.class, settingsFile);
 		} else {
 			settings = new GeneralSettings();
 		}
-
+		
 		if(settings.fullscreen){
-            config.width = windowSize.width;
-            config.height = windowSize.height;
-            config.fullscreen = true;
-        } else {
-            config.width = settings.width;
-            config.height = settings.height;
-        }
+		    config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+		} else {
+		    config.setWindowedMode(settings.width, settings.height);
+		}
 
-        config.addIcon("icon.png", Files.FileType.Internal);
-        
-        //config.vSyncEnabled = false;
-        //config.foregroundFPS = 0;
-        
-		new LwjglApplication(new GdxMain(settings, settingsFile), config);
+		config.useVsync(false);
+		
+		new Lwjgl3Application(new GdxMain(settings, settingsFile), config);
 	}
 }

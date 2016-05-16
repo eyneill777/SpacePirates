@@ -3,14 +3,14 @@ apply plugin: "java"
 sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
 
-project.ext.assetsDir = new File("../core/assets");
+project.ext.workingDir = new File("../");
 
 
 task packassets(dependsOn: classes, type: JavaExec) {
     main = "rustyice.tools.TexturePack"
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
-    workingDir = project.assetsDir
+    workingDir = project.workingDir
     ignoreExitValue = true
 }
 

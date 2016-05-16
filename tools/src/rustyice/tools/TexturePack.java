@@ -1,13 +1,14 @@
 package rustyice.tools;
 
-import java.io.File;
-
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
-import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
-import com.kotcrab.vis.usl.USL;
+import com.kotcrab.vis.usl.Main;
 
 public class TexturePack {
-	public static void main(String args[]){
-		System.out.println(USL.parse(new File("gui/gui.usl")));
+	public static void main(String args[]) {
+		TexturePacker.process("assets-raw/gui/x1", "core/assets/gui", "uiskin");
+		TexturePacker.process("assets-raw/game-art", "core/assets", "art");
+
+		String[] uslArgs = { "assets-raw/gui/uiskin.usl", "core/assets/gui/uiskin.json" };
+		Main.main(uslArgs);
 	}
 }

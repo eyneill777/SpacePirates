@@ -1,48 +1,77 @@
 package rustyice.screens;
 
+import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
 import rustyice.resources.Resources;
 
 /**
- * The temples for any screen, add it to the ScreenManager, come on try it.
+ * The temple for any screen, add it to the ScreenManager.
+ * 
  * @author gabek
  * @see ScreenManager
  */
-public abstract class Screen{
-	private ScreenManager manager;
-	private Stage stage;
-	private Resources resources;
+public abstract class Screen {
 
-	protected void setScreenManager(ScreenManager manager){
-		this.manager = manager;
-		stage = manager.getStage();
-		resources = manager.getResources();
-	}
-	
-	public ScreenManager getManager(){
-		return manager;
-	}
-	
-	public Stage getStage(){
-		return stage;
-	}
-	
-	public Resources getResources(){
-		return resources;
-	}
-	
-	public abstract void load();
+    private boolean loaded;
+    private ScreenManager manager;
+    private Stage stage;
+    private Resources resources;
 
-	public abstract void show(Stage stage);
-	
-	public abstract void hide(Stage stage);
-	
-	public abstract void dispose();
-	
-	public abstract void resize(int width, int height);
-	
-	public abstract void render(SpriteBatch batch, float delta);
+    protected void setScreenManager(ScreenManager manager) {
+        this.manager = manager;
+        loaded = false;
+        stage = manager.getStage();
+        resources = manager.getResources();
+    }
+
+    public ScreenManager getManager() {
+        return manager;
+    }
+
+    public TweenManager getTweenManager(){
+        return manager.getTweenManager();
+    }
+    
+    boolean isLoaded(){
+        return loaded;
+    }
+    
+    public Stage getStage() {
+        return stage;
+    }
+    
+    /**
+     * Gets a reference to the globe set of resources. 
+     * @return The game resources, sealy already loaded from files.
+     */
+    public Resources getResources() {
+        return resources;
+    }
+
+    /**
+     * Initializes all the screens widgets.
+     * some widgets may require the assets are loaded so if that is the case construct them here.
+     */
+    public void load(){
+        loaded = true;
+    }
+
+    /**
+     * Called when the screen is signaled to appear.
+     * @param stage
+     */
+    public abstract void show(Stage stage);
+
+    /**
+     * 
+     * @param stage
+     */
+    public abstract void hide(Stage stage);
+
+    public abstract void dispose();
+
+    public abstract void resize(int width, int height);
+
+    public abstract void render(SpriteBatch batch, float delta);
 }
