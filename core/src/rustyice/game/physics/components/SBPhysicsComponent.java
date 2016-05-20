@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -19,6 +20,7 @@ public class SBPhysicsComponent implements PhysicsComponent {
     private transient Body body;
     private transient boolean initialized = false;
 
+    private BodyType bodytype = BodyType.DynamicBody;
     private boolean flying;
     private float groundFriction = .5f;
     private float x, y, rotation;
@@ -31,6 +33,11 @@ public class SBPhysicsComponent implements PhysicsComponent {
         this.master = master;
     }
 
+    public SBPhysicsComponent(Actor master, BodyType bodyType){
+        this.master = master;
+        this.bodytype = bodyType;
+    }
+    
     @Override
     public void init() {
         if (!initialized) {
@@ -41,7 +48,7 @@ public class SBPhysicsComponent implements PhysicsComponent {
             body = master.getSection().getWorld().createBody(bodyDef);
         }
     }
-
+    
     private void updateDrag() {
         if (initialized && !flying) {
             body.setLinearDamping(body.getMass() * groundFriction);
@@ -117,7 +124,8 @@ public class SBPhysicsComponent implements PhysicsComponent {
     protected BodyDef buildBodyDef() {
         BodyDef bodyDef = new BodyDef();
 
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        
+        bodyDef.type = bodytype;
         // bodyDef.fixedRotation = true;
 
         bodyDef.position.x = x;
@@ -126,8 +134,8 @@ public class SBPhysicsComponent implements PhysicsComponent {
 
         return bodyDef;
     }
-
-    public Fixture addRectangle(float width, float height, float density) {
+    
+    public Fixture addRectangle(float width, float height, float density, boolean sensor) {
         PolygonShape rect = new PolygonShape();
         rect.setAsBox(width / 2, height / 2);
 
@@ -139,7 +147,7 @@ public class SBPhysicsComponent implements PhysicsComponent {
         return fix;
     }
 
-    public Fixture addCircle(float radius, float density) {
+    public Fixture addCircle(float radius, float density, boolean sensor) {
         CircleShape circle = new CircleShape();
         circle.setRadius(radius);
 

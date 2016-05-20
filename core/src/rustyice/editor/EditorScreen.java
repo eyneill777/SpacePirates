@@ -39,6 +39,8 @@ import rustyice.game.Section;
 import rustyice.game.actors.Actor;
 import rustyice.game.actors.Player;
 import rustyice.game.actors.TestActor;
+import rustyice.game.lights.PointLight;
+import rustyice.game.tiles.BoundaryTile;
 import rustyice.game.tiles.FloorTile;
 import rustyice.game.tiles.Tile;
 import rustyice.game.tiles.WallTile;
@@ -157,23 +159,35 @@ public class EditorScreen extends Screen {
     private void buildSelectionPane() {
         actorSelectionTree = new VisTree();
 
-        Node nodeToAdd = new Node(new VisLabel("Player"));
-        nodeToAdd.setObject(Player.class);
-        actorSelectionTree.add(nodeToAdd);
+        Node playerNode = new Node(new VisLabel("Player"));
+        playerNode.setObject(Player.class);
+        actorSelectionTree.add(playerNode);
 
-        nodeToAdd = new Node(new VisLabel("A Gabe"));
-        nodeToAdd.setObject(TestActor.class);
-        actorSelectionTree.add(nodeToAdd);
-
+        Node gabeNode = new Node(new VisLabel("A Gabe"));
+        gabeNode.setObject(TestActor.class);
+        actorSelectionTree.add(gabeNode);
+        
+        Node lightsNode = new Node(new VisLabel("Lights"));
+        lightsNode.setSelectable(false);
+        actorSelectionTree.add(lightsNode);
+        
+        Node pointLightNode = new Node(new VisLabel("Point Light"));
+        pointLightNode.setObject(PointLight.class);
+        lightsNode.add(pointLightNode);
+        
         tileSelectionTree = new VisTree();
 
-        nodeToAdd = new Node(new VisLabel("Floor"));
-        nodeToAdd.setObject(FloorTile.class);
-        tileSelectionTree.add(nodeToAdd);
+        Node floorNode = new Node(new VisLabel("Floor"));
+        floorNode.setObject(FloorTile.class);
+        tileSelectionTree.add(floorNode);
 
-        nodeToAdd = new Node(new VisLabel("Wall"));
-        nodeToAdd.setObject(WallTile.class);
-        tileSelectionTree.add(nodeToAdd);
+        Node wallNode = new Node(new VisLabel("Wall"));
+        wallNode.setObject(WallTile.class);
+        tileSelectionTree.add(wallNode);
+        
+        Node boundryNode = new Node(new VisLabel("Boundry"));
+        boundryNode.setObject(BoundaryTile.class);
+        tileSelectionTree.add(boundryNode);
     }
 
     private void buildMenuBar() {
@@ -344,7 +358,7 @@ public class EditorScreen extends Screen {
             batch.begin();
 
             batch.setColor(Color.LIGHT_GRAY);
-            GraphicsUtils.drawRect(batch, getResources(), tileSelectStart.x, tileSelectStart.y, tileSelectEnd.x - tileSelectStart.x, tileSelectEnd.y - tileSelectStart.y, 0.1f);
+            GraphicsUtils.drawRect(tileSelectStart.x, tileSelectStart.y, tileSelectEnd.x - tileSelectStart.x, tileSelectEnd.y - tileSelectStart.y, 0.1f);
 
             batch.end();
             display.getFBO().end();

@@ -1,7 +1,6 @@
 package rustyice.screens.menus;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -35,8 +34,6 @@ public class MainMenu extends Screen {
         
         root = new VisTable();
 
-        ClickSound clickSound = new ClickSound(getResources().get("gui/sfx/click3.wav", Sound.class));
-        
         VisTextButton newButt = new VisTextButton("New Game");
         newButt.addListener(new ClickListener() {
             @Override
@@ -44,10 +41,10 @@ public class MainMenu extends Screen {
                 getManager().showScreen("playing");
             }
         });
-        newButt.addListener(clickSound);
+        ClickSound.addDefault(newButt);
 
         VisTextButton loadButt = new VisTextButton("Load Game");
-        loadButt.addListener(clickSound);
+        ClickSound.addDefault(loadButt);
         
         VisTextButton settingsButt = new VisTextButton("Settings");
         settingsButt.addListener(new ClickListener() {
@@ -56,7 +53,7 @@ public class MainMenu extends Screen {
                 getManager().showScreen("settings");
             }
         });
-        settingsButt.addListener(clickSound);
+        ClickSound.addDefault(settingsButt);
 
         VisTextButton editorButt = new VisTextButton("Level Edit");
         editorButt.addListener(new ClickListener() {
@@ -65,7 +62,7 @@ public class MainMenu extends Screen {
                 getManager().showScreen("editor");
             }
         });
-        editorButt.addListener(clickSound);
+        ClickSound.addDefault(editorButt);
 
         VisTextButton quitButt = new VisTextButton("Quit");
         quitButt.addListener(new ClickListener() {
@@ -74,7 +71,7 @@ public class MainMenu extends Screen {
                 Gdx.app.exit();
             }
         });
-        quitButt.addListener(clickSound);
+        ClickSound.addDefault(quitButt);
         
         //root.add("Rusty Ice").pad(20).row();
         root.add(newButt).pad(PAD).prefWidth(BUTT_WIDTH).row();

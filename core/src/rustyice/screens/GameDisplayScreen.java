@@ -13,6 +13,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import rustyice.game.Game;
+import rustyice.graphics.Camera;
 import rustyice.graphics.GameDisplay;
 import rustyice.input.Actions;
 import rustyice.input.PlayerInput;
@@ -21,7 +22,7 @@ import rustyice.screens.menus.effects.GuiEffects;
 
 public class GameDisplayScreen extends Screen {
     private GameDisplay display;
-    private GameDisplay display2, display3, display4;
+    private Camera camera;
     private Game game;
     private VisWindow pauseWindow;
     private Container<VisWindow> pauseMenu;
@@ -35,20 +36,13 @@ public class GameDisplayScreen extends Screen {
         paused = false;
 
         display = new GameDisplay();
-        display.setTarget(game, game.getCamera(0));
+        camera = new Camera(7, 7);
+
+        display.setTarget(game, camera);
 
         playerInput = Actions.desktopDefault();
 
         game.setPlayerInput(playerInput);
-        
-        display2 = new GameDisplay();
-        display2.setTarget(game, game.getCamera(0));
-        
-        display3 = new GameDisplay();
-        display3.setTarget(game, game.getCamera(0));
-        
-        display4 = new GameDisplay();
-        display4.setTarget(game, game.getCamera(0));
     }
 
     @Override
@@ -59,10 +53,8 @@ public class GameDisplayScreen extends Screen {
 
         if (!paused) {
             game.update(delta);
+            camera.update(delta);
             display.render(batch, delta);
-            display2.render(batch, delta);
-            display3.render(batch, delta);
-            display4.render(batch, delta);
         }
     }
 
@@ -92,7 +84,6 @@ public class GameDisplayScreen extends Screen {
 
         VisTextButton resumeButt = new VisTextButton("Resume");
         resumeButt.addListener(new ClickListener() {
-
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 setPaused(false);
@@ -101,7 +92,6 @@ public class GameDisplayScreen extends Screen {
 
         VisTextButton settingsButt = new VisTextButton("Settings");
         settingsButt.addListener(new ClickListener() {
-
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 getManager().showScreen("settings");
@@ -110,7 +100,6 @@ public class GameDisplayScreen extends Screen {
 
         VisTextButton exitButt = new VisTextButton("Exit");
         exitButt.addListener(new ClickListener() {
-
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 getManager().popScreen();
@@ -129,20 +118,12 @@ public class GameDisplayScreen extends Screen {
         
         root = new VisTable();
         root.add(display).grow();
-        root.add(display2).grow();
-        root.row();
-        root.add(display3).grow();
-        root.add(display4).grow();
         
         root.setFillParent(true);
     }
 
     @Override
     public void show(Stage stage) {
-        // VisWindow window = new VisWindow("Test");
-        // window.setFillParent(true);
-        // window.add(this.display).grow();
-        // window.setResizable(true);
         stage.addActor(root);
         stage.addActor(pauseMenu);
         
@@ -155,20 +136,18 @@ public class GameDisplayScreen extends Screen {
     @Override
     public void hide(Stage stage) {
         
-        GuiEffects.fadeOut(root, 0.5f, () ->{
-            getStage().getActors().removeValue(root, true);
-        }).start(getTweenManager());
+        GuiEffects.fadeOut(root, 0.5f, () ->
+            getStage().getActors().removeValue(root, true)
+        ).start(getTweenManager());
         
-        GuiEffects.fadeOut(pauseMenu, 0.5f, () ->{
-            getStage().getActors().removeValue(pauseMenu, true);
-        }).start(getTweenManager());
+        GuiEffects.fadeOut(pauseMenu, 0.5f, () ->
+                getStage().getActors().removeValue(pauseMenu, true)
+        ).start(getTweenManager());
     }
 
     @Override
     public void dispose() {
         display.dispose();
-        display2.dispose();
-        // debugRender.dispose();
     }
 
     @Override

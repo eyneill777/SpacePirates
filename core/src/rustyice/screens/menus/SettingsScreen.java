@@ -1,19 +1,18 @@
 package rustyice.screens.menus;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Json;
-import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
-import rustyice.main.GeneralSettings;
+import com.kotcrab.vis.ui.widget.*;
+import rustyice.core.Core;
 import rustyice.screens.Screen;
+import rustyice.screens.menus.effects.ClickSound;
 import rustyice.screens.menus.effects.GuiEffects;
 
 public class SettingsScreen extends Screen {
@@ -21,9 +20,6 @@ public class SettingsScreen extends Screen {
     private static final float BUTT_WIDTH = 150;
     private static final float PAD = 5;
     private static final float FADE_DURATION = 0.5f;
-    private GeneralSettings settings;
-    private FileHandle settingFile;
-    private Json json;
 
     private ButtonGroup<TextButton> catButtions;
     private VisTable root;
@@ -32,125 +28,173 @@ public class SettingsScreen extends Screen {
     private VisTable bottemPane;
 
     private VisCheckBox fullscreenCheck;
-    private TextButton videoButt, audioButt, inputButt;
+    private VisCheckBox vsyncCheck;
 
-    public SettingsScreen(GeneralSettings settings, FileHandle settingFile) {
-        this.settings = settings;
-        this.settingFile = settingFile;
-        this.json = new Json();
-    }
+    private VisSlider soundSlider;
+    private VisLabel soundLabel;
+    private VisLabel soundLevelLabel;
+    private VisSlider musicSlider;
+    private VisLabel musicLabel;
+    private VisLabel musicLevelLabel;
+
+    private TextButton videoButt, audioButt, inputButt;
 
     @Override
     public void load() {
         super.load();
         
-        this.root = new VisTable();
-        this.root.setFillParent(true);
+        root = new VisTable();
+        root.setFillParent(true);
 
-        this.categoryPane = new VisTable();
-        this.settingPane = new VisTable();
-        this.bottemPane = new VisTable();
+        categoryPane = new VisTable();
+        settingPane = new VisTable();
+        bottemPane = new VisTable();
 
-        this.videoButt = new VisTextButton("Video", "toggle");
-        this.videoButt.addListener(new ClickListener() {
-
+        videoButt = new VisTextButton("Video", "toggle");
+        videoButt.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 switchToVideo();
             }
         });
+        ClickSound.addDefault(videoButt);
 
-        this.audioButt = new VisTextButton("Audio", "toggle");
-        this.audioButt.addListener(new ClickListener() {
-
+        audioButt = new VisTextButton("Audio", "toggle");
+        audioButt.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 switchAudio();
             }
         });
-
-        this.inputButt = new VisTextButton("Input", "toggle");
-        this.inputButt.addListener(new ClickListener() {
-
+        ClickSound.addDefault(audioButt);
+        
+        inputButt = new VisTextButton("Input", "toggle");
+        inputButt.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 switchInput();
             }
         });
+        ClickSound.addDefault(inputButt);
 
         VisTextButton backButt = new VisTextButton("Back");
         backButt.addListener(new ClickListener() {
-
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 getManager().popScreen();
             }
         });
+        ClickSound.addDefault(backButt);
 
         VisTextButton applyButt = new VisTextButton("Apply");
         applyButt.addListener(new ClickListener() {
-
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 apply();
             }
         });
+        ClickSound.addDefault(applyButt);
 
-        this.catButtions = new ButtonGroup<>(this.videoButt, this.audioButt, this.inputButt);
-        this.catButtions.setMinCheckCount(1);
-        this.catButtions.setMaxCheckCount(1);
+        catButtions = new ButtonGroup<>(videoButt, audioButt, inputButt);
+        catButtions.setMinCheckCount(1);
+        catButtions.setMaxCheckCount(1);
 
         loadVideo();
+        loadAudio();
 
-        this.categoryPane.add(this.videoButt).prefWidth(BUTT_WIDTH).pad(PAD).row();
-        this.categoryPane.add(this.audioButt).prefWidth(BUTT_WIDTH).pad(PAD).row();
-        this.categoryPane.add(this.inputButt).prefWidth(BUTT_WIDTH).pad(PAD);
+        categoryPane.add(videoButt).prefWidth(BUTT_WIDTH).pad(PAD).row();
+        categoryPane.add(audioButt).prefWidth(BUTT_WIDTH).pad(PAD).row();
+        categoryPane.add(inputButt).prefWidth(BUTT_WIDTH).pad(PAD);
 
-        this.bottemPane.add(backButt).expandX();
-        this.bottemPane.add(applyButt).expandX();
+        bottemPane.add(backButt).expandX();
+        bottemPane.add(applyButt).expandX();
 
-        this.root.add(this.categoryPane).fillY().right();
-        this.root.add(this.settingPane).fill().prefSize(800, 800).row();
-        this.root.add(this.bottemPane).colspan(2).fillX();
+        root.add(categoryPane).fillY().right();
+        root.add(settingPane).fill().prefSize(800, 640).row();
+        root.add(bottemPane).colspan(2).fillX();
         // root.setDebug(true, true);
     }
 
-    public void loadVideo() {
-        this.fullscreenCheck = new VisCheckBox("Fullscreen");
-        this.fullscreenCheck.setChecked(this.settings.fullscreen);
+    private void loadVideo() {
+        fullscreenCheck = new VisCheckBox("Fullscreen");
+        fullscreenCheck.setChecked(Core.settings.isFullscreen());
+        ClickSound.addDefault(fullscreenCheck);
+
+        vsyncCheck = new VisCheckBox("VSync");
+        vsyncCheck.setChecked(Core.settings.isVsync());
+        ClickSound.addDefault(vsyncCheck);
+    }
+
+    private void loadAudio(){
+        soundSlider = new VisSlider(0, 1, 0.1f, false);
+        soundLabel = new VisLabel("Sound: ");
+        soundLevelLabel = new VisLabel("");
+
+        soundSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                soundLevelLabel.setText(String.valueOf((int)(soundSlider.getValue() * 100)) + "%");
+                Core.settings.setSoundVolume(soundSlider.getValue());
+            }
+        });
+
+        musicSlider = new VisSlider(0, 1, 0.1f, false);
+        musicLabel = new VisLabel("Music: ");
+        musicLevelLabel = new VisLabel("");
+
+        musicSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                musicLevelLabel.setText(String.valueOf((int)(musicSlider.getValue() * 100)) + "%");
+                Core.settings.setMusicVolume(musicSlider.getValue());
+            }
+        });
     }
 
     private void switchToVideo() {
-        this.settingPane.clear();
-        this.settingPane.add(this.fullscreenCheck);
+        settingPane.clear();
+        settingPane.add(fullscreenCheck);
+        settingPane.add(vsyncCheck);
     }
 
     private void switchAudio() {
-        this.settingPane.clear();
+        settingPane.clear();
+        settingPane.add(soundLabel).pad(20);
+        settingPane.add(soundSlider).pad(20).prefWidth(100);
+        settingPane.add(soundLevelLabel).pad(20).row();
+
+        settingPane.add(musicLabel).pad(20);
+        settingPane.add(musicSlider).pad(20).prefWidth(100);
+        settingPane.add(musicLevelLabel).pad(20).row();
+
+        soundSlider.setValue(Core.settings.getSoundVolume());
+        soundSlider.fire(new ChangeListener.ChangeEvent());
+        musicSlider.setValue(Core.settings.getMusicVolume());
+        musicSlider.fire(new ChangeListener.ChangeEvent());
     }
 
     private void switchInput() {
-        this.settingPane.clear();
+        settingPane.clear();
     }
 
     private void apply() {
-        TextButton cat = this.catButtions.getChecked();
-        if (cat == this.videoButt) {
-            if (this.fullscreenCheck.isChecked() != this.settings.fullscreen) {
-                this.settings.fullscreen = this.fullscreenCheck.isChecked();
-                if (this.settings.fullscreen) {
+        TextButton cat = catButtions.getChecked();
+        if (cat == videoButt) {
+            if (fullscreenCheck.isChecked() != Core.settings.isFullscreen()) {
+                Core.settings.setFullscreen(fullscreenCheck.isChecked());
+                Core.settings.setVSync(vsyncCheck.isChecked());
+                Gdx.graphics.setVSync(vsyncCheck.isChecked());
+                if (Core.settings.isFullscreen()) {
                     Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-                    System.out.println(Gdx.graphics.getDisplayMode().refreshRate);
                 } else {
-                    Gdx.graphics.setWindowedMode(this.settings.width, this.settings.height);
+                    Gdx.graphics.setWindowedMode(Core.settings.getWidth(), Core.settings.getHeight());
                 }
             }
-        } else if (cat == this.audioButt) {
+        } else if (cat == audioButt) {
 
-        } else if (cat == this.inputButt) {
+        } else if (cat == inputButt) {
 
         }
-        this.json.toJson(this.settings, this.settingFile);
     }
 
     @Override
@@ -162,23 +206,17 @@ public class SettingsScreen extends Screen {
 
     @Override
     public void hide(Stage stage) {
-        GuiEffects.fadeOut(root, FADE_DURATION, () ->{
-            stage.getActors().removeValue(root, true);
-        }).start(getTweenManager());
+        GuiEffects.fadeOut(root, FADE_DURATION,
+                () -> stage.getActors().removeValue(root, true)
+        ).start(getTweenManager());
     }
 
     @Override
-    public void dispose() {
-
-    }
+    public void dispose() {}
 
     @Override
-    public void resize(int width, int height) {
-
-    }
+    public void resize(int width, int height) {}
 
     @Override
-    public void render(SpriteBatch batch, float delta) {
-
-    }
+    public void render(SpriteBatch batch, float delta) {}
 }

@@ -13,8 +13,9 @@ public class TestActor extends Actor {
 
     public TestActor() {
         super();
-        setPhysicsComponent(this.pComponent = new SBPhysicsComponent(this));
-        this.testSprite = new Sprite();
+        setPhysicsComponent(pComponent = new SBPhysicsComponent(this));
+        pComponent.setFlying(true);
+        testSprite = new Sprite();
 
         setPosition(5, 5);
         setWidth(1.9f);
@@ -43,7 +44,7 @@ public class TestActor extends Actor {
     @Override
     public void init() {
         super.init();
-        this.pComponent.addRectangle(getWidth(), getHeight(), 2);
+        this.pComponent.addRectangle(getWidth(), getHeight(), 2, false);
         this.testSprite = getResources().get("art.atlas", TextureAtlas.class).createSprite("may2015-3");
         this.testSprite.setSize(getWidth(), getHeight());
         this.testSprite.setOrigin(getWidth() / 2, getHeight() / 2);

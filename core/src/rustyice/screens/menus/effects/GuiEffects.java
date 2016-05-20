@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  */
 public class GuiEffects {
     
+    
+    
     /**
      * First sets alpha to 0 then transitions to 1, much call start(tweenmaneger) to start the effect.
      * @param target the widget to fading in.

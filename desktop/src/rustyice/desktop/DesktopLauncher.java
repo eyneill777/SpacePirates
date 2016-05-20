@@ -2,34 +2,26 @@ package rustyice.desktop;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Json;
-
-import rustyice.main.GdxMain;
-import rustyice.main.GeneralSettings;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Preferences;
+import rustyice.core.Core;
+import rustyice.core.GeneralSettings;
 
 public class DesktopLauncher {
 	public static void main(String[] arg) {
 
 	    Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 	    //config.useOpenGL3(true, 3, 2);
-	    
-		FileHandle settingsFile = new FileHandle("settings.json");
-		GeneralSettings settings;
-		if (settingsFile.exists()) {
-			settings = new Json().fromJson(GeneralSettings.class, settingsFile);
-		} else {
-			settings = new GeneralSettings();
-		}
+
+		GeneralSettings settings = new GeneralSettings(new Lwjgl3Preferences("setting.perf", ".rustyice"));
 		
-		if(settings.fullscreen){
-		    config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+		if(settings.isFullscreen()){
+			config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		} else {
-		    config.setWindowedMode(settings.width, settings.height);
+		    config.setWindowedMode(settings.getWidth(), settings.getHeight());
 		}
 
-		config.useVsync(false);
+		config.useVsync(settings.isVsync());
 		
-		new Lwjgl3Application(new GdxMain(settings, settingsFile), config);
+		new Lwjgl3Application(new Core(settings), config);
 	}
 }

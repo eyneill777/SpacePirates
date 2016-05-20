@@ -1,18 +1,9 @@
 package rustyice.game;
 
-import java.util.ArrayList;
-
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.World;
-
-import rustyice.game.actors.Actor;
+import com.badlogic.gdx.physics.box2d.*;
 import rustyice.game.actors.Player;
 import rustyice.game.physics.Collidable;
 import rustyice.game.physics.Collision;
@@ -21,10 +12,11 @@ import rustyice.graphics.Camera;
 import rustyice.input.PlayerInput;
 import rustyice.resources.Resources;
 
+import java.util.ArrayList;
+
 public class Game implements ContactListener {
     private static final float UPDATE_RATE = 1/60f;
-    
-    private ArrayList<Camera> cameras;
+
     private RayHandler rayHandler;
     private Resources resources;
     private PlayerInput playerInput;
@@ -41,25 +33,10 @@ public class Game implements ContactListener {
         rayHandler = new RayHandler(world);
         leftOverTime = 0;
 
-        Camera camera = new Camera();
-        camera.setWidth(10);
-        camera.setHeight(10);
-
         sectionToLoad = new Section();
 
         // actors = new ArrayList<>();
         collisions = new ArrayList<>();
-        cameras = new ArrayList<>();
-
-        cameras.add(camera);
-
-        Player player = new Player();
-
-        player.setPosition(7, 7);
-        camera.setTarget(player);
-        camera.setTracking(true);
-
-        sectionToLoad.addActor(player);
     }
 
     public Section getCurrentSection() {
@@ -75,19 +52,14 @@ public class Game implements ContactListener {
             currentSection.store();
         }
 
-        for (Camera camera : cameras) {
-            camera.setX(camera.getTarget().getX());
-            camera.setY(camera.getTarget().getY());
-        }
-
         section.setGame(this);
         section.init();
 
-        for (Actor actor : section.getActors()) {
-            if (actor instanceof Player) {
-                ((Player) actor).setPlayerInput(playerInput);
-            }
-        }
+        section.getActors().stream().
+                filter(
+                        actor -> actor instanceof Player).
+                forEach(
+                        actor -> ((Player) actor).setPlayerInput(playerInput));
 
         currentSection = section;
     }
@@ -132,8 +104,7 @@ public class Game implements ContactListener {
             leftOverTime -= UPDATE_RATE; 
             world.step(UPDATE_RATE, 6, 2);
 
-            for (int i = 0; i < collisions.size(); i++) {
-                Collision col = collisions.get(i);
+            for (Collision col : collisions) {
                 if (col.isBegin()) {
                     Collidable collidable = resolveCollidable(col.getThisFixture());
                     if (collidable != null) {
@@ -149,19 +120,11 @@ public class Game implements ContactListener {
             collisions.clear();
 
             currentSection.update(UPDATE_RATE);
-
-            for (Camera camera : cameras) {
-                camera.update(UPDATE_RATE);
-            }
         }
     }
 
     public void render(SpriteBatch batch, Camera camera) {
         currentSection.render(batch, camera);
-    }
-
-    public Camera getCamera(int playerId) {
-        return cameras.get(playerId);
     }
 
     public World getWorld() {

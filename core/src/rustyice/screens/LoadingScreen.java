@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
+import rustyice.core.Core;
 import rustyice.screens.menus.effects.GuiEffects;
 
 public class LoadingScreen extends Screen{
@@ -41,12 +42,12 @@ public class LoadingScreen extends Screen{
 
     @Override
     public void render(SpriteBatch batch, float delta) {
-        if(getResources().update()){
-            getResources().loadAll();
+        if(Core.resources.update()){
+            Core.resources.loadAll();
             getManager().showScreen("main_menu");
         }
         
-        progressBar.setValue(getResources().getProgress());
+        progressBar.setValue(Core.resources.getProgress());
     }
 
 }

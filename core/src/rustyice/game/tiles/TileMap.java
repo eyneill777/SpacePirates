@@ -24,19 +24,6 @@ public class TileMap {
 
     public TileMap() {
         this.tileMap = new Tile[0];
-
-        resize(-5, -5, 35, 35);
-        for (int i = 0; i < 30; i++) {
-            for (int j = 0; j < 30; j++) {
-                Tile tile = new BoundaryTile();
-                if (i == 0 || j == 0 || i == 29 || j == 29) {
-                    tile = new BoundaryTile();
-                } else {
-                    tile = new FloorTile();
-                }
-                setTile(tile, j - 5, i - 5);
-            }
-        }
     }
 
     public void setTile(Tile tile, int x, int y) {
@@ -203,13 +190,13 @@ public class TileMap {
     public void store() {
         this.initialized = false;
 
-        for (Tile tile : this.tileMap) {
+        for (Tile tile : tileMap) {
             if (tile != null) {
                 tile.store();
             }
         }
 
-        this.section.getWorld().destroyBody(this.body);
+        section.getWorld().destroyBody(this.body);
     }
 
     private int getIndex(int x, int y) {

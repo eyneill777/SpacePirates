@@ -16,13 +16,11 @@ public abstract class Screen {
     private boolean loaded;
     private ScreenManager manager;
     private Stage stage;
-    private Resources resources;
 
     protected void setScreenManager(ScreenManager manager) {
         this.manager = manager;
         loaded = false;
         stage = manager.getStage();
-        resources = manager.getResources();
     }
 
     public ScreenManager getManager() {
@@ -39,14 +37,6 @@ public abstract class Screen {
     
     public Stage getStage() {
         return stage;
-    }
-    
-    /**
-     * Gets a reference to the globe set of resources. 
-     * @return The game resources, sealy already loaded from files.
-     */
-    public Resources getResources() {
-        return resources;
     }
 
     /**

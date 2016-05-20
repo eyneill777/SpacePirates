@@ -1,4 +1,4 @@
-package rustyice.main;
+package rustyice.core;
 
 import aurelienribon.tweenengine.Tween;
 import com.badlogic.gdx.ApplicationListener;
@@ -23,24 +23,22 @@ import rustyice.screens.menus.MainMenu;
 import rustyice.screens.menus.SettingsScreen;
 import rustyice.screens.menus.effects.GuiAccessor;
 
-public class GdxMain implements ApplicationListener {
+public class Core implements ApplicationListener {
 
     //private ShaderProgram badProgram;
     //private float time = 0;
     
     private Game game;
-    private SpriteBatch batch;
+    public static SpriteBatch batch;
     private ScreenManager screenManager;
-    private Resources resources;
+    public static Resources resources;
 
-    private GeneralSettings settings;
-    private FileHandle settingsFile;
+    public static GeneralSettings settings;
     private PerformanceTracker tracker;
     private Kryo kryo;
 
-    public GdxMain(GeneralSettings settings, FileHandle settingsFile) {
-        this.settings = settings;
-        this.settingsFile = settingsFile;
+    public Core(GeneralSettings settings) {
+        Core.settings = settings;
     }
 
     @Override
@@ -70,7 +68,7 @@ public class GdxMain implements ApplicationListener {
         
         screenManager.addScreen("loading", new LoadingScreen());
         screenManager.addScreen("main_menu", new MainMenu());
-        screenManager.addScreen("settings", new SettingsScreen(settings, settingsFile));
+        screenManager.addScreen("settings", new SettingsScreen());
         screenManager.addScreen("playing", new GameDisplayScreen(game));
         screenManager.addScreen("editor", new EditorScreen(game, kryo));
 
@@ -102,6 +100,8 @@ public class GdxMain implements ApplicationListener {
         batch.dispose();
         screenManager.dispose();
         game.dispose();
+
+        settings.save();
     }
 
     @Override

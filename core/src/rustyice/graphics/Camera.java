@@ -17,29 +17,42 @@ public class Camera {
     private float halfRenderSize;
 
     public Camera() {
-        this.target = null;
-        this.tracking = false;
-        this.relative_rotation = false;
+        target = null;
+        tracking = false;
+        relative_rotation = false;
+    }
+
+    public Camera(float width, float height){
+        target = null;
+        tracking = false;
+        relative_rotation = false;
+        this.width = width;
+        this.height = height;
+    }
+
+    public void setSize(float width, float height){
+        this.width = width;
+        this.height = height;
     }
 
     public Actor getTarget() {
-        return this.target;
+        return target;
     }
 
     public void update(float delta) {
-        if (this.tracking) {
-            if (this.relative_rotation) {
-                this.rot = this.target.getRotation() + this.target_rot;
+        if (tracking) {
+            if (relative_rotation) {
+                rot = target.getRotation() + target_rot;
             } else {
-                this.rot = this.target_rot;
+                rot = target_rot;
             }
 
-            this.x += MathUtils.clamp(this.target.getX() - this.x, -.5f, .5f);
-            this.y += MathUtils.clamp(this.target.getY() - this.y, -.5f, .5f);
+            x += MathUtils.clamp(target.getX() - x, -.5f, .5f);
+            y += MathUtils.clamp(target.getY() - y, -.5f, .5f);
         } else {
-            this.rot = this.target_rot;
-            this.x = this.target_x;
-            this.y = this.target_y;
+            rot = target_rot;
+            x = target_x;
+            y = target_y;
         }
     }
 
@@ -48,7 +61,7 @@ public class Camera {
     }
 
     public boolean isTracking() {
-        return this.tracking;
+        return tracking;
     }
 
     public void setTarget(Actor target) {

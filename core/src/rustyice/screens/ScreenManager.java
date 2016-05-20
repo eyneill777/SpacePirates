@@ -22,7 +22,6 @@ public class ScreenManager {
     private Stack<Screen> screenHistory;
     private Screen currentScreen;
 
-    private Resources resources;
     private TweenManager tweenManager;
     
     private PerformanceTracker tracker;
@@ -35,7 +34,6 @@ public class ScreenManager {
         this.tracker = tracker;
 
         this.stage = new Stage(new ScreenViewport(), batch);
-        this.resources = resources;
 
         tweenManager = new TweenManager();
         
@@ -50,10 +48,6 @@ public class ScreenManager {
      */
     public Stage getStage() {
         return this.stage;
-    }
-
-    public Resources getResources() {
-        return this.resources;
     }
     
     public TweenManager getTweenManager(){

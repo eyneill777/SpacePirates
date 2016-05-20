@@ -8,6 +8,7 @@ import rustyice.game.physics.Collision;
 import rustyice.game.physics.components.SBPhysicsComponent;
 import rustyice.input.Actions;
 import rustyice.input.PlayerInput;
+import rustyice.core.Core;
 
 public class Player extends Actor {
 
@@ -19,7 +20,8 @@ public class Player extends Actor {
     private transient int count = 0;
 
     public Player() {
-        setPhysicsComponent(this.pComponent = new SBPhysicsComponent(this));
+        setPhysicsComponent(pComponent = new SBPhysicsComponent(this));
+        pComponent.setFlying(true);
         setWidth(0.98f);
         setHeight(0.98f);
     }
@@ -80,12 +82,12 @@ public class Player extends Actor {
     @Override
     public void init() {
         super.init();
-        this.boxSprite = new Sprite(getResources().circle);
-        this.boxSprite.setColor(Color.CYAN);
+        boxSprite = new Sprite(Core.resources.box);
+        boxSprite.setColor(Color.CYAN);
 
-        this.boxSprite.setSize(getWidth(), getHeight());
-        this.boxSprite.setOrigin(getWidth() / 2, getHeight() / 2);
+        boxSprite.setSize(getWidth(), getHeight());
+        boxSprite.setOrigin(getWidth() / 2, getHeight() / 2);
 
-        this.pComponent.addCircle(getWidth() / 2, 1);
+        pComponent.addRectangle(getWidth(), getHeight(), 1, false);
     }
 }
