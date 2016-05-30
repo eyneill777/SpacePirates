@@ -21,7 +21,7 @@ public class Player extends Actor {
 
     public Player() {
         setPhysicsComponent(pComponent = new SBPhysicsComponent(this));
-        pComponent.setFlying(true);
+        //pComponent.setFlying(true);
         setWidth(0.98f);
         setHeight(0.98f);
     }

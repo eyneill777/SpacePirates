@@ -9,7 +9,8 @@ public interface LightComponent {
     void setStaticLight(boolean isStatic);
     boolean isStaticLight();
 
-    void setPosition(float x, float y);
+    float getDistance();
+    void setDistance(float distance);
 
     void init();
     void store();

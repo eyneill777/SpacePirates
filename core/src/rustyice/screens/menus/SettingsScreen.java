@@ -121,7 +121,7 @@ public class SettingsScreen extends Screen {
         ClickSound.addDefault(fullscreenCheck);
 
         vsyncCheck = new VisCheckBox("VSync");
-        vsyncCheck.setChecked(Core.settings.isVsync());
+        vsyncCheck.setChecked(Core.settings.isVSync());
         ClickSound.addDefault(vsyncCheck);
     }
 
@@ -182,14 +182,14 @@ public class SettingsScreen extends Screen {
         if (cat == videoButt) {
             if (fullscreenCheck.isChecked() != Core.settings.isFullscreen()) {
                 Core.settings.setFullscreen(fullscreenCheck.isChecked());
-                Core.settings.setVSync(vsyncCheck.isChecked());
-                Gdx.graphics.setVSync(vsyncCheck.isChecked());
                 if (Core.settings.isFullscreen()) {
                     Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
                 } else {
                     Gdx.graphics.setWindowedMode(Core.settings.getWidth(), Core.settings.getHeight());
                 }
             }
+            Core.settings.setVSync(vsyncCheck.isChecked());
+            Gdx.graphics.setVSync(vsyncCheck.isChecked());
         } else if (cat == audioButt) {
 
         } else if (cat == inputButt) {

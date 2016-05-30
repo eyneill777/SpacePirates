@@ -2,6 +2,7 @@ package rustyice.game.lights.components;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import rustyice.editor.annotations.ComponentProperty;
 import rustyice.game.actors.Actor;
 
 /**
@@ -9,8 +10,8 @@ import rustyice.game.actors.Actor;
  */
 public class PointLightComponent implements LightComponent{
     private transient box2dLight.PointLight pointLight;
+    private transient boolean initialized = false;
 
-    private boolean initialized = false;
     private Actor parent;
     private float lightRes = 0.25f;
     private float distance = 5;
@@ -22,16 +23,35 @@ public class PointLightComponent implements LightComponent{
     public PointLightComponent(){
     }
 
-    public PointLightComponent(Actor parent){
+    public PointLightComponent(Actor parent, float distance){
         this.parent = parent;
+        this.distance = distance;
     }
 
     @Override
+    @ComponentProperty(title = "Distance")
+    public float getDistance(){
+        return distance;
+    }
+
+    @Override
+    @ComponentProperty(title = "Distance")
+    public void setDistance(float distance){
+        this.distance = distance;
+        if(initialized){
+            store();
+            init();
+        }
+    }
+
+    @Override
+    @ComponentProperty(title = "Color")
     public Color getColor() {
         return color;
     }
 
     @Override
+    @ComponentProperty(title = "Color")
     public void setColor(Color color) {
         this.color = color;
         if (initialized) {
@@ -78,7 +98,7 @@ public class PointLightComponent implements LightComponent{
         return (int) ((MathUtils.PI2 * r) / space);
     }
 
-    @Override
+
     public void setPosition(float x, float y){
         if(initialized){
             pointLight.setPosition(x, y);

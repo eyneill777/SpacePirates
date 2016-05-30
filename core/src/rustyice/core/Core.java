@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.minlog.Log;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
 import rustyice.editor.EditorScreen;
 import rustyice.game.Game;
 import rustyice.graphics.PerformanceTracker;
@@ -48,6 +49,7 @@ public class Core implements ApplicationListener {
         //GLProfiler.listener = new GLErrorLogger();
         
         VisUI.load(Gdx.files.internal("gui/uiskin.json"));
+        FileChooser.setFavoritesPrefsName("rustyice");
         Box2D.init();
         kryo = new Kryo();
 
@@ -77,6 +79,7 @@ public class Core implements ApplicationListener {
 
     @Override
     public void render() {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // clear screen
 
         float delta = Gdx.graphics.getDeltaTime();

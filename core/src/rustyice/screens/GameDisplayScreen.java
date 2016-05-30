@@ -13,6 +13,8 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import rustyice.game.Game;
+import rustyice.game.actors.Actor;
+import rustyice.game.actors.Player;
 import rustyice.graphics.Camera;
 import rustyice.graphics.GameDisplay;
 import rustyice.input.Actions;
@@ -36,13 +38,11 @@ public class GameDisplayScreen extends Screen {
         paused = false;
 
         display = new GameDisplay();
-        camera = new Camera(7, 7);
+        camera = new Camera(12, 12);
 
         display.setTarget(game, camera);
 
         playerInput = Actions.desktopDefault();
-
-        game.setPlayerInput(playerInput);
     }
 
     @Override
@@ -131,6 +131,14 @@ public class GameDisplayScreen extends Screen {
         
         GuiEffects.fadeIn(root, 0.5f).start(getTweenManager());
         GuiEffects.fadeIn(pauseMenu, 0.5f).start(getTweenManager());
+
+        game.finishLoadingSection();
+
+        game.getCurrentSection().getActors().stream().filter(actor -> actor instanceof Player).forEach(actor -> {
+            ((Player) actor).setPlayerInput(playerInput);
+            camera.setTarget(actor);
+            camera.setTracking(true);
+        });
     }
 
     @Override

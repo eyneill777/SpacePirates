@@ -27,9 +27,9 @@ public class LoadingScreen extends Screen{
 
     @Override
     public void hide(Stage stage) {
-        GuiEffects.fadeOut(root, 0.5f, () -> {
-            stage.getActors().removeValue(root, true);
-        }).start(getTweenManager());
+        GuiEffects.fadeOut(root, 0.5f, () ->
+            stage.getActors().removeValue(root, true)
+        ).start(getTweenManager());
     }
 
     @Override

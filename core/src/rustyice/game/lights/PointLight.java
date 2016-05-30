@@ -1,21 +1,20 @@
 package rustyice.game.lights;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sun.glass.ui.SystemClipboard;
+import rustyice.editor.annotations.ComponentAccess;
 import rustyice.game.actors.Actor;
 import rustyice.game.lights.components.LightComponent;
 import rustyice.game.lights.components.LightContainer;
 import rustyice.game.lights.components.PointLightComponent;
 import rustyice.game.physics.components.PointPhysicsComponent;
 
-import java.lang.reflect.Method;
 
 public class PointLight extends Actor implements LightContainer {
 
     private PointLightComponent light;
     
     public PointLight() {
-        light = new PointLightComponent(this);
+        light = new PointLightComponent(this, 10);
         setPhysicsComponent(new PointPhysicsComponent());
         setSize(1, 1);
     }
@@ -60,6 +59,7 @@ public class PointLight extends Actor implements LightContainer {
     }
 
     @Override
+    @ComponentAccess
     public LightComponent getLightComponent() {
         return light;
     }

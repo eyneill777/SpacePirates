@@ -14,7 +14,7 @@ public class TestActor extends Actor {
     public TestActor() {
         super();
         setPhysicsComponent(pComponent = new SBPhysicsComponent(this));
-        pComponent.setFlying(true);
+        //pComponent.setFlying(true);
         testSprite = new Sprite();
 
         setPosition(5, 5);

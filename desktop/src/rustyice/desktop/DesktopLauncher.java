@@ -20,7 +20,7 @@ public class DesktopLauncher {
 		    config.setWindowedMode(settings.getWidth(), settings.getHeight());
 		}
 
-		config.useVsync(settings.isVsync());
+		config.useVsync(settings.isVSync());
 		
 		new Lwjgl3Application(new Core(settings), config);
 	}

@@ -73,7 +73,7 @@ public class GeneralSettings {
         preferences.putFloat(APPID + "music", musicVolume);
     }
 
-    public boolean isVsync() {
+    public boolean isVSync() {
         return vsync;
     }
 

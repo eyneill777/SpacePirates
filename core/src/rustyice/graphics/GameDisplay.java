@@ -50,11 +50,7 @@ public class GameDisplay extends Widget {
 
     public void init() {
         if(getWidth() > 0 && getHeight() > 0){
-            fbo = new FrameBuffer(Format.RGBA8888, (int) getWidth(), (int) getHeight(), false);
-            fbo.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-
-            game.getRayHandler().resizeFBO((int) getWidth() / 4, (int) getHeight() / 4);
-            //game.getRayHandler().getLightMapTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+            initFBO((int) getWidth(), (int) getHeight());
 
             lightSharder = DiffuseShader.createShadowShader();
             
@@ -62,6 +58,13 @@ public class GameDisplay extends Widget {
 
             initialized = true;
         }
+    }
+
+    private void initFBO(int width, int height){
+        fbo = new FrameBuffer(Format.RGBA8888, width, height, false);
+        fbo.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+
+        game.getRayHandler().resizeFBO(width / 4, height / 4);
     }
 
     public void setTarget(Game world, Camera camera) {
@@ -76,38 +79,34 @@ public class GameDisplay extends Widget {
     private void resize() {
         if (this.initialized && (Math.abs(getWidth() - this.fbo.getWidth()) > 2 || Math.abs(getHeight() - this.fbo.getHeight()) > 2)) {
             fbo.dispose();
-            fbo = new FrameBuffer(Format.RGBA8888, (int) getWidth(), (int) getHeight(), false);
-            //fbo.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-
-            game.getRayHandler().resizeFBO((int) getWidth() / 4, (int) getHeight() / 4);
-            //game.getRayHandler().getLightMapTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+            initFBO((int) getWidth(), (int) getHeight());
 
             Log.debug(String.format("Resize buffer to %s x %s", getWidth(), getHeight()));
         }
     }
 
     public void stageToSection(Vector2 vector) {
-        this.mouseProj.set(vector.x, getHeight() - vector.y, 0);
+        mouseProj.set(vector.x, Gdx.graphics.getHeight() - vector.y, 0);
 
-        Vector3 vec3 = this.ortho.unproject(this.mouseProj, getX(), getStage().getHeight() - (getY() + getHeight()), getWidth(), getHeight());
+        Vector3 vec3 = ortho.unproject(mouseProj, 0, 0, getWidth(), getHeight());
         vector.set(vec3.x, vec3.y);
     }
 
     public FrameBuffer getFBO() {
-        return this.fbo;
+        return fbo;
     }
 
     private void fitOrtho() {
-        float xScale = getWidth() / this.ortho.viewportWidth;
-        float yScale = getHeight() / this.ortho.viewportHeight;
+        float xScale = getWidth() / ortho.viewportWidth;
+        float yScale = getHeight() / ortho.viewportHeight;
 
         if (xScale < yScale) {
-            this.ortho.viewportHeight *= (yScale / xScale);
+            ortho.viewportHeight *= (yScale / xScale);
         } else {
-            this.ortho.viewportWidth *= (xScale / yScale);
+            ortho.viewportWidth *= (xScale / yScale);
         }
 
-        this.cam.setHalfRenderSize(this.ortho.viewportWidth > this.ortho.viewportHeight ? this.ortho.viewportWidth / 2 : this.ortho.viewportHeight / 2);
+        this.cam.setHalfRenderSize(ortho.viewportWidth > ortho.viewportHeight ? ortho.viewportWidth / 2 : ortho.viewportHeight / 2);
     }
 
     public void render(SpriteBatch batch, float delta) {
@@ -124,7 +123,7 @@ public class GameDisplay extends Widget {
         
         
         fbo.begin();
-        // Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1);
+        Gdx.gl.glClearColor(1.0f, 1.0f, 1.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(ortho.projection);
@@ -134,7 +133,7 @@ public class GameDisplay extends Widget {
         game.render(batch, this.cam);
         batch.end();
 
-        if (this.lightsActive) {
+        if (lightsActive) {
             Color c = new Color(.05f, .05f, .05f, 1);
 
             game.getRayHandler().getLightMapTexture().bind(0);

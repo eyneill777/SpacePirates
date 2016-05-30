@@ -19,7 +19,6 @@ public class Game implements ContactListener {
 
     private RayHandler rayHandler;
     private Resources resources;
-    private PlayerInput playerInput;
     private World world;
     private Section currentSection;
     private Section sectionToLoad;
@@ -55,12 +54,6 @@ public class Game implements ContactListener {
         section.setGame(this);
         section.init();
 
-        section.getActors().stream().
-                filter(
-                        actor -> actor instanceof Player).
-                forEach(
-                        actor -> ((Player) actor).setPlayerInput(playerInput));
-
         currentSection = section;
     }
 
@@ -77,14 +70,6 @@ public class Game implements ContactListener {
 
     public TileMap getTiles() {
         return currentSection.getTiles();
-    }
-
-    public void setPlayerInput(PlayerInput playerInput) {
-        this.playerInput = playerInput;
-    }
-
-    public PlayerInput getPlayerInput() {
-        return playerInput;
     }
 
     public void setResources(Resources resources) {
