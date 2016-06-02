@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
+import rustyice.editor.annotations.ComponentAccess;
 import rustyice.game.physics.components.SBPhysicsComponent;
 
 public class TestActor extends Actor {
@@ -29,6 +30,7 @@ public class TestActor extends Actor {
     }
 
     @Override
+    @ComponentAccess
     public SBPhysicsComponent getPhysicsComponent() {
         return this.pComponent;
     }

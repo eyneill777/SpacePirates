@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
+import rustyice.editor.annotations.ComponentProperty;
 import rustyice.game.actors.Actor;
 import rustyice.game.physics.Collision;
 
@@ -60,6 +61,7 @@ public class SBPhysicsComponent implements PhysicsComponent {
         return initialized;
     }
 
+    @ComponentProperty(title = "Flying")
     public void setFlying(boolean flying) {
         this.flying = flying;
         if (isInitialized()) {
@@ -69,6 +71,11 @@ public class SBPhysicsComponent implements PhysicsComponent {
                 body.setLinearDamping(body.getMass() * groundFriction);
             }
         }
+    }
+
+    @ComponentProperty(title = "Flying")
+    public boolean isFlying(){
+        return flying;
     }
 
     @Override

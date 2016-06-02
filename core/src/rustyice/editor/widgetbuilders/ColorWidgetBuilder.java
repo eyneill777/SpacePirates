@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
@@ -36,7 +37,9 @@ public class ColorWidgetBuilder extends PropertyWidgetBuilder{
     }
 
     @Override
-    public void buildWidgets(WidgetGroup group) {
+    public VisTable buildWidgets() {
+        VisTable group = new VisTable();
+
         final ColorPicker colorPicker = new ColorPicker(new ColorPickerAdapter(){
             @Override
             public void finished(Color newColor) {
@@ -54,7 +57,7 @@ public class ColorWidgetBuilder extends PropertyWidgetBuilder{
             e.printStackTrace();
         }
 
-        group.addActor(new VisLabel(getTitle()));
+        group.add(new VisLabel(getTitle()));
 
         VisTextButton changeButt = new VisTextButton("Change");
         changeButt.addListener(new ChangeListener() {
@@ -63,6 +66,7 @@ public class ColorWidgetBuilder extends PropertyWidgetBuilder{
                 group.getStage().addActor(colorPicker.fadeIn());
             }
         });
-        group.addActor(changeButt);
+        group.add(changeButt);
+        return group;
     }
 }

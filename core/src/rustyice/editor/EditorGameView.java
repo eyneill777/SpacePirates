@@ -6,8 +6,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import rustyice.game.Game;
 import rustyice.game.actors.Actor;
 import rustyice.graphics.Camera;
@@ -19,6 +23,7 @@ public class EditorGameView {
     private EditorPropertyPane propertyPane;
     private GameDisplay display;
 
+    private EditorInput editorInput;
     private Camera camera;
     private Game game;
 
@@ -47,31 +52,33 @@ public class EditorGameView {
         tileSelectEnd = new Vector2();
 
         display = new GameDisplay();
-        display.addListener(new EditorInput());
         display.setTarget(game, camera);
+
+        editorInput = new EditorInput();
+        display.addListener(editorInput);
     }
 
     public void render(SpriteBatch batch, float delta) {
         game.getCurrentSection().finishAdding();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (editorInput.moveUp) {
             camera.setY(camera.getY() + camera.getHeight() * delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if (editorInput.moveDown) {
             camera.setY(camera.getY() - camera.getHeight() * delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if (editorInput.moveLeft) {
             camera.setX(camera.getX() - camera.getWidth() * delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if (editorInput.moveRight) {
             camera.setX(camera.getX() + camera.getWidth() * delta);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+        if (editorInput.zoomIn) {
             camera.setWidth(camera.getWidth() * (1 - 0.75f * delta));
             camera.setHeight(camera.getHeight() * (1 - 0.75f * delta));
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+        if (editorInput.zoomOut) {
             camera.setWidth(camera.getWidth() * (1 + 0.75f * delta));
             camera.setHeight(camera.getHeight() * (1 + 0.75f * delta));
         }
@@ -111,10 +118,66 @@ public class EditorGameView {
     }
 
     private class EditorInput extends ClickListener {
+        boolean moveUp, moveDown, moveLeft, moveRight, zoomIn, zoomOut;
+
+
+        @Override
+        public boolean keyDown(InputEvent event, int keycode) {
+            switch (keycode){
+                case Input.Keys.UP:
+                    moveUp = true;
+                    return true;
+                case Input.Keys.DOWN:
+                    moveDown = true;
+                    return true;
+                case Input.Keys.LEFT:
+                    moveLeft = true;
+                    return true;
+                case Input.Keys.RIGHT:
+                    moveRight = true;
+                    return true;
+                case Input.Keys.Z:
+                    zoomIn = true;
+                    return true;
+                case Input.Keys.X:
+                    zoomOut = true;
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public boolean keyUp(InputEvent event, int keycode) {
+            switch (keycode) {
+                case Input.Keys.UP:
+                    moveUp = false;
+                    return true;
+                case Input.Keys.DOWN:
+                    moveDown = false;
+                    return true;
+                case Input.Keys.LEFT:
+                    moveLeft = false;
+                    return true;
+                case Input.Keys.RIGHT:
+                    moveRight = false;
+                    return true;
+                case Input.Keys.Z:
+                    zoomIn = false;
+                    return true;
+                case Input.Keys.X:
+                    zoomOut = false;
+                    return true;
+                default:
+                    return false;
+            }
+        }
 
         @Override
         public void clicked(InputEvent event, float x, float y) {
             super.clicked(event, x, y);
+            event.getStage().setKeyboardFocus(event.getListenerActor());
+
             if (selectionPane.isActorMode() && selectionPane.hasSelectedActor()) {
                 Actor actor = selectionPane.buildSelectedActor();
                 actor.setPosition(mouseDownPos.x, mouseDownPos.y);

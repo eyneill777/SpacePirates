@@ -60,6 +60,7 @@ public class PointLightComponent implements LightComponent{
     }
 
     @Override
+    @ComponentProperty(title = "Static")
     public void setStaticLight(boolean isStatic) {
         this.isStatic = isStatic;
         if(initialized){
@@ -68,6 +69,7 @@ public class PointLightComponent implements LightComponent{
     }
 
     @Override
+    @ComponentProperty(title = "Static")
     public boolean isStaticLight() {
         return isStatic;
     }

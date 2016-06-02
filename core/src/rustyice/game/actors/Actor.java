@@ -1,5 +1,6 @@
 package rustyice.game.actors;
 
+import rustyice.editor.annotations.ComponentAccess;
 import rustyice.game.GameObject;
 import rustyice.game.Section;
 import rustyice.game.physics.Collidable;
@@ -95,6 +96,7 @@ public abstract class Actor implements GameObject, Collidable {
         physicsComponent.update(delta);
     }
 
+    @ComponentAccess
     public PhysicsComponent getPhysicsComponent() {
         return physicsComponent;
     }
