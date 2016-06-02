@@ -54,7 +54,7 @@ public class EditorPropertyPane {
     }
 
     public void setSelected(Actor selectedActor){
-        if(this.selectedActor == selectedActor){
+        if(this.selectedActor != selectedActor){
             this.selectedActor = selectedActor;
             tabGroup.clear();
             tabToggleGroup.clear();

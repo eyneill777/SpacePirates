@@ -1,6 +1,7 @@
 package rustyice.editor.widgetbuilders;
 
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.kotcrab.vis.ui.widget.VisTable;
 
 import java.lang.reflect.Method;
 
@@ -53,5 +54,5 @@ public abstract class PropertyWidgetBuilder {
 
     public abstract void addMethod(Method method);
 
-    public abstract void buildWidgets(WidgetGroup group);
+    public abstract VisTable buildWidgets();
 }
