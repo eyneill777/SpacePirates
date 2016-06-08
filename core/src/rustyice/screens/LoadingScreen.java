@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
 import rustyice.core.Core;
-import rustyice.screens.menus.effects.GuiEffects;
+import rustyice.screens.effects.GuiEffects;
 
 public class LoadingScreen extends Screen{
     private Container<VisProgressBar> root;

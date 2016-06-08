@@ -2,6 +2,8 @@ package rustyice.game.tiles;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import rustyice.graphics.Camera;
+import rustyice.graphics.RenderFlags;
 
 public class FloorTile extends Tile {
 
@@ -11,9 +13,11 @@ public class FloorTile extends Tile {
     }
 
     @Override
-    public void render(SpriteBatch batch) {
-        batch.setColor(Color.WHITE);
-        batch.draw(getResources().box, +getX() * TileMap.TILE_SIZE, +getY() * TileMap.TILE_SIZE, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
+    public void render(SpriteBatch batch, Camera camera, int flags) {
+        if((flags & RenderFlags.NORMAL) == RenderFlags.NORMAL){
+            batch.setColor(Color.WHITE);
+            batch.draw(getResources().box, +getX() * TileMap.TILE_SIZE, +getY() * TileMap.TILE_SIZE, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
+        }
     }
 
     @Override

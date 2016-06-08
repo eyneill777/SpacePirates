@@ -1,4 +1,4 @@
-package rustyice.screens.menus.effects;
+package rustyice.screens.effects;
 
 import aurelienribon.tweenengine.TweenAccessor;
 import com.badlogic.gdx.scenes.scene2d.Actor;

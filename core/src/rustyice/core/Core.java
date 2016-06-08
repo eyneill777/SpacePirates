@@ -3,7 +3,6 @@ package rustyice.core;
 import aurelienribon.tweenengine.Tween;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
@@ -22,7 +21,7 @@ import rustyice.screens.LoadingScreen;
 import rustyice.screens.ScreenManager;
 import rustyice.screens.menus.MainMenu;
 import rustyice.screens.menus.SettingsScreen;
-import rustyice.screens.menus.effects.GuiAccessor;
+import rustyice.screens.effects.GuiAccessor;
 
 public class Core implements ApplicationListener {
 
@@ -46,6 +45,7 @@ public class Core implements ApplicationListener {
     public void create() {
         Log.set(Log.LEVEL_DEBUG);
         //GL30Profiler.enable();
+        Gdx.gl.glDepthMask(false);
         //GLProfiler.listener = new GLErrorLogger();
         
         VisUI.load(Gdx.files.internal("gui/uiskin.json"));

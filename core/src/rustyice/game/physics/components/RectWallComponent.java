@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import rustyice.game.Direction;
 import rustyice.game.physics.Collision;
+import rustyice.game.physics.FillterFlags;
 import rustyice.game.tiles.Tile;
 import rustyice.game.tiles.TileMap;
 
@@ -68,6 +69,8 @@ public class RectWallComponent implements PhysicsComponent {
         FixtureDef fixterDef = new FixtureDef();
         EdgeShape edge = new EdgeShape();
         fixterDef.shape = edge;
+        fixterDef.filter.categoryBits = FillterFlags.WALL | FillterFlags.OPAQUE;
+        fixterDef.filter.maskBits = FillterFlags.LARGE | FillterFlags.SMALL | FillterFlags.LIGHT;
 
         int x = master.getTileX();
         int y = master.getTileY();

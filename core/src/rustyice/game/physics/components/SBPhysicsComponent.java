@@ -2,12 +2,8 @@ package rustyice.game.physics.components;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import rustyice.editor.annotations.ComponentProperty;
 import rustyice.game.actors.Actor;
@@ -18,7 +14,7 @@ import rustyice.game.physics.Collision;
  */
 public class SBPhysicsComponent implements PhysicsComponent {
 
-    private transient Body body;
+    protected transient Body body;
     private transient boolean initialized = false;
 
     private BodyType bodytype = BodyType.DynamicBody;
@@ -38,7 +34,11 @@ public class SBPhysicsComponent implements PhysicsComponent {
         this.master = master;
         this.bodytype = bodyType;
     }
-    
+
+    public Actor getMaster(){
+        return master;
+    }
+
     @Override
     public void init() {
         if (!initialized) {
@@ -108,22 +108,6 @@ public class SBPhysicsComponent implements PhysicsComponent {
         }
     }
 
-    public void walk(float maxX, float maxY, float acceleration) {
-        float diffX = maxX - body.getLinearVelocity().x;
-        float diffY = maxY - body.getLinearVelocity().y;
-        if (Math.abs(diffX) > .1f || Math.abs(diffY) > .1f) {
-            // cap on force generated.
-            if (Math.abs(diffX) > acceleration) {
-                diffX = (diffX < 0) ? -acceleration : acceleration;
-            }
-            if (Math.abs(diffY) > acceleration) {
-                diffY = (diffY < 0) ? -acceleration : acceleration;
-            }
-
-            body.applyLinearImpulse(diffX, diffY, body.getWorldCenter().x, body.getWorldCenter().y, true);
-        }
-    }
-
     public Body getBody() {
         return body;
     }
@@ -142,11 +126,12 @@ public class SBPhysicsComponent implements PhysicsComponent {
         return bodyDef;
     }
     
-    public Fixture addRectangle(float width, float height, float density, boolean sensor) {
+    public Fixture addRectangle(float width, float height, FixtureDef fixtureDef) {
         PolygonShape rect = new PolygonShape();
         rect.setAsBox(width / 2, height / 2);
 
-        Fixture fix = body.createFixture(rect, density);
+        fixtureDef.shape = rect;
+        Fixture fix = body.createFixture(fixtureDef);
         rect.dispose();
 
         fix.setUserData(master);
@@ -154,11 +139,12 @@ public class SBPhysicsComponent implements PhysicsComponent {
         return fix;
     }
 
-    public Fixture addCircle(float radius, float density, boolean sensor) {
+    public Fixture addCircle(float radius, FixtureDef fixtureDef) {
         CircleShape circle = new CircleShape();
         circle.setRadius(radius);
 
-        Fixture fix = body.createFixture(circle, density);
+        fixtureDef.shape = circle;
+        Fixture fix = body.createFixture(fixtureDef);
         circle.dispose();
 
         fix.setUserData(master);

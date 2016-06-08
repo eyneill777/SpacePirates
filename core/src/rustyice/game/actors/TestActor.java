@@ -4,8 +4,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import rustyice.core.Core;
 import rustyice.editor.annotations.ComponentAccess;
+import rustyice.game.physics.FillterFlags;
 import rustyice.game.physics.components.SBPhysicsComponent;
+import rustyice.graphics.Camera;
+import rustyice.graphics.RenderFlags;
 
 public class TestActor extends Actor {
 
@@ -36,19 +41,28 @@ public class TestActor extends Actor {
     }
 
     @Override
-    public void render(SpriteBatch batch) {
-        this.testSprite.setX(getX() - getWidth() / 2);
-        this.testSprite.setY(getY() - getHeight() / 2);
-        this.testSprite.setRotation(getRotation());
-        this.testSprite.draw(batch);
+    public void render(SpriteBatch batch, Camera camera, int flags) {
+        if((flags & RenderFlags.NORMAL) == RenderFlags.NORMAL){
+            testSprite.setX(getX() - getWidth() / 2);
+            testSprite.setY(getY() - getHeight() / 2);
+            testSprite.setRotation(getRotation());
+            testSprite.draw(batch);
+        }
     }
 
     @Override
     public void init() {
         super.init();
-        this.pComponent.addRectangle(getWidth(), getHeight(), 2, false);
-        this.testSprite = getResources().get("art.atlas", TextureAtlas.class).createSprite("may2015-3");
-        this.testSprite.setSize(getWidth(), getHeight());
-        this.testSprite.setOrigin(getWidth() / 2, getHeight() / 2);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.density = 1;
+        fixtureDef.filter.categoryBits = FillterFlags.LARGE | FillterFlags.OPAQUE;
+        fixtureDef.filter.maskBits = FillterFlags.LARGE | FillterFlags.WALL | FillterFlags.LIGHT;
+        pComponent.addRectangle(getWidth(), getHeight(), fixtureDef);
+
+
+        testSprite = new Sprite(Core.resources.box);
+        testSprite.setSize(getWidth(), getHeight());
+        testSprite.setOrigin(getWidth() / 2, getHeight() / 2);
     }
 }

@@ -4,9 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import rustyice.game.actors.Player;
+import rustyice.game.characters.Player;
 import rustyice.game.physics.Collision;
 import rustyice.game.physics.components.RectWallComponent;
+import rustyice.graphics.Camera;
 
 public class WallTile extends Tile {
 
@@ -14,8 +15,9 @@ public class WallTile extends Tile {
 
     public WallTile() {
         super();
-        setSolid(true);
-        setTilePhysics(new RectWallComponent(this));
+        RectWallComponent wallComp = new RectWallComponent(this);
+        setTilePhysics(wallComp);
+
     }
 
     @Override
@@ -27,13 +29,13 @@ public class WallTile extends Tile {
     }
 
     @Override
-    public void render(SpriteBatch batch) {
+    public void render(SpriteBatch batch, Camera camera, int flags) {
         if (this.count == 0) {
             getSprite().setColor(Color.BLUE);
         } else {
             getSprite().setColor(Color.GRAY);
         }
-        super.render(batch);
+        super.render(batch, camera, flags);
     }
 
     @Override

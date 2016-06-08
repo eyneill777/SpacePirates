@@ -1,10 +1,7 @@
 package rustyice.editor;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.layout.HorizontalFlowGroup;
 import com.kotcrab.vis.ui.widget.Separator;
@@ -21,7 +18,7 @@ import rustyice.game.actors.Actor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -68,15 +65,7 @@ public class EditorPropertyPane {
             tabToggleGroup.add(tab);
 
             for(Method method: selectedActor.getClass().getMethods()){
-                Annotation accessAnnotation = null;
-                for(Annotation annotation: method.getAnnotations()){
-                    if(annotation instanceof ComponentAccess){
-                        accessAnnotation = annotation;
-                        break;
-                    }
-                }
-
-                if(accessAnnotation != null){
+                if(getInheritedAnnotation(selectedActor.getClass(), method, ComponentAccess.class) != null){
                     try {
                         Object comp = method.invoke(selectedActor);
                         if(compSet.add(comp)){
@@ -93,6 +82,26 @@ public class EditorPropertyPane {
         }
     }
 
+    private <T extends Annotation> T getInheritedAnnotation(Class cls, Method mth, Class<T> anno){
+        T out = mth.getAnnotation(anno);
+
+        //check superclasses
+        Class superclass = cls.getSuperclass();
+        while (superclass != null && out == null){
+            for(Method method: superclass.getDeclaredMethods()){
+                if(method.getName().equals(mth.getName())
+                        && Arrays.equals(method.getParameterTypes(), mth.getParameterTypes())
+                        && method.getAnnotation(anno) != null){
+                    out = method.getAnnotation(anno);
+                    break;
+                }
+            }
+            superclass = superclass.getSuperclass();
+        }
+
+        return out;
+    }
+
     private class TabButtonListener extends ChangeListener{
         private Object comp;
 
@@ -106,9 +115,9 @@ public class EditorPropertyPane {
             HashMap<String, PropertyWidgetBuilder> propertyMap = new HashMap<>();
 
             for(Method method: comp.getClass().getMethods()){
-                for(Annotation annotation: method.getAnnotations()){
-                    if(annotation instanceof ComponentProperty){
-                        ComponentProperty propertyAnno = (ComponentProperty)annotation;
+                ComponentProperty propertyAnno = getInheritedAnnotation(comp.getClass(), method, ComponentProperty.class);
+
+                    if(propertyAnno != null){
                         String title = propertyAnno.title();
 
                         if(ColorWidgetBuilder.isColorField(method)){
@@ -121,7 +130,7 @@ public class EditorPropertyPane {
 
                         propertyMap.get(title).addMethod(method);
                     }
-                }
+
             }
 
             propertiesGroup.clear();

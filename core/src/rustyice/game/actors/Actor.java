@@ -1,12 +1,14 @@
 package rustyice.game.actors;
 
 import rustyice.editor.annotations.ComponentAccess;
+import rustyice.editor.annotations.ComponentProperty;
 import rustyice.game.GameObject;
 import rustyice.game.Section;
 import rustyice.game.physics.Collidable;
 import rustyice.game.physics.Collision;
 import rustyice.game.physics.components.PhysicsComponent;
 import rustyice.resources.Resources;
+
 
 public abstract class Actor implements GameObject, Collidable {
 
@@ -16,19 +18,23 @@ public abstract class Actor implements GameObject, Collidable {
     private float width, height;
 
     @Override
+    @ComponentProperty(title = "X")
     public float getX() {
         return physicsComponent.getX();
     }
 
     @Override
+    @ComponentProperty(title = "Y")
     public float getY() {
         return physicsComponent.getY();
     }
 
+    @ComponentProperty(title = "X")
     public void setX(float x) {
         physicsComponent.setX(x);
     }
 
+    @ComponentProperty(title = "Y")
     public void setY(float y) {
         physicsComponent.setY(y);
     }
@@ -58,10 +64,12 @@ public abstract class Actor implements GameObject, Collidable {
         physicsComponent.setPosition(x, y);
     }
 
+    @ComponentProperty(title = "Rotation")
     public float getRotation() {
         return physicsComponent.getRotation();
     }
 
+    @ComponentProperty(title = "Rotation")
     public void setRotation(float rotation) {
         physicsComponent.setRotation(rotation);
     }

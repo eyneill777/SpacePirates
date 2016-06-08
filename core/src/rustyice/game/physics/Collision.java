@@ -9,7 +9,7 @@ public class Collision {
     private Fixture otherFixture;
     private boolean begin;
 
-    public Collision(Fixture thisFixture, Fixture otherFixture, Contact contact, boolean begin) {
+    public Collision(Fixture thisFixture, Fixture otherFixture, boolean begin) {
         this.thisFixture = thisFixture;
         this.otherFixture = otherFixture;
         this.begin = begin;

@@ -1,6 +1,10 @@
 package rustyice.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import rustyice.graphics.Camera;
+import rustyice.graphics.RenderFlags;
+
+import java.util.EnumSet;
 
 public interface GameObject {
 
@@ -10,7 +14,7 @@ public interface GameObject {
 
     void update(float delta);
 
-    void render(SpriteBatch batch);
+    void render(SpriteBatch batch, Camera camera, int flags);
 
     boolean isInitialized();
 

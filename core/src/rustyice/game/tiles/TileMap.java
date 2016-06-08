@@ -135,7 +135,7 @@ public class TileMap {
         return this.body;
     }
 
-    public void render(SpriteBatch batch, Camera camera) {
+    public void render(SpriteBatch batch, Camera camera, int flags) {
         int startX = (int) (camera.getX() - camera.getHalfRenderSize()) - 1;
         int startY = (int) (camera.getY() - camera.getHalfRenderSize()) - 1;
         int endX = (int) (camera.getX() + camera.getHalfRenderSize()) + 1;
@@ -145,7 +145,7 @@ public class TileMap {
             for (int j = startX; j < endX; j++) {
                 Tile tile = getTile(j, i);
                 if (tile != null) {
-                    tile.render(batch);
+                    tile.render(batch, camera, flags);
                 }
             }
         }

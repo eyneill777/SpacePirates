@@ -1,18 +1,27 @@
-package rustyice.game.actors;
+package rustyice.game.characters;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import rustyice.game.actors.Actor;
+import rustyice.game.characters.components.CharacterPhysics;
 import rustyice.game.physics.Collision;
+import rustyice.game.physics.FillterFlags;
 import rustyice.game.physics.components.SBPhysicsComponent;
+import rustyice.graphics.Camera;
+import rustyice.graphics.RenderFlags;
 import rustyice.input.Actions;
 import rustyice.input.PlayerInput;
 import rustyice.core.Core;
 
+import java.util.EnumSet;
+
 public class Player extends Actor {
 
-    private SBPhysicsComponent pComponent;
+    private CharacterPhysics pComponent;
     private transient PlayerInput playerInput;
     private transient Sprite boxSprite;
 
@@ -20,8 +29,9 @@ public class Player extends Actor {
     private transient int count = 0;
 
     public Player() {
-        setPhysicsComponent(pComponent = new SBPhysicsComponent(this));
+        setPhysicsComponent(pComponent = new CharacterPhysics(this));
         //pComponent.setFlying(true);
+
         setWidth(0.98f);
         setHeight(0.98f);
     }
@@ -45,34 +55,36 @@ public class Player extends Actor {
             }
         }
 
-        this.pComponent.walk(fx, fy, 1);
+        pComponent.walk(fx, fy, 1);
 
-        if (this.count > 0) {
-            this.boxSprite.setColor(Color.BLUE);
+        if (count > 0) {
+            boxSprite.setColor(Color.BLUE);
         } else {
-            this.boxSprite.setColor(Color.GREEN);
+            boxSprite.setColor(Color.GREEN);
         }
     }
 
     @Override
     public void beginCollision(Collision collision) {
         super.beginCollision(collision);
-        this.count++;
+        count++;
     }
 
     @Override
     public void endCollision(Collision collision) {
         super.endCollision(collision);
-        this.count--;
+        count--;
     }
 
     @Override
-    public void render(SpriteBatch batch) {
-        this.boxSprite.setX(getX() - getWidth() / 2);
-        this.boxSprite.setY(getY() - getHeight() / 2);
-        this.boxSprite.setRotation(getRotation());
+    public void render(SpriteBatch batch, Camera camera, int flags) {
+        if((flags & RenderFlags.NORMAL) == RenderFlags.NORMAL){
+            boxSprite.setX(getX() - getWidth() / 2);
+            boxSprite.setY(getY() - getHeight() / 2);
+            boxSprite.setRotation(getRotation());
 
-        this.boxSprite.draw(batch);
+            boxSprite.draw(batch);
+        }
     }
 
     public void setPlayerInput(PlayerInput input) {
@@ -82,12 +94,10 @@ public class Player extends Actor {
     @Override
     public void init() {
         super.init();
-        boxSprite = new Sprite(Core.resources.box);
+        boxSprite = new Sprite(Core.resources.circle);
         boxSprite.setColor(Color.CYAN);
 
         boxSprite.setSize(getWidth(), getHeight());
         boxSprite.setOrigin(getWidth() / 2, getHeight() / 2);
-
-        pComponent.addRectangle(getWidth(), getHeight(), 1, false);
     }
 }

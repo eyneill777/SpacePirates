@@ -8,7 +8,6 @@ public class BoundaryTile extends Tile {
 
     public BoundaryTile() {
         super();
-        setSolid(true);
         setTilePhysics(new RectWallComponent(this));
     }
 

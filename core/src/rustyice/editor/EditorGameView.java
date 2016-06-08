@@ -17,6 +17,7 @@ import rustyice.game.actors.Actor;
 import rustyice.graphics.Camera;
 import rustyice.graphics.GameDisplay;
 import rustyice.graphics.GraphicsUtils;
+import rustyice.graphics.RenderFlags;
 
 public class EditorGameView {
     private EditorSelectionPane selectionPane;
@@ -42,6 +43,7 @@ public class EditorGameView {
         camera = new Camera();
         camera.setWidth(20);
         camera.setHeight(20);
+        camera.enableFlag(RenderFlags.EDITOR);
 
         mouseDownPos = new Vector2();
         mouseDraggedPos = new Vector2();
@@ -84,7 +86,11 @@ public class EditorGameView {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
-            display.setLightsActive(!display.isLightsActive());
+            camera.toggleFlag(RenderFlags.LIGHTING);
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
+            camera.toggleFlag(RenderFlags.POV);
         }
 
         display.render(batch, delta);
@@ -212,7 +218,7 @@ public class EditorGameView {
             super.touchUp(event, x, y, pointer, button);
             selectionActor = null;
 
-            if (selectionPane.isTileMode() && mouseDraging) {
+            if (selectionPane.hasSelectedTile() && mouseDraging) {
                 for (int i = (int) tileSelectStart.y; i < tileSelectEnd.y; i++) {
                     for (int j = (int) tileSelectStart.x; j < tileSelectEnd.x; j++) {
                         game.getTiles().setTile(selectionPane.buildSelectedTile(), j, i);

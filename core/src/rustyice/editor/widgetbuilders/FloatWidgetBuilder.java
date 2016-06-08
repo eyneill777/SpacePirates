@@ -35,7 +35,7 @@ public class FloatWidgetBuilder extends PropertyWidgetBuilder{
     public VisTable buildWidgets() {
         VisTable group = new VisTable();
 
-        group.add(new VisLabel(getTitle()));
+        group.add(new VisLabel(getTitle())).spaceRight(5);
         final VisValidatableTextField numberField = new VisValidatableTextField(new Validators.FloatValidator());
 
         try {
@@ -43,16 +43,18 @@ public class FloatWidgetBuilder extends PropertyWidgetBuilder{
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        group.add(numberField);
+        group.add(numberField).prefWidth(35);
 
         VisTextButton applyButt = new VisTextButton("Apply");
         applyButt.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                try {
-                    getSetter().invoke(getComponent(), Float.valueOf(numberField.getText()));
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
+                if(numberField.isInputValid()){
+                    try {
+                        getSetter().invoke(getComponent(), Float.valueOf(numberField.getText()));
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

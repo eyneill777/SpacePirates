@@ -7,14 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
-import rustyice.game.actors.Player;
+import rustyice.game.characters.Player;
 import rustyice.game.actors.TestActor;
+import rustyice.game.lights.ConeLight;
 import rustyice.game.lights.PointLight;
 import rustyice.game.tiles.FloorTile;
 import rustyice.game.tiles.Tile;
 import rustyice.game.tiles.WallTile;
-
-import java.util.EnumSet;
 
 /**
  * @author gabek
@@ -72,6 +71,7 @@ class EditorSelectionPane {
 
         actorTree.pushBranch("Lights");
         actorTree.addLeaf("Point Light", PointLight.class);
+        actorTree.addLeaf("Cone Light", ConeLight.class);
         actorTree.popBranch();
     }
 

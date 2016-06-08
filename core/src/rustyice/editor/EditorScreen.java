@@ -164,6 +164,7 @@ public class EditorScreen extends Screen {
         stage.addActor(root);
         gameView.getDisplay().setSize(stage.getWidth(), stage.getHeight());
 
+
         game.finishLoadingSection();
     }
 

@@ -13,14 +13,14 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import rustyice.game.Game;
-import rustyice.game.actors.Actor;
-import rustyice.game.actors.Player;
+import rustyice.game.characters.Player;
 import rustyice.graphics.Camera;
 import rustyice.graphics.GameDisplay;
+import rustyice.graphics.RenderFlags;
 import rustyice.input.Actions;
 import rustyice.input.PlayerInput;
-import rustyice.screens.menus.effects.GuiAccessor;
-import rustyice.screens.menus.effects.GuiEffects;
+import rustyice.screens.effects.GuiAccessor;
+import rustyice.screens.effects.GuiEffects;
 
 public class GameDisplayScreen extends Screen {
     private GameDisplay display;
@@ -39,6 +39,7 @@ public class GameDisplayScreen extends Screen {
 
         display = new GameDisplay();
         camera = new Camera(12, 12);
+        camera.enableFlag(RenderFlags.POV);
 
         display.setTarget(game, camera);
 

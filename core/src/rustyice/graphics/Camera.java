@@ -4,6 +4,9 @@ import com.badlogic.gdx.math.MathUtils;
 
 import rustyice.game.actors.Actor;
 
+import java.util.EnumSet;
+import java.util.HashSet;
+
 /**
  * @author gabek
  */
@@ -15,14 +18,48 @@ public class Camera {
     private float x, y, rot, target_x, target_y, target_rot;
     private float width, height;
     private float halfRenderSize;
+    private int flags;
 
     public Camera() {
+        flags = RenderFlags.NORMAL | RenderFlags.LIGHTING;
+
         target = null;
         tracking = false;
         relative_rotation = false;
     }
 
+    public int getFlags(){
+        return flags;
+    }
+
+    public void setFlags(int flags){
+        this.flags = flags;
+    }
+
+    public boolean checkFlag(int flag){
+        return (flags & flag) == flag;
+    }
+
+    public boolean checkAnyFlag(int flag){
+        return (flags & flag) != 0;
+    }
+
+    public void enableFlag(int flag){
+        flags |= flag;
+    }
+
+    public void disableFlag(int flag){
+        flags &= ~flag;
+    }
+
+    public void toggleFlag(int flag){
+        flags ^= flag;
+    }
+
     public Camera(float width, float height){
+        flags = RenderFlags.NORMAL | RenderFlags.LIGHTING;
+
+
         target = null;
         tracking = false;
         relative_rotation = false;

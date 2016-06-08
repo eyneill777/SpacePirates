@@ -1,5 +1,7 @@
 package rustyice.graphics;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -18,21 +20,25 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.esotericsoftware.minlog.Log;
 import rustyice.game.Game;
+import rustyice.game.physics.FillterFlags;
 import shaders.DiffuseShader;
 
 public class GameDisplay extends Widget {
+    private RayHandler povHandler;
+    private ShaderProgram povShader;
+    private PointLight povTestLight;
+
     private FrameBuffer fbo;
     private OrthographicCamera ortho;
 
     private Camera cam;
     private Game game;
 
-    private ShaderProgram lightSharder;
-    private Mesh lightMesh;
+    //private ShaderProgram lightSharder;
+    //private Mesh lightMesh;
 
     private Vector3 mouseProj;
 
-    private boolean lightsActive = true;
     private boolean initialized = false;
 
     public GameDisplay() {
@@ -40,21 +46,13 @@ public class GameDisplay extends Widget {
         this.mouseProj = new Vector3();
     }
 
-    public void setLightsActive(boolean active) {
-        this.lightsActive = active;
-    }
-
-    public boolean isLightsActive() {
-        return this.lightsActive;
-    }
-
     public void init() {
         if(getWidth() > 0 && getHeight() > 0){
             initFBO((int) getWidth(), (int) getHeight());
 
-            lightSharder = DiffuseShader.createShadowShader();
+            //lightSharder = DiffuseShader.createShadowShader();
             
-            lightMesh = createMesh();
+            //lightMesh = createMesh();
 
             initialized = true;
         }
@@ -65,6 +63,23 @@ public class GameDisplay extends Widget {
         fbo.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
         game.getRayHandler().resizeFBO(width / 4, height / 4);
+        if(povHandler == null){
+            povShader = PovShader.createLightShader();
+
+            povHandler = new RayHandler(game.getWorld(), width, height);
+            povHandler.setLightShader(povShader);
+            povHandler.setBlur(false);
+            //povHandler.setShadows(false);
+
+            povHandler.setAmbientLight(0, 0, 0, 0);
+
+            povTestLight = new PointLight(povHandler, 200);
+            povTestLight.setDistance(10);
+            povTestLight.setSoft(false);
+            povTestLight.setContactFilter(FillterFlags.LIGHT, (short)0, FillterFlags.WALL);
+        } else {
+            povHandler.resizeFBO(width, height);
+        }
     }
 
     public void setTarget(Game world, Camera camera) {
@@ -106,51 +121,69 @@ public class GameDisplay extends Widget {
             ortho.viewportWidth *= (xScale / yScale);
         }
 
-        this.cam.setHalfRenderSize(ortho.viewportWidth > ortho.viewportHeight ? ortho.viewportWidth / 2 : ortho.viewportHeight / 2);
+        cam.setHalfRenderSize(ortho.viewportWidth > ortho.viewportHeight ? ortho.viewportWidth / 2 : ortho.viewportHeight / 2);
     }
 
     public void render(SpriteBatch batch, float delta) {
+        boolean lighting = cam.checkFlag(RenderFlags.LIGHTING);
+        boolean pov = cam.checkFlag(RenderFlags.POV);
+        boolean postLighting = cam.checkAnyFlag(RenderFlags.POST_LIGHT_FLAGS);
+
         if (!initialized) {
             init();
         }
 
         updateProjection();
-        if (lightsActive) {
-            game.getRayHandler().setLightMapRendering(false);
-            game.getRayHandler().setCombinedMatrix(this.ortho);
-            game.getRayHandler().updateAndRender();
+        if (lighting) {
+            //game.getRayHandler().setLightMapRendering(false);
+            game.getRayHandler().setAmbientLight(0, 0, 0, 0.05f);
+            //game.getRayHandler().setShadows(true);
+            //game.getRayHandler().setBlur(true);
+            game.getRayHandler().setCombinedMatrix(ortho);
+            game.getRayHandler().update();
+            game.getRayHandler().prepareRender();
+            Gdx.gl20.glDisable(GL20.GL_BLEND);
+        }
+
+        if (pov){
+            povTestLight.setPosition(cam.getX(), cam.getY());
+
+            povHandler.setCombinedMatrix(ortho);
+            povHandler.update();
+            povHandler.prepareRender();
+
+            Gdx.gl20.glDisable(GL20.GL_BLEND);
         }
         
         
         fbo.begin();
-        Gdx.gl.glClearColor(1.0f, 1.0f, 1.0f, 1);
+        Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(ortho.projection);
         batch.setTransformMatrix(ortho.view);
 
         batch.begin();
-        game.render(batch, this.cam);
+        game.render(batch, cam, cam.getFlags() & ~RenderFlags.POST_LIGHT_FLAGS);
         batch.end();
 
-        if (lightsActive) {
-            Color c = new Color(.05f, .05f, .05f, 1);
-
-            game.getRayHandler().getLightMapTexture().bind(0);
-
+        if (lighting) {
             Gdx.gl20.glEnable(GL20.GL_BLEND);
-            lightSharder.begin();
-            game.getRayHandler().diffuseBlendFunc.apply();
-            lightSharder.setUniformf("ambient", c.r, c.b, c.g, c.a);
+            game.getRayHandler().renderOnly();
+        }
 
-            lightMesh.render(this.lightSharder, GL20.GL_TRIANGLE_FAN);
+        if (pov){
+            Gdx.gl20.glEnable(GL20.GL_BLEND);
+            povHandler.renderOnly();
+        }
 
-            lightSharder.end();
-            Gdx.gl20.glDisable(GL20.GL_BLEND);
+        if(postLighting){
+            batch.begin();
+            game.render(batch, cam, cam.getFlags() & RenderFlags.POST_LIGHT_FLAGS);
+            batch.end();
         }
 
         fbo.end();
-        
     }
 
     private void updateProjection() {
@@ -171,13 +204,15 @@ public class GameDisplay extends Widget {
     public void dispose() {
         if (this.initialized) {
             this.fbo.dispose();
-            this.lightSharder.dispose();
-            this.lightMesh.dispose();
+            //lightSharder.dispose();
+            //lightMesh.dispose();
 
             this.fbo = null;
-            this.lightSharder = null;
-            this.lightMesh = null;
+            //lightSharder = null;
+            //lightMesh = null;
             this.initialized = false;
+            povHandler.dispose();
+            povShader.dispose();
         }
     }
 

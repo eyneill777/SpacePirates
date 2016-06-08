@@ -12,8 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.*;
 import rustyice.core.Core;
 import rustyice.screens.Screen;
-import rustyice.screens.menus.effects.ClickSound;
-import rustyice.screens.menus.effects.GuiEffects;
+import rustyice.screens.effects.ClickSound;
+import rustyice.screens.effects.GuiEffects;
 
 public class SettingsScreen extends Screen {
 
@@ -153,8 +153,8 @@ public class SettingsScreen extends Screen {
 
     private void switchToVideo() {
         settingPane.clear();
-        settingPane.add(fullscreenCheck);
-        settingPane.add(vsyncCheck);
+        settingPane.add(fullscreenCheck).space(5).row();
+        settingPane.add(vsyncCheck).space(5);
     }
 
     private void switchAudio() {

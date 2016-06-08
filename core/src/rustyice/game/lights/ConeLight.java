@@ -1,6 +1,5 @@
 package rustyice.game.lights;
 
-import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,22 +7,22 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import rustyice.core.Core;
 import rustyice.editor.annotations.ComponentAccess;
 import rustyice.game.actors.Actor;
+import rustyice.game.lights.components.ConeLightComponent;
 import rustyice.game.lights.components.LightComponent;
 import rustyice.game.lights.components.LightContainer;
-import rustyice.game.lights.components.PointLightComponent;
 import rustyice.game.physics.components.PointPhysicsComponent;
 import rustyice.graphics.Camera;
 import rustyice.graphics.RenderFlags;
 
-import java.awt.*;
+/**
+ * @author gabek
+ */
+public class ConeLight extends Actor implements LightContainer{
+    private Sprite icon;
+    private ConeLightComponent light;
 
-
-public class PointLight extends Actor implements LightContainer {
-    private transient Sprite icon;
-    private PointLightComponent light;
-    
-    public PointLight() {
-        light = new PointLightComponent(this);
+    public ConeLight() {
+        light = new ConeLightComponent(this);
         setPhysicsComponent(new PointPhysicsComponent());
         setSize(1, 1);
     }
@@ -47,6 +46,7 @@ public class PointLight extends Actor implements LightContainer {
         super.init();
         light.init();
         light.setPosition(getX(), getY());
+        light.setDirection(getRotation());
     }
 
     @Override
@@ -54,13 +54,13 @@ public class PointLight extends Actor implements LightContainer {
         super.update(delta);
 
     }
-    
+
     @Override
     public void setX(float x) {
         super.setX(x);
         light.setPosition(x, getY());
     }
-    
+
     @Override
     public void setY(float y) {
         super.setY(y);
@@ -72,7 +72,13 @@ public class PointLight extends Actor implements LightContainer {
         super.setPosition(x, y);
         light.setPosition(x, y);
     }
-    
+
+    @Override
+    public void setRotation(float rotation) {
+        super.setRotation(rotation);
+        light.setDirection(rotation);
+    }
+
     @Override
     public void store() {
         super.store();

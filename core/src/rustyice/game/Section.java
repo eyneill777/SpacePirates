@@ -1,6 +1,8 @@
 package rustyice.game;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashSet;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import rustyice.game.actors.Actor;
 import rustyice.game.tiles.TileMap;
 import rustyice.graphics.Camera;
+import rustyice.graphics.RenderFlags;
 import rustyice.resources.Resources;
 
 public class Section {
@@ -75,15 +78,15 @@ public class Section {
         this.removeList.clear();
     }
 
-    public void render(SpriteBatch batch, Camera camera) {
-        this.tiles.render(batch, camera);
+    public void render(SpriteBatch batch, Camera camera, int flags) {
+        tiles.render(batch, camera, flags);
 
         actors.stream().filter(
                 actor -> actor.getX() + actor.getWidth() / 2 > camera.getX() - camera.getHalfRenderSize()
                 && actor.getX() - actor.getWidth() / 2 < camera.getX() + camera.getHalfRenderSize()
                 && actor.getY() + actor.getHeight() / 2 > camera.getY() - camera.getHalfRenderSize()
                 && actor.getY() - actor.getHeight() / 2 < camera.getY() + camera.getHalfRenderSize())
-                .forEach(actor -> actor.render(batch));
+                .forEach(actor -> actor.render(batch, camera, flags));
     }
 
     public Resources getResources() {

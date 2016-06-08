@@ -7,6 +7,8 @@ import rustyice.game.Section;
 import rustyice.game.physics.Collidable;
 import rustyice.game.physics.Collision;
 import rustyice.game.physics.components.PhysicsComponent;
+import rustyice.graphics.Camera;
+import rustyice.graphics.RenderFlags;
 import rustyice.resources.Resources;
 
 public abstract class Tile implements GameObject, Collidable {
@@ -16,7 +18,6 @@ public abstract class Tile implements GameObject, Collidable {
     private transient boolean initialized = false;
     private transient Sprite sprite;
     private PhysicsComponent tilePhysics;
-    private boolean solid;
     private int x, y;
 
     public void setSprite(Sprite sprite) {
@@ -76,8 +77,8 @@ public abstract class Tile implements GameObject, Collidable {
     }
 
     @Override
-    public void render(SpriteBatch batch) {
-        if (sprite != null) {
+    public void render(SpriteBatch batch, Camera camera, int flags) {
+        if (sprite != null && (flags & RenderFlags.NORMAL) == RenderFlags.NORMAL) {
             sprite.draw(batch);
         }
     }
@@ -85,14 +86,6 @@ public abstract class Tile implements GameObject, Collidable {
     @Override
     public boolean isInitialized() {
         return initialized;
-    }
-
-    public boolean isSolid() {
-        return solid;
-    }
-
-    public void setSolid(boolean solid) {
-        this.solid = solid;
     }
 
     @Override

@@ -4,12 +4,10 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import rustyice.game.actors.Player;
 import rustyice.game.physics.Collidable;
 import rustyice.game.physics.Collision;
 import rustyice.game.tiles.TileMap;
 import rustyice.graphics.Camera;
-import rustyice.input.PlayerInput;
 import rustyice.resources.Resources;
 
 import java.util.ArrayList;
@@ -108,8 +106,8 @@ public class Game implements ContactListener {
         }
     }
 
-    public void render(SpriteBatch batch, Camera camera) {
-        currentSection.render(batch, camera);
+    public void render(SpriteBatch batch, Camera camera, int flags) {
+        currentSection.render(batch, camera, flags);
     }
 
     public World getWorld() {
@@ -126,14 +124,14 @@ public class Game implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-        collisions.add(new Collision(contact.getFixtureA(), contact.getFixtureB(), contact, true));
-        collisions.add(new Collision(contact.getFixtureB(), contact.getFixtureA(), contact, true));
+        collisions.add(new Collision(contact.getFixtureA(), contact.getFixtureB(), true));
+        collisions.add(new Collision(contact.getFixtureB(), contact.getFixtureA(), true));
     }
 
     @Override
     public void endContact(Contact contact) {
-        collisions.add(new Collision(contact.getFixtureA(), contact.getFixtureB(), contact, false));
-        collisions.add(new Collision(contact.getFixtureB(), contact.getFixtureA(), contact, false));
+        collisions.add(new Collision(contact.getFixtureA(), contact.getFixtureB(), false));
+        collisions.add(new Collision(contact.getFixtureB(), contact.getFixtureA(), false));
     }
 
     @Override

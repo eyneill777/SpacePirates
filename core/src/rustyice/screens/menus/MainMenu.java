@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import rustyice.screens.Screen;
-import rustyice.screens.menus.effects.ClickSound;
-import rustyice.screens.menus.effects.GuiEffects;
+import rustyice.screens.effects.ClickSound;
+import rustyice.screens.effects.GuiEffects;
 
 /**
  * The menu that greets the player when they start the program.
