@@ -152,6 +152,22 @@ public class TileMap {
 
     }
 
+    public void updateCameraPov(Camera camera){
+        int startX = (int) (camera.getX() - camera.getHalfRenderSize()) - 1;
+        int startY = (int) (camera.getY() - camera.getHalfRenderSize()) - 1;
+        int endX = (int) (camera.getX() + camera.getHalfRenderSize()) + 1;
+        int endY = (int) (camera.getY() + camera.getHalfRenderSize()) + 1;
+
+        for (int i = startY; i < endY; i++) {
+            for (int j = startX; j < endX; j++) {
+                Tile tile = getTile(j, i);
+                if (tile != null) {
+                    tile.updateCameraPov(camera);
+                }
+            }
+        }
+    }
+
     public void update(float delta) {
         for (Tile tile : this.tileMap) {
            if (tile != null) {

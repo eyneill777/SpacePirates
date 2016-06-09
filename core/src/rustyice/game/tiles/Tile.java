@@ -7,6 +7,8 @@ import rustyice.game.Section;
 import rustyice.game.physics.Collidable;
 import rustyice.game.physics.Collision;
 import rustyice.game.physics.components.PhysicsComponent;
+import rustyice.game.physics.components.RectWallComponent;
+import rustyice.game.physics.components.SBPhysicsComponent;
 import rustyice.graphics.Camera;
 import rustyice.graphics.RenderFlags;
 import rustyice.resources.Resources;
@@ -31,6 +33,12 @@ public abstract class Tile implements GameObject, Collidable {
 
     public void setTilePhysics(PhysicsComponent tilePhysics) {
         this.tilePhysics = tilePhysics;
+    }
+
+    public void updateCameraPov(Camera camera){
+        if(tilePhysics instanceof RectWallComponent){
+            ((RectWallComponent)tilePhysics).updateCameraPov(camera);
+        }
     }
 
     void setPosition(int x, int y) {

@@ -73,10 +73,10 @@ public class GameDisplay extends Widget {
 
             povHandler.setAmbientLight(0, 0, 0, 0);
 
-            povTestLight = new PointLight(povHandler, 200);
+            povTestLight = new PointLight(povHandler, 400);
             povTestLight.setDistance(10);
             povTestLight.setSoft(false);
-            povTestLight.setContactFilter(FillterFlags.LIGHT, (short)0, FillterFlags.WALL);
+            povTestLight.setContactFilter(FillterFlags.CAMERA_POV, (short)0, FillterFlags.WALL);
         } else {
             povHandler.resizeFBO(width, height);
         }
@@ -146,6 +146,8 @@ public class GameDisplay extends Widget {
         }
 
         if (pov){
+            game.updateCameraPov(cam);
+
             povTestLight.setPosition(cam.getX(), cam.getY());
 
             povHandler.setCombinedMatrix(ortho);

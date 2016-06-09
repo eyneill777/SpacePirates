@@ -12,6 +12,10 @@ public class CharacterPhysics extends SBPhysicsComponent{
     private float characterRadius;
     private float activatorRadius;
 
+    public CharacterPhysics(){
+        super();
+    }
+
     public CharacterPhysics(Actor master){
         super(master);
     }
@@ -42,12 +46,12 @@ public class CharacterPhysics extends SBPhysicsComponent{
 
         addCircle(getMaster().getWidth()/2, characterDef);
 
-        FixtureDef activatorDef = new FixtureDef();
-        activatorDef.density = 0;
-        characterDef.filter.categoryBits = FillterFlags.ACTIVATOR;
-        characterDef.filter.maskBits = FillterFlags.ACTIVATABLE;
+        //FixtureDef activatorDef = new FixtureDef();
+        //activatorDef.density = 0;
+        //characterDef.filter.categoryBits = FillterFlags.ACTIVATOR;
+        //characterDef.filter.maskBits = FillterFlags.ACTIVATABLE;
 
-        addCircle(activatorRadius, activatorDef);
+        //addCircle(activatorRadius, activatorDef);
 
     }
 }

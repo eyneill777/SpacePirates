@@ -1,14 +1,12 @@
 package rustyice.game.physics.components;
 
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.*;
 import rustyice.game.Direction;
 import rustyice.game.physics.Collision;
 import rustyice.game.physics.FillterFlags;
 import rustyice.game.tiles.Tile;
 import rustyice.game.tiles.TileMap;
+import rustyice.graphics.Camera;
 
 /**
  * @author gabek
@@ -16,6 +14,7 @@ import rustyice.game.tiles.TileMap;
 public class RectWallComponent implements PhysicsComponent {
 
     private Tile master;
+    private boolean opaque = true;
     private transient Fixture[] fixtures;
     private transient boolean initialized = false;
 
@@ -58,6 +57,33 @@ public class RectWallComponent implements PhysicsComponent {
     public void setPosition(float x, float y) {
     }
 
+    public void updateCameraPov(Camera camera){
+        if(opaque){
+            updateFixturePov(fixtures[Direction.N], camera.getY() > getY() + TileMap.TILE_SIZE);
+            updateFixturePov(fixtures[Direction.E], camera.getX() > getX() + TileMap.TILE_SIZE);
+            updateFixturePov(fixtures[Direction.S], camera.getY() < getY());
+            updateFixturePov(fixtures[Direction.W], camera.getX() < getX());
+        }
+    }
+
+    private void updateFixturePov(Fixture fixture, boolean value){
+        if(fixture != null){
+            Filter filter = fixture.getFilterData();
+            short mask = filter.maskBits;
+
+            if(value){
+                mask &= ~FillterFlags.CAMERA_POV;
+            } else {
+                mask |= FillterFlags.CAMERA_POV;
+            }
+
+            if(mask != filter.maskBits){
+                filter.maskBits = mask;
+                fixture.setFilterData(filter);
+            }
+        }
+    }
+
     @Override
     public void init() {
         initialized = true;
@@ -70,7 +96,7 @@ public class RectWallComponent implements PhysicsComponent {
         EdgeShape edge = new EdgeShape();
         fixterDef.shape = edge;
         fixterDef.filter.categoryBits = FillterFlags.WALL | FillterFlags.OPAQUE;
-        fixterDef.filter.maskBits = FillterFlags.LARGE | FillterFlags.SMALL | FillterFlags.LIGHT;
+        fixterDef.filter.maskBits = FillterFlags.LARGE | FillterFlags.SMALL | FillterFlags.LIGHT | FillterFlags.CAMERA_POV;
 
         int x = master.getTileX();
         int y = master.getTileY();
