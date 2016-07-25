@@ -110,10 +110,6 @@ public class Game implements ContactListener {
         currentSection.render(batch, camera, flags);
     }
 
-    public void updateCameraPov(Camera camera){
-        currentSection.updateCameraPov(camera);
-    }
-
     public World getWorld() {
         return world;
     }

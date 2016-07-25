@@ -48,8 +48,8 @@ public class Core implements ApplicationListener {
         Gdx.gl.glDepthMask(false);
         //GLProfiler.listener = new GLErrorLogger();
         
-        VisUI.load(Gdx.files.internal("gui/uiskin.json"));
-        FileChooser.setFavoritesPrefsName("rustyice");
+        //VisUI.load(Gdx.files.internal("gui/uiskin.json"));
+        VisUI.load();
         Box2D.init();
         kryo = new Kryo();
 
@@ -57,7 +57,7 @@ public class Core implements ApplicationListener {
         resources.startLoading();
 
         batch = new SpriteBatch();
-        
+
         tracker = new PerformanceTracker(VisUI.getSkin().getFont("default-font"), false);
 
         screenManager = new ScreenManager(batch, resources, tracker);

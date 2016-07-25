@@ -70,25 +70,19 @@ public class TileMap {
     }
 
     private void refreshArea(int x, int y){
-        Tile tile = getTile(x-1, y);
-        if(tile != null){
-            tile.store();
-            tile.init();
-        }
-        
-        tile = getTile(x+1, y);
-        if(tile != null){
-            tile.store();
-            tile.init();
-        }
-        
-        tile = getTile(x, y-1);
-        if(tile != null){
-            tile.store();
-            tile.init();
-        }
-        
-        tile = getTile(x, y+1);
+        refreahTile(x-1, y);
+        refreahTile(x+1, y);
+        refreahTile(x, y-1);
+        refreahTile(x, y+1);
+
+        refreahTile(x-1, y-1);
+        refreahTile(x+1, y+1);
+        refreahTile(x+1, y-1);
+        refreahTile(x-1, y+1);
+    }
+
+    private void refreahTile(int x, int y){
+        Tile tile = getTile(x, y);
         if(tile != null){
             tile.store();
             tile.init();
@@ -136,10 +130,10 @@ public class TileMap {
     }
 
     public void render(SpriteBatch batch, Camera camera, int flags) {
-        int startX = (int) (camera.getX() - camera.getHalfRenderSize()) - 1;
-        int startY = (int) (camera.getY() - camera.getHalfRenderSize()) - 1;
-        int endX = (int) (camera.getX() + camera.getHalfRenderSize()) + 1;
-        int endY = (int) (camera.getY() + camera.getHalfRenderSize()) + 1;
+        int startX = (int) ((camera.getX() - camera.getHalfRenderSize()) / TILE_SIZE) - 1;
+        int startY = (int) ((camera.getY() - camera.getHalfRenderSize()) / TILE_SIZE) - 1;
+        int endX = (int) ((camera.getX() + camera.getHalfRenderSize()) / TILE_SIZE) + 1;
+        int endY = (int) ((camera.getY() + camera.getHalfRenderSize()) / TILE_SIZE) + 1;
 
         for (int i = startY; i < endY; i++) {
             for (int j = startX; j < endX; j++) {
@@ -150,22 +144,6 @@ public class TileMap {
             }
         }
 
-    }
-
-    public void updateCameraPov(Camera camera){
-        int startX = (int) (camera.getX() - camera.getHalfRenderSize()) - 1;
-        int startY = (int) (camera.getY() - camera.getHalfRenderSize()) - 1;
-        int endX = (int) (camera.getX() + camera.getHalfRenderSize()) + 1;
-        int endY = (int) (camera.getY() + camera.getHalfRenderSize()) + 1;
-
-        for (int i = startY; i < endY; i++) {
-            for (int j = startX; j < endX; j++) {
-                Tile tile = getTile(j, i);
-                if (tile != null) {
-                    tile.updateCameraPov(camera);
-                }
-            }
-        }
     }
 
     public void update(float delta) {

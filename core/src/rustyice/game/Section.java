@@ -89,10 +89,6 @@ public class Section {
                 .forEach(actor -> actor.render(batch, camera, flags));
     }
 
-    public void updateCameraPov(Camera camera){
-        tiles.updateCameraPov(camera);
-    }
-
     public Resources getResources() {
         return game.getResources();
     }

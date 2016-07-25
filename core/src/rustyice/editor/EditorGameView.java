@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import rustyice.game.Game;
 import rustyice.game.actors.Actor;
+import rustyice.game.tiles.TileMap;
 import rustyice.graphics.Camera;
 import rustyice.graphics.GameDisplay;
 import rustyice.graphics.GraphicsUtils;
@@ -100,7 +102,12 @@ public class EditorGameView {
             batch.begin();
 
             batch.setColor(Color.LIGHT_GRAY);
-            GraphicsUtils.drawRect(tileSelectStart.x, tileSelectStart.y, tileSelectEnd.x - tileSelectStart.x, tileSelectEnd.y - tileSelectStart.y, 0.1f);
+            GraphicsUtils.drawRect(
+                    tileSelectStart.x * TileMap.TILE_SIZE,
+                    tileSelectStart.y  * TileMap.TILE_SIZE,
+                    (tileSelectEnd.x - tileSelectStart.x)  * TileMap.TILE_SIZE,
+                    (tileSelectEnd.y - tileSelectStart.y)  * TileMap.TILE_SIZE, 0.1f
+            );
 
             batch.end();
             display.getFBO().end();
@@ -239,19 +246,19 @@ public class EditorGameView {
 
             if (selectionPane.isTileMode()) {
                 if (mouseDownPos.x < mouseDraggedPos.x) {
-                    tileSelectStart.x = MathUtils.floor(mouseDownPos.x);
-                    tileSelectEnd.x = MathUtils.ceil(mouseDraggedPos.x);
+                    tileSelectStart.x = tileFloor(mouseDownPos.x);
+                    tileSelectEnd.x = tileCeil(mouseDraggedPos.x);
                 } else {
-                    tileSelectStart.x = MathUtils.floor(mouseDraggedPos.x);
-                    tileSelectEnd.x = MathUtils.ceil(mouseDownPos.x);
+                    tileSelectStart.x = tileFloor(mouseDraggedPos.x);
+                    tileSelectEnd.x = tileCeil(mouseDownPos.x);
                 }
 
                 if (mouseDownPos.y < mouseDraggedPos.y) {
-                    tileSelectStart.y = MathUtils.floor(mouseDownPos.y);
-                    tileSelectEnd.y = MathUtils.ceil(mouseDraggedPos.y);
+                    tileSelectStart.y = tileFloor(mouseDownPos.y);
+                    tileSelectEnd.y = tileCeil(mouseDraggedPos.y);
                 } else {
-                    tileSelectStart.y = MathUtils.floor(mouseDraggedPos.y);
-                    tileSelectEnd.y = MathUtils.ceil(mouseDownPos.y);
+                    tileSelectStart.y = tileFloor(mouseDraggedPos.y);
+                    tileSelectEnd.y = tileCeil(mouseDownPos.y);
                 }
             }
 
@@ -259,6 +266,14 @@ public class EditorGameView {
                 selectionActor.setX(selectionPos.x + (mouseDraggedPos.x - mouseDownPos.x));
                 selectionActor.setY(selectionPos.y + (mouseDraggedPos.y - mouseDownPos.y));
             }
+        }
+
+        private float tileFloor(float value){
+            return MathUtils.floor(value / TileMap.TILE_SIZE);
+        }
+
+        private float tileCeil(float value){
+            return MathUtils.ceil(value / TileMap.TILE_SIZE);
         }
     }
 }

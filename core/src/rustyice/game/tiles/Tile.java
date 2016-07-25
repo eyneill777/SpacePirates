@@ -24,7 +24,7 @@ public abstract class Tile implements GameObject, Collidable {
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
-        sprite.setBounds(getX() * TileMap.TILE_SIZE, getY() * TileMap.TILE_SIZE, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
+        sprite.setBounds(getX(), getY(), TileMap.TILE_SIZE, TileMap.TILE_SIZE);
     }
 
     public Sprite getSprite() {
@@ -33,12 +33,6 @@ public abstract class Tile implements GameObject, Collidable {
 
     public void setTilePhysics(PhysicsComponent tilePhysics) {
         this.tilePhysics = tilePhysics;
-    }
-
-    public void updateCameraPov(Camera camera){
-        if(tilePhysics instanceof RectWallComponent){
-            ((RectWallComponent)tilePhysics).updateCameraPov(camera);
-        }
     }
 
     void setPosition(int x, int y) {
@@ -101,6 +95,9 @@ public abstract class Tile implements GameObject, Collidable {
         initialized = true;
         if (tilePhysics != null) {
             tilePhysics.init();
+        }
+        if(sprite != null){
+            setSprite(sprite);
         }
     }
 

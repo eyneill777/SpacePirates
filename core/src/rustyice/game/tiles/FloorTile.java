@@ -16,7 +16,7 @@ public class FloorTile extends Tile {
     public void render(SpriteBatch batch, Camera camera, int flags) {
         if((flags & RenderFlags.NORMAL) == RenderFlags.NORMAL){
             batch.setColor(Color.WHITE);
-            batch.draw(getResources().box, +getX() * TileMap.TILE_SIZE, +getY() * TileMap.TILE_SIZE, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
+            batch.draw(getResources().box, getX(), getY(), TileMap.TILE_SIZE, TileMap.TILE_SIZE);
         }
     }
 

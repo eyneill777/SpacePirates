@@ -10,9 +10,6 @@ import rustyice.game.physics.components.RectWallComponent;
 import rustyice.graphics.Camera;
 
 public class WallTile extends Tile {
-
-    private int count = 0;
-
     public WallTile() {
         super();
         RectWallComponent wallComp = new RectWallComponent(this);
@@ -30,11 +27,6 @@ public class WallTile extends Tile {
 
     @Override
     public void render(SpriteBatch batch, Camera camera, int flags) {
-        if (this.count == 0) {
-            getSprite().setColor(Color.BLUE);
-        } else {
-            getSprite().setColor(Color.GRAY);
-        }
         super.render(batch, camera, flags);
     }
 
@@ -46,17 +38,13 @@ public class WallTile extends Tile {
     @Override
     public void beginCollision(Collision collision) {
         super.beginCollision(collision);
-        if (collision.getOther() instanceof Player) {
-            this.count++;
-        }
+
     }
 
     @Override
     public void endCollision(Collision collision) {
         super.endCollision(collision);
-        if (collision.getOther() instanceof Player) {
-            this.count--;
-        }
+
     }
 
     @Override
