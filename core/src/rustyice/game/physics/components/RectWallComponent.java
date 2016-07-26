@@ -92,114 +92,116 @@ public class RectWallComponent implements PhysicsComponent {
         other = map.getTile(x - 1, y + 1);
         boolean nw = other != null && master.isConnected(other);
 
-        FixtureDef fixterDef = new FixtureDef();
-        EdgeShape edge = new EdgeShape();
-        fixterDef.shape = edge;
-        fixterDef.filter.categoryBits = FillterFlags.WALL | FillterFlags.OPAQUE;
-        fixterDef.filter.maskBits = FillterFlags.LARGE | FillterFlags.SMALL | FillterFlags.LIGHT;
+        if(!n || !s || !e || !w || !ne || !nw || !se || !sw){
+            FixtureDef fixterDef = new FixtureDef();
+            EdgeShape edge = new EdgeShape();
+            fixterDef.shape = edge;
+            fixterDef.filter.categoryBits = FillterFlags.WALL | FillterFlags.OPAQUE;
+            fixterDef.filter.maskBits = FillterFlags.LARGE | FillterFlags.SMALL | FillterFlags.LIGHT;
 
-        float x1 = TileMap.TILE_SIZE * x;
-        float y1 = TileMap.TILE_SIZE * y;
-        float x2 = x1 + TileMap.TILE_SIZE;
-        float y2 = y1 + TileMap.TILE_SIZE;
-        float centreX = x1 + TileMap.TILE_SIZE/2;
-        float centreY = y1 + TileMap.TILE_SIZE/2;
+            float x1 = TileMap.TILE_SIZE * x;
+            float y1 = TileMap.TILE_SIZE * y;
+            float x2 = x1 + TileMap.TILE_SIZE;
+            float y2 = y1 + TileMap.TILE_SIZE;
+            float centreX = x1 + TileMap.TILE_SIZE/2;
+            float centreY = y1 + TileMap.TILE_SIZE/2;
 
-        if (!n) {
-            edge.set(x1, y2, x2, y2);
-            if (w) {
-                edge.setHasVertex0(true);
-                edge.setVertex0(x1 - TileMap.TILE_SIZE, y2);
+            if (!n) {
+                edge.set(x1, y2, x2, y2);
+                if (w) {
+                    edge.setHasVertex0(true);
+                    edge.setVertex0(x1 - TileMap.TILE_SIZE, y2);
+                }
+                if (e) {
+                    edge.setHasVertex3(true);
+                    edge.setVertex3(x2 + TileMap.TILE_SIZE, y2);
+                }
+                fixtures[N] = map.getBody().createFixture(fixterDef);
+                fixtures[N].setUserData(master);
             }
-            if (e) {
-                edge.setHasVertex3(true);
-                edge.setVertex3(x2 + TileMap.TILE_SIZE, y2);
+
+            if (!s) {
+                edge.set(x2, y1, x1, y1);
+                if (e) {
+                    edge.setHasVertex0(true);
+                    edge.setVertex0(x2 + TileMap.TILE_SIZE, y1);
+                }
+                if (w) {
+                    edge.setHasVertex3(true);
+                    edge.setVertex3(x1 - TileMap.TILE_SIZE, y1);
+                }
+                fixtures[S] = map.getBody().createFixture(fixterDef);
+                fixtures[S].setUserData(master);
             }
-            fixtures[N] = map.getBody().createFixture(fixterDef);
-            fixtures[N].setUserData(master);
+
+            if (!e) {
+                edge.set(x2, y2, x2, y1);
+                if (n) {
+                    edge.setHasVertex0(true);
+                    edge.setVertex0(x2, y2 + TileMap.TILE_SIZE);
+                }
+                if (s) {
+                    edge.setHasVertex3(true);
+                    edge.setVertex3(x2, y1 - TileMap.TILE_SIZE);
+                }
+                fixtures[E] = map.getBody().createFixture(fixterDef);
+                fixtures[E].setUserData(master);
+            }
+
+            if (!w) {
+                edge.set(x1, y1, x1, y2);
+                if (s) {
+                    edge.setHasVertex0(true);
+                    edge.setVertex0(x1, y1 - TileMap.TILE_SIZE);
+                }
+                if (n) {
+                    edge.setHasVertex3(true);
+                    edge.setVertex3(x1, y2 + TileMap.TILE_SIZE);
+                }
+                fixtures[W] = map.getBody().createFixture(fixterDef);
+                fixtures[W].setUserData(master);
+            }
+
+            //pov
+            if(opaque){
+                fixterDef.filter.categoryBits = FillterFlags.WALL;
+                fixterDef.filter.maskBits = FillterFlags.CAMERA_POV;
+                edge.setHasVertex0(false);
+                edge.setHasVertex3(false);
+
+
+                if(n && s){
+                    edge.set(centreX, y1, centreX, y2);
+                    fixtures[POVNS] = map.getBody().createFixture(fixterDef);
+                    fixtures[POVNS].setUserData(master);
+                } else if(n && (!ne || !nw || !w || !e)){
+                    edge.set(centreX, centreY, centreX, y2);
+                    fixtures[POVN] = map.getBody().createFixture(fixterDef);
+                    fixtures[POVN].setUserData(master);
+                } else if(s && (!se || !sw || !w || !e)){
+                    edge.set(centreX, y1, centreX, centreY);
+                    fixtures[POVS] = map.getBody().createFixture(fixterDef);
+                    fixtures[POVS].setUserData(master);
+                }
+
+
+                if(e && w){
+                    edge.set(x1, centreY, x2, centreY);
+                    fixtures[POVEW] = map.getBody().createFixture(fixterDef);
+                    fixtures[POVEW].setUserData(master);
+                } else if(e && (!ne || !se || !n || !s)){
+                    edge.set(centreX, centreY, x2, centreY);
+                    fixtures[POVE] = map.getBody().createFixture(fixterDef);
+                    fixtures[POVE].setUserData(master);
+                } else if(w && (!nw || !sw || !n || !s)){
+                    edge.set(x1, centreY, centreX, centreY);
+                    fixtures[POVW] = map.getBody().createFixture(fixterDef);
+                    fixtures[POVW].setUserData(master);
+                }
+            }
+
+            edge.dispose();
         }
-
-        if (!s) {
-            edge.set(x2, y1, x1, y1);
-            if (e) {
-                edge.setHasVertex0(true);
-                edge.setVertex0(x2 + TileMap.TILE_SIZE, y1);
-            }
-            if (w) {
-                edge.setHasVertex3(true);
-                edge.setVertex3(x1 - TileMap.TILE_SIZE, y1);
-            }
-            fixtures[S] = map.getBody().createFixture(fixterDef);
-            fixtures[S].setUserData(master);
-        }
-
-        if (!e) {
-            edge.set(x2, y2, x2, y1);
-            if (n) {
-                edge.setHasVertex0(true);
-                edge.setVertex0(x2, y2 + TileMap.TILE_SIZE);
-            }
-            if (s) {
-                edge.setHasVertex3(true);
-                edge.setVertex3(x2, y1 - TileMap.TILE_SIZE);
-            }
-            fixtures[E] = map.getBody().createFixture(fixterDef);
-            fixtures[E].setUserData(master);
-        }
-
-        if (!w) {
-            edge.set(x1, y1, x1, y2);
-            if (s) {
-                edge.setHasVertex0(true);
-                edge.setVertex0(x1, y1 - TileMap.TILE_SIZE);
-            }
-            if (n) {
-                edge.setHasVertex3(true);
-                edge.setVertex3(x1, y2 + TileMap.TILE_SIZE);
-            }
-            fixtures[W] = map.getBody().createFixture(fixterDef);
-            fixtures[W].setUserData(master);
-        }
-
-        //pov
-        if(opaque){
-            fixterDef.filter.categoryBits = FillterFlags.WALL;
-            fixterDef.filter.maskBits = FillterFlags.CAMERA_POV;
-            edge.setHasVertex0(false);
-            edge.setHasVertex3(false);
-
-
-            if(n && s && (!w || !e)){
-                edge.set(centreX, y1, centreX, y2);
-                fixtures[POVNS] = map.getBody().createFixture(fixterDef);
-                fixtures[POVNS].setUserData(master);
-            } else if(n && (!ne || !nw || !w || !e)){
-                edge.set(centreX, centreY, centreX, y2);
-                fixtures[POVN] = map.getBody().createFixture(fixterDef);
-                fixtures[POVN].setUserData(master);
-            } else if(s && (!se || !sw || !w || !e)){
-                edge.set(centreX, y1, centreX, centreY);
-                fixtures[POVS] = map.getBody().createFixture(fixterDef);
-                fixtures[POVS].setUserData(master);
-            }
-
-
-            if(e && w && (!n || !s)){
-                edge.set(x1, centreY, x2, centreY);
-                fixtures[POVEW] = map.getBody().createFixture(fixterDef);
-                fixtures[POVEW].setUserData(master);
-            } else if(e && (!ne || !se || !n || !s)){
-                edge.set(centreX, centreY, x2, centreY);
-                fixtures[POVE] = map.getBody().createFixture(fixterDef);
-                fixtures[POVE].setUserData(master);
-            } else if(w && (!nw || !sw || !n || !s)){
-                edge.set(x1, centreY, centreX, centreY);
-                fixtures[POVW] = map.getBody().createFixture(fixterDef);
-                fixtures[POVW].setUserData(master);
-            }
-        }
-
-        edge.dispose();
     }
 
     @Override
