@@ -8,7 +8,7 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import rustyice.game.characters.Player;
-import rustyice.game.actors.TestActor;
+import rustyice.game.TestActor;
 import rustyice.game.lights.ConeLight;
 import rustyice.game.lights.PointLight;
 import rustyice.game.tiles.FloorTile;
@@ -62,7 +62,7 @@ class EditorSelectionPane {
         buildActorTree();
         buildTileTree();
 
-        setMode(Mode.TILES);
+        setMode(Mode.ACTORS);
     }
 
     private void buildActorTree(){
@@ -77,9 +77,7 @@ class EditorSelectionPane {
 
     private void buildTileTree(){
         tileTree.pushBranch("Floors");
-        tileTree.pushBranch("boring");
         tileTree.addLeaf("normal", FloorTile.class);
-        tileTree.popBranch();
         tileTree.popBranch();
 
         tileTree.pushBranch("Walls");
@@ -122,10 +120,10 @@ class EditorSelectionPane {
         return actorTree.hasSelection() && mode == Mode.ACTORS;
     }
 
-    public rustyice.game.actors.Actor buildSelectedActor(){
+    public rustyice.game.Actor buildSelectedActor(){
         try {
             Class<?> actorClass = (Class<?>) actorTree.getTree().getSelection().getLastSelected().getObject();
-            return (rustyice.game.actors.Actor) actorClass.newInstance();
+            return (rustyice.game.Actor) actorClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
             System.exit(-1);

@@ -1,8 +1,7 @@
-package rustyice.game.actors;
+package rustyice.game;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import rustyice.core.Core;
@@ -19,7 +18,7 @@ public class TestActor extends Actor {
 
     public TestActor() {
         super();
-        setPhysicsComponent(pComponent = new SBPhysicsComponent(this));
+        setPhysicsComponent(pComponent = new SBPhysicsComponent());
         //pComponent.setFlying(true);
         testSprite = new Sprite();
 

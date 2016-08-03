@@ -1,21 +1,18 @@
 package rustyice.game.lights;
 
-import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import rustyice.core.Core;
 import rustyice.editor.annotations.ComponentAccess;
-import rustyice.game.actors.Actor;
+import rustyice.game.Actor;
 import rustyice.game.lights.components.LightComponent;
 import rustyice.game.lights.components.LightContainer;
 import rustyice.game.lights.components.PointLightComponent;
 import rustyice.game.physics.components.PointPhysicsComponent;
 import rustyice.graphics.Camera;
 import rustyice.graphics.RenderFlags;
-
-import java.awt.*;
 
 
 public class PointLight extends Actor implements LightContainer {

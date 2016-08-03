@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import rustyice.core.Core;
 import rustyice.editor.annotations.ComponentAccess;
-import rustyice.game.actors.Actor;
+import rustyice.game.Actor;
 import rustyice.game.lights.components.ConeLightComponent;
 import rustyice.game.lights.components.LightComponent;
 import rustyice.game.lights.components.LightContainer;

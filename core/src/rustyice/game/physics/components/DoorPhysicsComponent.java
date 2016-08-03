@@ -1,5 +1,10 @@
 package rustyice.game.physics.components;
 
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint;
+import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
+import rustyice.game.GameObject;
+import rustyice.game.Section;
 import rustyice.game.physics.Collision;
 import rustyice.game.tiles.Tile;
 
@@ -7,23 +12,25 @@ import rustyice.game.tiles.Tile;
  * @author gabek
  */
 public class DoorPhysicsComponent implements PhysicsComponent{
-    private Tile master;
+    private transient boolean initialized = false;
+    private transient Body sensorBody, doorLeftBody, doorRightBody;
+    private transient Fixture sensorFixture, doorLeftFixture, doorRightFixture, doorLeftInternal, doorRightInternal;
+    private transient PrismaticJoint jointLeft, jointRight;
+    private float x;
+    private float y;
 
     @Deprecated
-    public DoorPhysicsComponent(){}
-
-    public DoorPhysicsComponent(Tile master){
-        this.master = master;
+    public DoorPhysicsComponent(){
     }
 
     @Override
     public float getX() {
-        return master.getX();
+        return x;
     }
 
     @Override
     public float getY() {
-        return master.getY();
+        return y;
     }
 
     @Override
@@ -52,7 +59,25 @@ public class DoorPhysicsComponent implements PhysicsComponent{
     }
 
     @Override
-    public void init() {
+    public void init(GameObject parent) {
+        PolygonShape polyShape = new PolygonShape();
+
+        BodyDef sensorBodyDef = new BodyDef();
+        sensorBodyDef.type = BodyDef.BodyType.StaticBody;
+
+        sensorBody = parent.getSection().getWorld().createBody(sensorBodyDef);
+
+        FixtureDef sensorFixtureDef = new FixtureDef();
+        sensorFixtureDef.isSensor = true;
+
+        polyShape.setAsBox(0.1f, 0.5f);
+        sensorFixtureDef.shape = polyShape;
+        sensorFixture = sensorBody.createFixture(sensorFixtureDef);
+
+        //PrismaticJointDef jointDef = new PrismaticJointDef();
+
+
+        polyShape.dispose();
 
     }
 

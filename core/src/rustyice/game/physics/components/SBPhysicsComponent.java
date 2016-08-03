@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import rustyice.editor.annotations.ComponentProperty;
-import rustyice.game.actors.Actor;
+import rustyice.game.GameObject;
 import rustyice.game.physics.Collision;
 
 /**
@@ -21,32 +21,24 @@ public class SBPhysicsComponent implements PhysicsComponent {
     private boolean flying;
     private float groundFriction = .5f;
     private float x, y, rotation;
-    private Actor master;
+    private GameObject parent;
 
     public SBPhysicsComponent() {
     }
 
-    public SBPhysicsComponent(Actor master) {
-        this.master = master;
-    }
-
-    public SBPhysicsComponent(Actor master, BodyType bodyType){
-        this.master = master;
-        this.bodytype = bodyType;
-    }
-
-    public Actor getMaster(){
-        return master;
+    public GameObject getParent(){
+        return parent;
     }
 
     @Override
-    public void init() {
+    public void init(GameObject parent) {
         if (!initialized) {
             initialized = true;
+            this.parent = parent;
 
             BodyDef bodyDef = buildBodyDef();
 
-            body = master.getSection().getWorld().createBody(bodyDef);
+            body = parent.getSection().getWorld().createBody(bodyDef);
         }
     }
     
@@ -103,7 +95,7 @@ public class SBPhysicsComponent implements PhysicsComponent {
     public void store() {
         if (initialized) {
             initialized = false;
-            master.getSection().getWorld().destroyBody(body);
+            parent.getSection().getWorld().destroyBody(body);
             body = null;
         }
     }
@@ -134,7 +126,7 @@ public class SBPhysicsComponent implements PhysicsComponent {
         Fixture fix = body.createFixture(fixtureDef);
         rect.dispose();
 
-        fix.setUserData(master);
+        fix.setUserData(parent);
         updateDrag();
         return fix;
     }
@@ -147,7 +139,7 @@ public class SBPhysicsComponent implements PhysicsComponent {
         Fixture fix = body.createFixture(fixtureDef);
         circle.dispose();
 
-        fix.setUserData(master);
+        fix.setUserData(parent);
         updateDrag();
         return fix;
     }

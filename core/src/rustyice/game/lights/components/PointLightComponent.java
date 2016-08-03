@@ -2,11 +2,9 @@ package rustyice.game.lights.components;
 
 import box2dLight.Light;
 import box2dLight.PointLight;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
-import rustyice.editor.annotations.ComponentProperty;
 import rustyice.game.GameObject;
-import rustyice.game.actors.Actor;
+import rustyice.game.Actor;
 
 /**
  * @author gabek

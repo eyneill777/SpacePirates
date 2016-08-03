@@ -1,4 +1,4 @@
-package rustyice.game.actors;
+package rustyice.game;
 
 import rustyice.editor.annotations.ComponentAccess;
 import rustyice.editor.annotations.ComponentProperty;
@@ -90,7 +90,7 @@ public abstract class Actor implements GameObject, Collidable {
     @Override
     public void init() {
         initialized = true;
-        physicsComponent.init();
+        physicsComponent.init(this);
     }
 
     @Override

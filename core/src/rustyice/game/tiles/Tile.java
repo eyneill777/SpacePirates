@@ -94,7 +94,7 @@ public abstract class Tile implements GameObject, Collidable {
     public void init() {
         initialized = true;
         if (tilePhysics != null) {
-            tilePhysics.init();
+            tilePhysics.init(this);
         }
         if(sprite != null){
             setSprite(sprite);

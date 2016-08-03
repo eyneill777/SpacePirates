@@ -1,17 +1,13 @@
 package rustyice.game;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashSet;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 
-import rustyice.game.actors.Actor;
 import rustyice.game.tiles.TileMap;
 import rustyice.graphics.Camera;
-import rustyice.graphics.RenderFlags;
 import rustyice.resources.Resources;
 
 public class Section {
@@ -47,14 +43,14 @@ public class Section {
     }
 
     public void store() {
-        finishAdding();
+        finishAddingActors();
 
         actors.forEach(Actor::store);
 
         this.initialized = false;
     }
 
-    public void finishAdding() {
+    public void finishAddingActors() {
         for (Actor actor : addList) {
             actors.add(actor);
             actor.init();
@@ -63,7 +59,7 @@ public class Section {
     }
 
     public void update(float delta) {
-        finishAdding();
+        finishAddingActors();
 
         for (Actor actor : getActors()) {
             actor.update(delta);

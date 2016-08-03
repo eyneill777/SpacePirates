@@ -1,9 +1,9 @@
 package rustyice.game.physics.components;
 
+import rustyice.game.GameObject;
 import rustyice.game.physics.Collision;
 
 public class PointPhysicsComponent implements PhysicsComponent {
-
     private float x, y, rotation;
 
     public PointPhysicsComponent() {
@@ -61,7 +61,7 @@ public class PointPhysicsComponent implements PhysicsComponent {
     }
 
     @Override
-    public void init() {
+    public void init(GameObject parent) {
     }
 
     @Override

@@ -19,7 +19,7 @@ public abstract class LightComponent {
     private float direction;
 
     public LightComponent(){
-        color = new Color(1, 1, 1, 1);
+        color = new Color(.75f, .75f, .75f, .75f);
         isStatic = false;
         isXRay = false;
         distance = 10;

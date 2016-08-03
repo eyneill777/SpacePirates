@@ -1,6 +1,8 @@
 package rustyice.game.physics.components;
 
 import com.badlogic.gdx.physics.box2d.*;
+import rustyice.game.GameObject;
+import rustyice.game.Section;
 import rustyice.game.physics.Collision;
 import rustyice.game.physics.FillterFlags;
 import rustyice.game.tiles.Tile;
@@ -58,7 +60,7 @@ public class RectWallComponent implements PhysicsComponent {
     }
 
     @Override
-    public void init() {
+    public void init(GameObject parent) {
         initialized = true;
 
         TileMap map = master.getTileMap();

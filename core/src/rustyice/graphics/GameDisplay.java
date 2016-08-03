@@ -3,7 +3,6 @@ package rustyice.graphics;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,22 +16,24 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.esotericsoftware.minlog.Log;
 import rustyice.game.Game;
 import rustyice.game.physics.FillterFlags;
-import shaders.DiffuseShader;
 
 public class GameDisplay extends Widget {
     private RayHandler povHandler;
     private ShaderProgram povShader;
-    private PointLight povTestLight;
+    private PointLight povCameraView;
 
     private FrameBuffer fbo;
     private OrthographicCamera ortho;
 
     private Camera cam;
     private Game game;
+
+    private Box2DDebugRenderer debugRenderer;
 
     //private ShaderProgram lightSharder;
     //private Mesh lightMesh;
@@ -42,11 +43,13 @@ public class GameDisplay extends Widget {
     private boolean initialized = false;
 
     public GameDisplay() {
-        this.ortho = new OrthographicCamera();
-        this.mouseProj = new Vector3();
+        ortho = new OrthographicCamera();
+        mouseProj = new Vector3();
     }
 
     public void init() {
+        debugRenderer = new Box2DDebugRenderer(true, true, false, true, false, true);
+
         if(getWidth() > 0 && getHeight() > 0){
             initFBO((int) getWidth(), (int) getHeight());
 
@@ -73,11 +76,10 @@ public class GameDisplay extends Widget {
 
             povHandler.setAmbientLight(0, 0, 0, 0);
 
-            povTestLight = new PointLight(povHandler, 400);
-            povTestLight.setDistance(10);
-            povTestLight.setSoft(false);
-            povTestLight.setStaticLight(true);
-            povTestLight.setContactFilter(FillterFlags.CAMERA_POV, (short)0, FillterFlags.WALL);
+            povCameraView = new PointLight(povHandler, 200);
+            povCameraView.setDistance(10);
+            povCameraView.setSoft(false);
+            povCameraView.setContactFilter(FillterFlags.CAMERA_POV, (short)0, FillterFlags.WALL);
         } else {
             povHandler.resizeFBO(width, height);
         }
@@ -93,7 +95,7 @@ public class GameDisplay extends Widget {
     }
 
     private void resize() {
-        if (this.initialized && (Math.abs(getWidth() - this.fbo.getWidth()) > 2 || Math.abs(getHeight() - this.fbo.getHeight()) > 2)) {
+        if (initialized && (Math.abs(getWidth() - fbo.getWidth()) > 5 || Math.abs(getHeight() - fbo.getHeight()) > 5)) {
             fbo.dispose();
             initFBO((int) getWidth(), (int) getHeight());
 
@@ -137,7 +139,7 @@ public class GameDisplay extends Widget {
         updateProjection();
         if (lighting) {
             //game.getRayHandler().setLightMapRendering(false);
-            game.getRayHandler().setAmbientLight(0, 0, 0, 0.05f);
+            game.getRayHandler().setAmbientLight(0, 0, 0, 0.01f);
             //game.getRayHandler().setShadows(true);
             //game.getRayHandler().setBlur(true);
             game.getRayHandler().setCombinedMatrix(ortho);
@@ -147,8 +149,8 @@ public class GameDisplay extends Widget {
         }
 
         if (pov){
-            if(povTestLight.getX() != cam.getX() || povTestLight.getY() != cam.getY()){
-                povTestLight.setPosition(cam.getX(), cam.getY());
+            if(povCameraView.getX() != cam.getX() || povCameraView.getY() != cam.getY()){
+                povCameraView.setPosition(cam.getX(), cam.getY());
             }
 
             povHandler.setCombinedMatrix(ortho);
@@ -171,12 +173,12 @@ public class GameDisplay extends Widget {
         batch.end();
 
         if (lighting) {
-            Gdx.gl20.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glEnable(GL20.GL_BLEND);
             game.getRayHandler().renderOnly();
         }
 
         if (pov){
-            Gdx.gl20.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glEnable(GL20.GL_BLEND);
             povHandler.renderOnly();
         }
 
@@ -184,6 +186,8 @@ public class GameDisplay extends Widget {
             batch.begin();
             game.render(batch, cam, cam.getFlags() & RenderFlags.POST_LIGHT_FLAGS);
             batch.end();
+
+            debugRenderer.render(game.getWorld(), ortho.combined);
         }
 
         fbo.end();
@@ -198,24 +202,26 @@ public class GameDisplay extends Widget {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (this.initialized) {
+        if (initialized) {
             batch.setColor(getColor().a, getColor().g, getColor().b, getColor().a * parentAlpha);
             batch.draw(fbo.getColorBufferTexture(), getX(), getY(), getWidth(), getHeight(), 0, 0, fbo.getWidth(), fbo.getHeight(), false, true);
         }
     }
 
     public void dispose() {
-        if (this.initialized) {
-            this.fbo.dispose();
+        if (initialized) {
+            fbo.dispose();
             //lightSharder.dispose();
             //lightMesh.dispose();
 
-            this.fbo = null;
+            fbo = null;
             //lightSharder = null;
             //lightMesh = null;
-            this.initialized = false;
+            initialized = false;
             povHandler.dispose();
             povShader.dispose();
+
+            debugRenderer.dispose();
         }
     }
 

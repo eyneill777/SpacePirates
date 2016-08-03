@@ -3,21 +3,14 @@ package rustyice.game.characters;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import rustyice.game.actors.Actor;
+import rustyice.core.Core;
+import rustyice.game.Actor;
 import rustyice.game.characters.components.CharacterPhysics;
 import rustyice.game.physics.Collision;
-import rustyice.game.physics.FillterFlags;
-import rustyice.game.physics.components.SBPhysicsComponent;
 import rustyice.graphics.Camera;
 import rustyice.graphics.RenderFlags;
 import rustyice.input.Actions;
 import rustyice.input.PlayerInput;
-import rustyice.core.Core;
-
-import java.util.EnumSet;
 
 public class Player extends Actor {
 
@@ -29,7 +22,7 @@ public class Player extends Actor {
     private transient int count = 0;
 
     public Player() {
-        setPhysicsComponent(pComponent = new CharacterPhysics(this));
+        setPhysicsComponent(pComponent = new CharacterPhysics());
         //pComponent.setFlying(true);
 
         setWidth(0.98f);

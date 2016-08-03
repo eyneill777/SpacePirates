@@ -5,7 +5,7 @@ import box2dLight.Light;
 import com.badlogic.gdx.math.MathUtils;
 import rustyice.editor.annotations.ComponentProperty;
 import rustyice.game.GameObject;
-import rustyice.game.actors.Actor;
+import rustyice.game.Actor;
 
 /**
  * @author gabek

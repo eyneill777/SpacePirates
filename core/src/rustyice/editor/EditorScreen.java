@@ -62,8 +62,8 @@ public class EditorScreen extends Screen {
         root.add(menuBar.getTable()).growX().row();
 
 
-        VisSplitPane centerSplit = new VisSplitPane(gameView.getDisplay(), propertyPane.getTable(), true);
-        centerSplit.setSplitAmount(0.85f);
+        VisSplitPane centerSplit = new VisSplitPane(propertyPane.getRoot(), gameView.getDisplay(), false);
+        centerSplit.setSplitAmount(0.2f);
 
         VisSplitPane centerSelectionSplit = new VisSplitPane(centerSplit, selectionPane.getTable(), false);
         centerSelectionSplit.setSplitAmount(0.8f);

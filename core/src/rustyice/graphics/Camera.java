@@ -2,10 +2,7 @@ package rustyice.graphics;
 
 import com.badlogic.gdx.math.MathUtils;
 
-import rustyice.game.actors.Actor;
-
-import java.util.EnumSet;
-import java.util.HashSet;
+import rustyice.game.Actor;
 
 /**
  * @author gabek

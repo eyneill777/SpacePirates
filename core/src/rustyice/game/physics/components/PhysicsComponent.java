@@ -1,5 +1,6 @@
 package rustyice.game.physics.components;
 
+import rustyice.game.GameObject;
 import rustyice.game.physics.Collision;
 
 /**
@@ -21,7 +22,7 @@ public interface PhysicsComponent {
 
     void setPosition(float x, float y);
 
-    void init();
+    void init(GameObject parent);
 
     void store();
 
