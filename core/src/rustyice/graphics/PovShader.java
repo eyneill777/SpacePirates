@@ -18,8 +18,10 @@ public class PovShader {
                             + "attribute vec4 quad_colors;\n" //
                             + "attribute float s;\n"
                             + "uniform mat4 u_projTrans;\n" //
+                            + "varying vec4 v_color;\n" //
                             + "void main()\n" //
                             + "{\n" //
+                            + "   v_color = s * quad_colors;\n" //
                             + "   gl_Position =  u_projTrans * vertex_positions;\n" //
                             + "}\n";
             final String fragmentShader = "#ifdef GL_ES\n" //
@@ -31,7 +33,7 @@ public class PovShader {
                     + "varying vec4 v_color;\n" //
                     + "void main()\n"//
                     + "{\n" //
-                    + "  gl_FragColor = vec4(0, 0, 0, 1);\n" //
+                    + "  gl_FragColor = vec4(0, 0, 0, 4);\n" //
                     + "}";
 
             ShaderProgram.pedantic = false;

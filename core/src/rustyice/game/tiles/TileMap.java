@@ -117,6 +117,10 @@ public class TileMap {
         }
     }
 
+    public Tile getTileAt(float x, float y){
+        return getTile((int) (x / TILE_SIZE), (int) (y / TILE_SIZE));
+    }
+
     public float getOffsetX() {
         return this.offsetX;
     }

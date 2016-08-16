@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.serializers.CompatibleFieldSerializer;
 import com.esotericsoftware.minlog.Log;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.file.FileChooser;
 import rustyice.editor.EditorScreen;
 import rustyice.game.Game;
 import rustyice.graphics.PerformanceTracker;
@@ -27,7 +27,7 @@ public class Core implements ApplicationListener {
 
     //private ShaderProgram badProgram;
     //private float time = 0;
-    
+
     private Game game;
     public static SpriteBatch batch;
     private ScreenManager screenManager;
@@ -47,11 +47,13 @@ public class Core implements ApplicationListener {
         //GL30Profiler.enable();
         Gdx.gl.glDepthMask(false);
         //GLProfiler.listener = new GLErrorLogger();
-        
+
         //VisUI.load(Gdx.files.internal("gui/uiskin.json"));
         VisUI.load();
         Box2D.init();
+
         kryo = new Kryo();
+        kryo.setDefaultSerializer(CompatibleFieldSerializer.class);
 
         resources = new Resources();
         resources.startLoading();

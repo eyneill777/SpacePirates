@@ -3,6 +3,7 @@ package rustyice.graphics;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -65,23 +66,23 @@ public class GameDisplay extends Widget {
         fbo = new FrameBuffer(Format.RGBA8888, width, height, false);
         fbo.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
-        game.getRayHandler().resizeFBO(width / 4, height / 4);
+        game.getRayHandler().resizeFBO(width / 2, height / 2);
         if(povHandler == null){
             povShader = PovShader.createLightShader();
 
             povHandler = new RayHandler(game.getWorld(), width / 4, height / 4);
             povHandler.setLightShader(povShader);
-            //povHandler.setBlur(false);
+            povHandler.setBlur(false);
             //povHandler.setShadows(false);
 
             povHandler.setAmbientLight(0, 0, 0, 0);
 
-            povCameraView = new PointLight(povHandler, 200);
+            povCameraView = new PointLight(povHandler, 400);
             povCameraView.setDistance(10);
             povCameraView.setSoft(false);
             povCameraView.setContactFilter(FillterFlags.CAMERA_POV, (short)0, FillterFlags.WALL);
         } else {
-            povHandler.resizeFBO(width, height);
+            povHandler.resizeFBO(width / 2, height / 2);
         }
     }
 
@@ -136,6 +137,15 @@ public class GameDisplay extends Widget {
             init();
         }
 
+        if(Gdx.input.isKeyJustPressed(Input.Keys.B)){
+            if(debugRenderer == null){
+                debugRenderer = new Box2DDebugRenderer(true, true, false, true, false, true);
+            } else {
+                debugRenderer.dispose();
+                debugRenderer = null;
+            }
+        }
+
         updateProjection();
         if (lighting) {
             //game.getRayHandler().setLightMapRendering(false);
@@ -156,7 +166,6 @@ public class GameDisplay extends Widget {
             povHandler.setCombinedMatrix(ortho);
             povHandler.update();
             povHandler.prepareRender();
-
             Gdx.gl20.glDisable(GL20.GL_BLEND);
         }
         
@@ -173,12 +182,12 @@ public class GameDisplay extends Widget {
         batch.end();
 
         if (lighting) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl20.glEnable(GL20.GL_BLEND);
             game.getRayHandler().renderOnly();
         }
 
         if (pov){
-            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl20.glEnable(GL20.GL_BLEND);
             povHandler.renderOnly();
         }
 
@@ -186,7 +195,9 @@ public class GameDisplay extends Widget {
             batch.begin();
             game.render(batch, cam, cam.getFlags() & RenderFlags.POST_LIGHT_FLAGS);
             batch.end();
+        }
 
+        if(debugRenderer != null){
             debugRenderer.render(game.getWorld(), ortho.combined);
         }
 
@@ -221,17 +232,9 @@ public class GameDisplay extends Widget {
             povHandler.dispose();
             povShader.dispose();
 
-            debugRenderer.dispose();
+            if(debugRenderer != null){
+                debugRenderer.dispose();
+            }
         }
-    }
-
-    private Mesh createMesh() {
-        float[] verts = { -1, -1, 0, 0, 1, -1, 1, 0, 1, 1, 1, 1, -1, 1, 0, 1 };
-
-        Mesh mesh = new Mesh(true, 4, 0, new VertexAttribute(Usage.Position, 2, "a_position"), new VertexAttribute(Usage.TextureCoordinates, 2, "a_texCoord"));
-
-        mesh.setVertices(verts);
-
-        return mesh;
     }
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import rustyice.game.Game;
 import rustyice.game.Actor;
+import rustyice.game.tiles.Tile;
 import rustyice.game.tiles.TileMap;
 import rustyice.graphics.Camera;
 import rustyice.graphics.GameDisplay;
@@ -150,6 +151,13 @@ public class EditorGameView {
                 case Input.Keys.X:
                     zoomOut = true;
                     return true;
+                case Input.Keys.R:
+                    if(selectionActor != null){
+                        game.getCurrentSection().getActors().remove(selectionActor);
+                        selectionActor.store();
+                        selectionActor = null;
+                    }
+                    return true;
                 default:
                     return false;
             }
@@ -209,6 +217,11 @@ public class EditorGameView {
                         propertyPane.setSelected(selectionActor);
                         break;
                     }
+                }
+            } else {
+                Tile tile = game.getTiles().getTileAt(mouseDownPos.x, mouseDownPos.y);
+                if(tile != null){
+                    propertyPane.setSelected(tile);
                 }
             }
 

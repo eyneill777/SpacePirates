@@ -4,25 +4,40 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import rustyice.editor.annotations.ComponentProperty;
 import rustyice.game.characters.Player;
 import rustyice.game.physics.Collision;
 import rustyice.game.physics.components.RectWallComponent;
 import rustyice.graphics.Camera;
 
 public class WallTile extends Tile {
-    public WallTile() {
-        super();
-        RectWallComponent wallComp = new RectWallComponent(this);
-        setTilePhysics(wallComp);
+    private Color color = Color.BLUE;
 
+    public WallTile() {
+        super(true, true);
+        RectWallComponent wallComp = new RectWallComponent();
+        setTilePhysics(wallComp);
     }
 
     @Override
     public void init() {
         super.init();
         Sprite sprite = new Sprite(getResources().box);
-        sprite.setColor(Color.BLUE);
+        sprite.setColor(color);
         setSprite(sprite);
+    }
+
+    @ComponentProperty(title = "Color")
+    public Color getColor(){
+        return color;
+    }
+
+    @ComponentProperty(title = "Color")
+    public void setColor(Color color){
+        this.color = color;
+        if(isInitialized()){
+            getSprite().setColor(color);
+        }
     }
 
     @Override
@@ -45,10 +60,5 @@ public class WallTile extends Tile {
     public void endCollision(Collision collision) {
         super.endCollision(collision);
 
-    }
-
-    @Override
-    public boolean isConnected(Tile other) {
-        return other instanceof WallTile || other instanceof BoundaryTile;
     }
 }

@@ -15,6 +15,7 @@ import rustyice.graphics.Camera;
 import rustyice.graphics.RenderFlags;
 
 
+
 public class PointLight extends Actor implements LightContainer {
     private transient Sprite icon;
     private PointLightComponent light;
@@ -42,7 +43,7 @@ public class PointLight extends Actor implements LightContainer {
     @Override
     public void init() {
         super.init();
-        light.init();
+        light.init(this);
         light.setPosition(getX(), getY());
     }
 

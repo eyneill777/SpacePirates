@@ -65,13 +65,13 @@ public class Section {
             actor.update(delta);
         }
 
-        this.tiles.update(delta);
+        tiles.update(delta);
 
-        for (Actor actor : this.removeList) {
+        for (Actor actor : removeList) {
             getActors().remove(actor);
             actor.store();
         }
-        this.removeList.clear();
+        removeList.clear();
     }
 
     public void render(SpriteBatch batch, Camera camera, int flags) {

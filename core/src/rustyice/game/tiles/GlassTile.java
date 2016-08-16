@@ -4,23 +4,18 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import rustyice.game.physics.components.RectWallComponent;
 
-public class BoundaryTile extends Tile {
+public class GlassTile extends Tile {
 
-    public BoundaryTile() {
-        super();
-        setTilePhysics(new RectWallComponent(this));
+    public GlassTile() {
+        super(true, false);
+        setTilePhysics(new RectWallComponent());
     }
 
     @Override
     public void init() {
         super.init();
         Sprite sprite = new Sprite(getResources().box);
-        sprite.setColor(Color.YELLOW);
+        sprite.setColor(new Color(0, 0.1f, 0.1f, 0.5f));
         setSprite(sprite);
-    }
-
-    @Override
-    public boolean isConnected(Tile other) {
-        return other instanceof BoundaryTile;
     }
 }

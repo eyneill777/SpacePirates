@@ -2,6 +2,7 @@ package rustyice.game.lights.components;
 
 import box2dLight.ConeLight;
 import box2dLight.Light;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.math.MathUtils;
 import rustyice.editor.annotations.ComponentProperty;
 import rustyice.game.GameObject;
@@ -11,26 +12,13 @@ import rustyice.game.Actor;
  * @author gabek
  */
 public class ConeLightComponent extends LightComponent{
-    private GameObject parent;
-
     private transient ConeLight coneLight;
     private float coneDegree = 25;
-
-    public ConeLightComponent(){
-    }
-
-    public ConeLightComponent(Actor parent){
-        super();
-        this.parent = parent;
-    }
 
     @ComponentProperty(title = "Cone Degree")
     public void setConeDegree(float degree){
         this.coneDegree = degree;
-        if(isInitialized()){
-            store();
-            init();
-        }
+        rebuild();
     }
 
     @ComponentProperty(title = "Cone Degree")
@@ -39,9 +27,9 @@ public class ConeLightComponent extends LightComponent{
     }
 
     @Override
-    protected Light buildLight() {
-        return coneLight = new ConeLight(parent.getSection().getRayHandler(), getRayNum(getDistance(), LIGHT_RES, coneDegree), getColor(),
-                getDistance(), 0, 0, 0, coneDegree);
+    protected Light buildLight(RayHandler rayHandler) {
+        return coneLight = new ConeLight(rayHandler, getRayNum(getDistance(), LIGHT_RES, coneDegree), getColor(),
+                getDistance(), getX(), getY(), getDirection(), coneDegree);
     }
 
     private int getRayNum(float r, float space, float coneDegree) {

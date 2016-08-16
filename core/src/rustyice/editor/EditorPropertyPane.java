@@ -8,7 +8,7 @@ import rustyice.editor.widgetbuilders.BoolWidgetBuilder;
 import rustyice.editor.widgetbuilders.ColorWidgetBuilder;
 import rustyice.editor.widgetbuilders.FloatWidgetBuilder;
 import rustyice.editor.widgetbuilders.PropertyWidgetBuilder;
-import rustyice.game.Actor;
+import rustyice.game.GameObject;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +24,7 @@ public class EditorPropertyPane {
     private VisScrollPane propertyTreeScroll;
     private VisTree propertyTree;
 
-    private Actor selectedActor;
+    private GameObject selectedObject;
 
     public EditorPropertyPane(){
         propertyTree = new VisTree();
@@ -35,19 +35,19 @@ public class EditorPropertyPane {
         return propertyTreeScroll;
     }
 
-    public void setSelected(Actor selectedActor){
-        if(this.selectedActor != selectedActor){
-            this.selectedActor = selectedActor;
+    public void setSelected(GameObject selectedObject){
+        if(this.selectedObject != selectedObject){
+            this.selectedObject = selectedObject;
             propertyTree.clearChildren();
 
 
-            propertyTree.add(buildCompEditNode(selectedActor));
+            propertyTree.add(buildCompEditNode(selectedObject));
             HashSet<Object> compSet = new HashSet<>();
 
-            for(Method method: selectedActor.getClass().getMethods()){
-                if(getInheritedAnnotation(selectedActor.getClass(), method, ComponentAccess.class) != null){
+            for(Method method: selectedObject.getClass().getMethods()){
+                if(getInheritedAnnotation(selectedObject.getClass(), method, ComponentAccess.class) != null){
                     try {
-                        Object comp = method.invoke(selectedActor);
+                        Object comp = method.invoke(selectedObject);
                         if(compSet.add(comp)){
                             propertyTree.add(buildCompEditNode(comp));
                         }
@@ -106,7 +106,9 @@ public class EditorPropertyPane {
         }
 
         for (PropertyWidgetBuilder propertyWidgetBuilder : propertyMap.values()) {
-            node.add(new VisTree.Node(propertyWidgetBuilder.buildWidgets()));
+            VisTree.Node widgetNode = new VisTree.Node(propertyWidgetBuilder.buildWidgets());
+            widgetNode.setSelectable(false);
+            node.add(widgetNode);
         }
 
         return node;

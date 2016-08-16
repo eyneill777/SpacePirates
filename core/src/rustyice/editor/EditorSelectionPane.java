@@ -11,9 +11,7 @@ import rustyice.game.characters.Player;
 import rustyice.game.TestActor;
 import rustyice.game.lights.ConeLight;
 import rustyice.game.lights.PointLight;
-import rustyice.game.tiles.FloorTile;
-import rustyice.game.tiles.Tile;
-import rustyice.game.tiles.WallTile;
+import rustyice.game.tiles.*;
 
 /**
  * @author gabek
@@ -77,11 +75,16 @@ class EditorSelectionPane {
 
     private void buildTileTree(){
         tileTree.pushBranch("Floors");
-        tileTree.addLeaf("normal", FloorTile.class);
+        tileTree.addLeaf("Boarding", FloorTile.class);
         tileTree.popBranch();
 
         tileTree.pushBranch("Walls");
         tileTree.addLeaf("Wall", WallTile.class);
+        tileTree.addLeaf("Glass", GlassTile.class);
+        tileTree.popBranch();
+
+        tileTree.pushBranch("Machine");
+        tileTree.addLeaf("Door", DoorTile.class);
         tileTree.popBranch();
     }
 

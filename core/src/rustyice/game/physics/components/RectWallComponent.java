@@ -16,17 +16,8 @@ public class RectWallComponent implements PhysicsComponent {
     private static final int N = 0, S = 1, E = 2, W = 3, POVN = 4, POVS = 5, POVE = 6, POVW = 7, POVNS = 8, POVEW = 9;
 
     private Tile master;
-    private boolean opaque = true;
-    private transient Fixture fixtures[];
+    private transient Fixture fixtures[] = new Fixture[FIXTURES_SIZE];
     private transient boolean initialized = false;
-
-    @Deprecated
-    public RectWallComponent() {
-    }
-
-    public RectWallComponent(Tile master) {
-        this.master = master;
-    }
 
     @Override
     public float getX() {
@@ -59,54 +50,40 @@ public class RectWallComponent implements PhysicsComponent {
     public void setPosition(float x, float y) {
     }
 
-    @Override
-    public void init(GameObject parent) {
-        initialized = true;
+    private boolean checkTileSolid(int rx, int ry){
+        Tile other = master.getTileMap().getTile(master.getTileX() + rx, master.getTileY() + ry);
+        return other != null && other.isSolid() && (!master.isOpaque() || other.isOpaque());
+    }
 
-        TileMap map = master.getTileMap();
-        fixtures = new Fixture[FIXTURES_SIZE];
+    private boolean checkTileOpaque(int rx, int ry){
+        Tile other = master.getTileMap().getTile(master.getTileX() + rx, master.getTileY() + ry);
+        return other != null && other.isOpaque();
+    }
 
-        int x = master.getTileX();
-        int y = master.getTileY();
+    private void initSolid(){
+        boolean n = checkTileSolid(0, 1),
+                s = checkTileSolid(0, -1),
+                e = checkTileSolid(1, 0),
+                w = checkTileSolid(-1, 0);
 
-        Tile other = map.getTile(x, y + 1);
-        boolean n = other != null && master.isConnected(other);
+        if(!n || !s || !e || !w) {
+            TileMap map = master.getTileMap();
 
-        other = map.getTile(x, y - 1);
-        boolean s = other != null && master.isConnected(other);
-
-        other = map.getTile(x + 1, y);
-        boolean e = other != null && master.isConnected(other);
-
-        other = map.getTile(x - 1, y);
-        boolean w = other != null && master.isConnected(other);
-
-
-        other = map.getTile(x + 1, y + 1);
-        boolean ne = other != null && master.isConnected(other);
-
-        other = map.getTile(x - 1, y - 1);
-        boolean sw = other != null && master.isConnected(other);
-
-        other = map.getTile(x + 1, y - 1);
-        boolean se = other != null && master.isConnected(other);
-
-        other = map.getTile(x - 1, y + 1);
-        boolean nw = other != null && master.isConnected(other);
-
-        if(!n || !s || !e || !w || !ne || !nw || !se || !sw){
-            FixtureDef fixterDef = new FixtureDef();
+            FixtureDef fixtureDef = new FixtureDef();
             EdgeShape edge = new EdgeShape();
-            fixterDef.shape = edge;
-            fixterDef.filter.categoryBits = FillterFlags.WALL | FillterFlags.OPAQUE;
-            fixterDef.filter.maskBits = FillterFlags.LARGE | FillterFlags.SMALL | FillterFlags.LIGHT;
+            fixtureDef.shape = edge;
+            fixtureDef.filter.categoryBits = FillterFlags.WALL;
+            fixtureDef.filter.maskBits = FillterFlags.LARGE | FillterFlags.SMALL;
 
-            float x1 = TileMap.TILE_SIZE * x;
-            float y1 = TileMap.TILE_SIZE * y;
+            if(master.isOpaque()){
+                fixtureDef.filter.categoryBits |= FillterFlags.OPAQUE;
+                fixtureDef.filter.maskBits |= FillterFlags.LIGHT;
+            }
+
+            float x1 = TileMap.TILE_SIZE * master.getTileX();
+            float y1 = TileMap.TILE_SIZE * master.getTileY();
             float x2 = x1 + TileMap.TILE_SIZE;
             float y2 = y1 + TileMap.TILE_SIZE;
-            float centreX = x1 + TileMap.TILE_SIZE/2;
-            float centreY = y1 + TileMap.TILE_SIZE/2;
 
             if (!n) {
                 edge.set(x1, y2, x2, y2);
@@ -118,7 +95,7 @@ public class RectWallComponent implements PhysicsComponent {
                     edge.setHasVertex3(true);
                     edge.setVertex3(x2 + TileMap.TILE_SIZE, y2);
                 }
-                fixtures[N] = map.getBody().createFixture(fixterDef);
+                fixtures[N] = map.getBody().createFixture(fixtureDef);
                 fixtures[N].setUserData(master);
             }
 
@@ -132,7 +109,7 @@ public class RectWallComponent implements PhysicsComponent {
                     edge.setHasVertex3(true);
                     edge.setVertex3(x1 - TileMap.TILE_SIZE, y1);
                 }
-                fixtures[S] = map.getBody().createFixture(fixterDef);
+                fixtures[S] = map.getBody().createFixture(fixtureDef);
                 fixtures[S].setUserData(master);
             }
 
@@ -146,7 +123,7 @@ public class RectWallComponent implements PhysicsComponent {
                     edge.setHasVertex3(true);
                     edge.setVertex3(x2, y1 - TileMap.TILE_SIZE);
                 }
-                fixtures[E] = map.getBody().createFixture(fixterDef);
+                fixtures[E] = map.getBody().createFixture(fixtureDef);
                 fixtures[E].setUserData(master);
             }
 
@@ -160,77 +137,116 @@ public class RectWallComponent implements PhysicsComponent {
                     edge.setHasVertex3(true);
                     edge.setVertex3(x1, y2 + TileMap.TILE_SIZE);
                 }
-                fixtures[W] = map.getBody().createFixture(fixterDef);
+                fixtures[W] = map.getBody().createFixture(fixtureDef);
                 fixtures[W].setUserData(master);
-            }
-
-            //pov
-            if(opaque){
-                fixterDef.filter.categoryBits = FillterFlags.WALL;
-                fixterDef.filter.maskBits = FillterFlags.CAMERA_POV;
-                edge.setHasVertex0(false);
-                edge.setHasVertex3(false);
-
-
-                if(n && s){
-                    edge.set(centreX, y1, centreX, y2);
-                    fixtures[POVNS] = map.getBody().createFixture(fixterDef);
-                    fixtures[POVNS].setUserData(master);
-                } else if(n && (!ne || !nw || !w || !e)){
-                    edge.set(centreX, centreY, centreX, y2);
-                    fixtures[POVN] = map.getBody().createFixture(fixterDef);
-                    fixtures[POVN].setUserData(master);
-                } else if(s && (!se || !sw || !w || !e)){
-                    edge.set(centreX, y1, centreX, centreY);
-                    fixtures[POVS] = map.getBody().createFixture(fixterDef);
-                    fixtures[POVS].setUserData(master);
-                }
-
-
-                if(e && w){
-                    edge.set(x1, centreY, x2, centreY);
-                    fixtures[POVEW] = map.getBody().createFixture(fixterDef);
-                    fixtures[POVEW].setUserData(master);
-                } else if(e && (!ne || !se || !n || !s)){
-                    edge.set(centreX, centreY, x2, centreY);
-                    fixtures[POVE] = map.getBody().createFixture(fixterDef);
-                    fixtures[POVE].setUserData(master);
-                } else if(w && (!nw || !sw || !n || !s)){
-                    edge.set(x1, centreY, centreX, centreY);
-                    fixtures[POVW] = map.getBody().createFixture(fixterDef);
-                    fixtures[POVW].setUserData(master);
-                }
             }
 
             edge.dispose();
         }
     }
 
-    @Override
-    public void store() {
-        initialized = false;
-        Body body = master.getTileMap().getBody();
+    private void initOpaque(){
+        boolean n = checkTileOpaque(0, 1),
+                s = checkTileOpaque(0, -1),
+                e = checkTileOpaque(1, 0),
+                w = checkTileOpaque(-1, 0),
+                ne = checkTileOpaque(1, 1),
+                sw = checkTileOpaque(-1, -1),
+                se = checkTileOpaque(1, -1),
+                nw = checkTileOpaque(-1, 1);
 
-        for(int i = 0; i < FIXTURES_SIZE; i++){
-            if(fixtures[i] != null){
-                body.destroyFixture(fixtures[i]);
+
+        if(!n || !s || !e || !w || !ne || !nw || !se || !sw) {
+            TileMap map = master.getTileMap();
+            float x1 = TileMap.TILE_SIZE * master.getTileX();
+            float y1 = TileMap.TILE_SIZE * master.getTileY();
+            float x2 = x1 + TileMap.TILE_SIZE;
+            float y2 = y1 + TileMap.TILE_SIZE;
+            float centreX = x1 + TileMap.TILE_SIZE / 2;
+            float centreY = y1 + TileMap.TILE_SIZE / 2;
+
+            FixtureDef fixtureDef = new FixtureDef();
+            EdgeShape edge = new EdgeShape();
+
+            fixtureDef.filter.categoryBits = FillterFlags.WALL;
+            fixtureDef.filter.maskBits = FillterFlags.CAMERA_POV;
+            fixtureDef.shape = edge;
+
+
+            if(n && s){
+                edge.set(centreX, y1, centreX, y2);
+                fixtures[POVNS] = map.getBody().createFixture(fixtureDef);
+                fixtures[POVNS].setUserData(master);
+            } else if(n && (!ne || !nw || !w || !e)){
+                edge.set(centreX, centreY, centreX, y2);
+                fixtures[POVN] = map.getBody().createFixture(fixtureDef);
+                fixtures[POVN].setUserData(master);
+            } else if(s && (!se || !sw || !w || !e)){
+                edge.set(centreX, y1, centreX, centreY);
+                fixtures[POVS] = map.getBody().createFixture(fixtureDef);
+                fixtures[POVS].setUserData(master);
+            }
+
+
+            if(e && w){
+                edge.set(x1, centreY, x2, centreY);
+                fixtures[POVEW] = map.getBody().createFixture(fixtureDef);
+                fixtures[POVEW].setUserData(master);
+            } else if(e && (!ne || !se || !n || !s)){
+                edge.set(centreX, centreY, x2, centreY);
+                fixtures[POVE] = map.getBody().createFixture(fixtureDef);
+                fixtures[POVE].setUserData(master);
+            } else if(w && (!nw || !sw || !n || !s)){
+                edge.set(x1, centreY, centreX, centreY);
+                fixtures[POVW] = map.getBody().createFixture(fixtureDef);
+                fixtures[POVW].setUserData(master);
+            }
+
+
+            edge.dispose();
+        }
+    }
+
+    @Override
+    public void init(GameObject parent) {
+        master = (Tile) parent;
+        if(!initialized){
+            initialized = true;
+
+            if(master.isSolid()){
+                initSolid();
+            }
+
+            if(master.isOpaque()){
+                initOpaque();
             }
         }
-        fixtures = null;
+    }
+
+    @Override
+    public void store() {
+        if(initialized){
+            initialized = false;
+
+            Body body = master.getTileMap().getBody();
+            for(int i = 0; i < FIXTURES_SIZE; i++) {
+                if (fixtures[i] != null) {
+                    body.destroyFixture(fixtures[i]);
+                    fixtures[i] = null;
+                }
+            }
+        }
     }
 
     @Override
     public void update(float delta) {
-
     }
 
     @Override
     public void beginCollision(Collision collision) {
-
     }
 
     @Override
     public void endCollision(Collision collision) {
-
     }
 }

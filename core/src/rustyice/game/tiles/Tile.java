@@ -19,8 +19,16 @@ public abstract class Tile implements GameObject, Collidable {
 
     private transient boolean initialized = false;
     private transient Sprite sprite;
+    private boolean solid, opaque;
     private PhysicsComponent tilePhysics;
     private int x, y;
+
+    public Tile(){}
+
+    public Tile(boolean solid, boolean opaque){
+        this.solid = solid;
+        this.opaque = opaque;
+    }
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
@@ -109,7 +117,13 @@ public abstract class Tile implements GameObject, Collidable {
         }
     }
 
-    public abstract boolean isConnected(Tile other);
+    public boolean isSolid(){
+        return solid;
+    }
+
+    public boolean isOpaque(){
+        return opaque;
+    }
 
     @Override
     public void beginCollision(Collision collision) {

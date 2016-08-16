@@ -22,7 +22,7 @@ public class ConeLight extends Actor implements LightContainer{
     private ConeLightComponent light;
 
     public ConeLight() {
-        light = new ConeLightComponent(this);
+        light = new ConeLightComponent();
         setPhysicsComponent(new PointPhysicsComponent());
         setSize(1, 1);
     }
@@ -44,7 +44,7 @@ public class ConeLight extends Actor implements LightContainer{
     @Override
     public void init() {
         super.init();
-        light.init();
+        light.init(this);
         light.setPosition(getX(), getY());
         light.setDirection(getRotation());
     }

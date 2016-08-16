@@ -24,9 +24,4 @@ public class FloorTile extends Tile {
     public void init() {
         super.init();
     }
-
-    @Override
-    public boolean isConnected(Tile other) {
-        return other instanceof FloorTile;
-    }
 }
