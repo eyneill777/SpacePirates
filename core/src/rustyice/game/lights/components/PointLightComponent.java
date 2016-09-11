@@ -11,20 +11,10 @@ import rustyice.game.Actor;
  * @author gabek
  */
 public class PointLightComponent extends LightComponent{
-    private GameObject parent;
-
-
-    public PointLightComponent(){
-    }
-
-    public PointLightComponent(GameObject parent){
-        super();
-        this.parent = parent;
-    }
 
     @Override
     protected Light buildLight(RayHandler rayHandler) {
-        return new PointLight(parent.getSection().getRayHandler(), getRayNum(getDistance(), LIGHT_RES),
+        return new PointLight(rayHandler, getRayNum(getDistance(), LIGHT_RES),
                 getColor(), getDistance(), getX(), getY());
     }
 

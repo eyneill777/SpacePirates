@@ -18,7 +18,7 @@ import rustyice.graphics.RenderFlags;
  * @author gabek
  */
 public class ConeLight extends Actor implements LightContainer{
-    private Sprite icon;
+    private transient Sprite icon;
     private ConeLightComponent light;
 
     public ConeLight() {

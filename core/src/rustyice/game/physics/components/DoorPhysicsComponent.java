@@ -1,5 +1,6 @@
 package rustyice.game.physics.components;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint;
@@ -10,6 +11,7 @@ import rustyice.game.physics.Collision;
 import rustyice.game.physics.FillterFlags;
 import rustyice.game.tiles.Tile;
 import rustyice.game.tiles.TileMap;
+import rustyice.graphics.RenderFlags;
 
 /**
  * @author gabek
@@ -17,9 +19,8 @@ import rustyice.game.tiles.TileMap;
 public class DoorPhysicsComponent implements PhysicsComponent{
     private transient boolean initialized = false;
     private transient Tile parent;
-    private transient Body sensorBody, doorLeftBody, doorRightBody;
-    private transient Fixture sensorFixture, doorLeftFixture, doorRightFixture, doorLeftInternal, doorRightInternal;
-    private transient PrismaticJoint jointLeft, jointRight;
+    private transient Body sensorBody, doorLeftBody;
+    private transient PrismaticJoint jointLeft;
     private float x;
     private float y;
 
@@ -62,61 +63,88 @@ public class DoorPhysicsComponent implements PhysicsComponent{
     public void init(GameObject parent) {
         if(!initialized){
             this.parent = (Tile) parent;
-            PolygonShape polyShape = new PolygonShape();
 
             BodyDef sensorBodyDef = new BodyDef();
             sensorBodyDef.type = BodyDef.BodyType.StaticBody;
+            sensorBodyDef.angle = MathUtils.degRad * 90;
             sensorBodyDef.position.set(parent.getX() + TileMap.TILE_SIZE/2, parent.getY() + TileMap.TILE_SIZE/2);
             sensorBody = parent.getSection().getWorld().createBody(sensorBodyDef);
 
             FixtureDef sensorFixtureDef = new FixtureDef();
             sensorFixtureDef.isSensor = true;
+            sensorFixtureDef.filter.categoryBits = FillterFlags.ACTIVATABLE;
+            sensorFixtureDef.filter.maskBits = FillterFlags.ACTIVATOR;
+
+            PolygonShape polyShape = new PolygonShape();
             polyShape.setAsBox(TileMap.TILE_SIZE/2, TileMap.TILE_SIZE/2);
             sensorFixtureDef.shape = polyShape;
-            sensorFixture = sensorBody.createFixture(sensorFixtureDef);
-
-
-            short doorCat = FillterFlags.LARGE;
-            short doorMask = FillterFlags.LARGE | FillterFlags.SMALL;
-
-            BodyDef doorLeftBodyDef = new BodyDef();
-            doorLeftBodyDef.type = BodyDef.BodyType.DynamicBody;
-            doorLeftBodyDef.position.set(parent.getX() + TileMap.TILE_SIZE/4, parent.getY() + TileMap.TILE_SIZE/2);
-            doorLeftBody = parent.getSection().getWorld().createBody(doorLeftBodyDef);
-
-            FixtureDef doorLeftFixtureDef = new FixtureDef();
-            polyShape.setAsBox(TileMap.TILE_SIZE/4, TileMap.TILE_SIZE/8);
-            doorLeftFixtureDef.shape = polyShape;
-            doorLeftFixtureDef.filter.maskBits = doorMask;
-            doorLeftFixtureDef.filter.categoryBits = doorCat;
-            doorLeftFixture = doorLeftBody.createFixture(doorLeftFixtureDef);
-
-
-            BodyDef doorRightBodyDef = new BodyDef();
-            doorRightBodyDef.type = BodyDef.BodyType.DynamicBody;
-            doorRightBodyDef.position.set(parent.getX() + TileMap.TILE_SIZE * (3/4f), parent.getY() + TileMap.TILE_SIZE/2);
-            doorRightBody = parent.getSection().getWorld().createBody(doorRightBodyDef);
-
-            FixtureDef doorRightFixtureDef = new FixtureDef();
-            polyShape.setAsBox(TileMap.TILE_SIZE/4, TileMap.TILE_SIZE/8);
-            doorRightFixtureDef.shape = polyShape;
-            doorRightFixtureDef.filter.maskBits = doorMask;
-            doorRightFixtureDef.filter.categoryBits = doorCat;
-            doorRightFixture = doorRightBody.createFixture(doorRightFixtureDef);
-
+            sensorBody.createFixture(sensorFixtureDef);
             polyShape.dispose();
 
+            doorLeftBody = createDoorPanelBody();
+            createDoorPanelOuter(doorLeftBody);
+            createDoorPanelInner(doorLeftBody);
 
-            PrismaticJointDef jointDef = new PrismaticJointDef();
-
-            jointDef.bodyA = sensorBody;
-            jointDef.bodyB = doorRightBody;
-            jointDef.enableLimit = true;
-            jointDef.upperTranslation = TileMap.TILE_SIZE/4;
-            jointLeft = (PrismaticJoint) parent.getSection().getWorld().createJoint(jointDef);
+            jointLeft = createHingJoint(sensorBody, doorLeftBody);
 
             initialized = true;
         }
+    }
+
+    private Body createDoorPanelBody(){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.angle = MathUtils.degRad * 90;
+        bodyDef.position.set(parent.getX() + TileMap.TILE_SIZE/2, parent.getY() + TileMap.TILE_SIZE/2);
+
+        return parent.getSection().getWorld().createBody(bodyDef);
+    }
+
+    private Fixture createDoorPanelOuter(Body parentBody){
+        PolygonShape polygonShape = new PolygonShape();
+        polygonShape.setAsBox(TileMap.TILE_SIZE/2, TileMap.TILE_SIZE/8);
+
+        FixtureDef fixtureDef = new FixtureDef();
+
+        fixtureDef.shape = polygonShape;
+        fixtureDef.filter.categoryBits = FillterFlags.LARGE | FillterFlags.OPAQUE;
+        fixtureDef.filter.maskBits = FillterFlags.LARGE | FillterFlags.SMALL | FillterFlags.LIGHT;
+        Fixture fixture = parentBody.createFixture(fixtureDef);
+        polygonShape.dispose();
+
+        return fixture;
+    }
+
+    private Fixture createDoorPanelInner(Body parentBody){
+        EdgeShape edgeShape = new EdgeShape();
+        edgeShape.set(new Vector2(-TileMap.TILE_SIZE/2, 0), new Vector2(TileMap.TILE_SIZE/2, 0));
+
+        FixtureDef fixtureDef = new FixtureDef();
+
+        fixtureDef.shape = edgeShape;
+        fixtureDef.filter.categoryBits = FillterFlags.WALL;
+        fixtureDef.filter.maskBits = FillterFlags.CAMERA_POV;
+        Fixture fixture = parentBody.createFixture(fixtureDef);
+        edgeShape.dispose();
+
+        return fixture;
+    }
+
+    public PrismaticJoint createHingJoint(Body base, Body door){
+        PrismaticJointDef jointDef = new PrismaticJointDef();
+
+        jointDef.bodyA = base;
+        jointDef.bodyB = door;
+
+        jointDef.enableLimit = true;
+        jointDef.upperTranslation = 0;
+        jointDef.lowerTranslation = -TileMap.TILE_SIZE;
+
+        jointDef.maxMotorForce = 1;
+        jointDef.enableMotor = true;
+        jointDef.motorSpeed = 1;
+        //jointDef.maxMotorForce = 1;
+        return (PrismaticJoint) parent.getSection().getWorld().createJoint(jointDef);
     }
 
     @Override
@@ -126,7 +154,6 @@ public class DoorPhysicsComponent implements PhysicsComponent{
 
             parent.getSection().getWorld().destroyBody(sensorBody);
             parent.getSection().getWorld().destroyBody(doorLeftBody);
-            parent.getSection().getWorld().destroyBody(doorRightBody);
             initialized = false;
         }
     }

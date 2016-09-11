@@ -5,6 +5,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -14,6 +15,7 @@ import com.esotericsoftware.minlog.Log;
 import com.kotcrab.vis.ui.VisUI;
 import rustyice.editor.EditorScreen;
 import rustyice.game.Game;
+import rustyice.graphics.GLErrorLogger;
 import rustyice.graphics.PerformanceTracker;
 import rustyice.resources.Resources;
 import rustyice.screens.GameDisplayScreen;
@@ -24,10 +26,6 @@ import rustyice.screens.menus.SettingsScreen;
 import rustyice.screens.effects.GuiAccessor;
 
 public class Core implements ApplicationListener {
-
-    //private ShaderProgram badProgram;
-    //private float time = 0;
-
     private Game game;
     public static SpriteBatch batch;
     private ScreenManager screenManager;
@@ -44,12 +42,13 @@ public class Core implements ApplicationListener {
     @Override
     public void create() {
         Log.set(Log.LEVEL_DEBUG);
-        //GL30Profiler.enable();
+        //GLProfiler.enable();
+
         Gdx.gl.glDepthMask(false);
         //GLProfiler.listener = new GLErrorLogger();
 
-        //VisUI.load(Gdx.files.internal("gui/uiskin.json"));
-        VisUI.load();
+        VisUI.load(Gdx.files.internal("gui/uiskin.json"));
+        //VisUI.load();
         Box2D.init();
 
         kryo = new Kryo();

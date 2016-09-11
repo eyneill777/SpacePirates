@@ -1,18 +1,13 @@
 package rustyice.graphics;
 
-import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 /**
  * @author gabek
  */
-public class PovShader {
-        static final public ShaderProgram createLightShader() {
-            String gamma = "";
-            if (RayHandler.getGammaCorrection())
-                gamma = "sqrt";
-
+class PovShader {
+        static ShaderProgram createLightShader() {
             final String vertexShader =
                     "attribute vec4 vertex_positions;\n" //
                             + "attribute vec4 quad_colors;\n" //
@@ -33,13 +28,13 @@ public class PovShader {
                     + "varying vec4 v_color;\n" //
                     + "void main()\n"//
                     + "{\n" //
-                    + "  gl_FragColor = vec4(0, 0, 0, 4);\n" //
+                    + "  gl_FragColor = vec4(0, 0, 0, 1);\n" //
                     + "}";
 
             ShaderProgram.pedantic = false;
             ShaderProgram lightShader = new ShaderProgram(vertexShader,
                     fragmentShader);
-            if (lightShader.isCompiled() == false) {
+            if (!lightShader.isCompiled()) {
                 Gdx.app.log("ERROR", lightShader.getLog());
             }
 

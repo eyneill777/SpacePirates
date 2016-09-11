@@ -21,7 +21,7 @@ public class PointLight extends Actor implements LightContainer {
     private PointLightComponent light;
     
     public PointLight() {
-        light = new PointLightComponent(this);
+        light = new PointLightComponent();
         setPhysicsComponent(new PointPhysicsComponent());
         setSize(1, 1);
     }
