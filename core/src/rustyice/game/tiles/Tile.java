@@ -7,8 +7,6 @@ import rustyice.game.Section;
 import rustyice.game.physics.Collidable;
 import rustyice.game.physics.Collision;
 import rustyice.game.physics.components.PhysicsComponent;
-import rustyice.game.physics.components.RectWallComponent;
-import rustyice.game.physics.components.SBPhysicsComponent;
 import rustyice.graphics.Camera;
 import rustyice.graphics.RenderFlags;
 import rustyice.resources.Resources;
@@ -22,12 +20,14 @@ public abstract class Tile implements GameObject, Collidable {
     private boolean solid, opaque;
     private PhysicsComponent tilePhysics;
     private int x, y;
+    private TileDirection direction;
 
     public Tile(){}
 
     public Tile(boolean solid, boolean opaque){
         this.solid = solid;
         this.opaque = opaque;
+        direction = TileDirection.EAST;
     }
 
     public void setSprite(Sprite sprite) {
@@ -64,6 +64,14 @@ public abstract class Tile implements GameObject, Collidable {
     @Override
     public float getY() {
         return y * TileMap.TILE_SIZE;
+    }
+
+    public TileDirection getDirection() {
+        return direction;
+    }
+
+    public void setDirection(TileDirection direction) {
+        this.direction = direction;
     }
 
     public TileMap getTileMap() {

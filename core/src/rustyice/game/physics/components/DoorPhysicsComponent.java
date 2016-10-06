@@ -21,43 +21,39 @@ public class DoorPhysicsComponent implements PhysicsComponent{
     private transient Tile parent;
     private transient Body sensorBody, doorLeftBody;
     private transient PrismaticJoint jointLeft;
-    private float x;
-    private float y;
+
+    private float percentOpen;
+    private float targetPercentOpen;
+    private float moterSpeed = 5;
+
+    private float clock = 0;
 
     @Override
     public float getX() {
-        return x;
+        return parent.getX();
     }
 
     @Override
     public float getY() {
-        return y;
+        return parent.getY();
     }
 
     @Override
     public float getRotation() {
-        return 0;
+        return parent.getDirection().getDegrees();
     }
 
     @Override
-    public void setX(float x) {
-
-    }
+    public void setX(float x) {}
 
     @Override
-    public void setY(float y) {
-
-    }
+    public void setY(float y) {}
 
     @Override
-    public void setRotation(float rotation) {
-
-    }
+    public void setPosition(float x, float y) {}
 
     @Override
-    public void setPosition(float x, float y) {
-
-    }
+    public void setRotation(float rotation) {}
 
     @Override
     public void init(GameObject parent) {
@@ -66,7 +62,7 @@ public class DoorPhysicsComponent implements PhysicsComponent{
 
             BodyDef sensorBodyDef = new BodyDef();
             sensorBodyDef.type = BodyDef.BodyType.StaticBody;
-            sensorBodyDef.angle = MathUtils.degRad * 90;
+            sensorBodyDef.angle = this.parent.getDirection().getRad();
             sensorBodyDef.position.set(parent.getX() + TileMap.TILE_SIZE/2, parent.getY() + TileMap.TILE_SIZE/2);
             sensorBody = parent.getSection().getWorld().createBody(sensorBodyDef);
 
@@ -94,7 +90,7 @@ public class DoorPhysicsComponent implements PhysicsComponent{
     private Body createDoorPanelBody(){
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.angle = MathUtils.degRad * 90;
+        bodyDef.angle = parent.getDirection().getRad();
         bodyDef.position.set(parent.getX() + TileMap.TILE_SIZE/2, parent.getY() + TileMap.TILE_SIZE/2);
 
         return parent.getSection().getWorld().createBody(bodyDef);
@@ -140,11 +136,23 @@ public class DoorPhysicsComponent implements PhysicsComponent{
         jointDef.upperTranslation = 0;
         jointDef.lowerTranslation = -TileMap.TILE_SIZE;
 
-        jointDef.maxMotorForce = 1;
+        jointDef.maxMotorForce = 5;
         jointDef.enableMotor = true;
-        jointDef.motorSpeed = 1;
+        //jointDef.motorSpeed = 1;
         //jointDef.maxMotorForce = 1;
         return (PrismaticJoint) parent.getSection().getWorld().createJoint(jointDef);
+    }
+
+    public float getPercentOpen() {
+        return percentOpen;
+    }
+
+    public float getTargetPercentOpen() {
+        return targetPercentOpen;
+    }
+
+    public void setTargetPercentOpen(float targetPercentOpen) {
+        this.targetPercentOpen = targetPercentOpen;
     }
 
     @Override
@@ -160,7 +168,20 @@ public class DoorPhysicsComponent implements PhysicsComponent{
 
     @Override
     public void update(float delta) {
+        percentOpen = jointLeft.getJointTranslation() / jointLeft.getLowerLimit();
+        if(Math.abs(percentOpen - targetPercentOpen) < 0.05f) {
+            jointLeft.setMotorSpeed(0);
+        } else{
+            if(percentOpen > targetPercentOpen){
+                jointLeft.setMotorSpeed(moterSpeed);
+            } else {
+                jointLeft.setMotorSpeed(-moterSpeed);
+            }
+        }
 
+
+        clock += delta;
+        targetPercentOpen = ((int)(clock) % 2 == 0)?0:1;
     }
 
     @Override

@@ -22,18 +22,12 @@ public class ColorWidgetBuilder extends PropertyWidgetBuilder{
         super(component, title);
     }
 
-    public static boolean isColorField(Method method){
-        return (method.getParameterTypes().length == 1 && method.getParameterTypes()[0].equals(Color.class)) ||
-                (method.getReturnType().equals(Color.class));
+    public static boolean isGetter(Method method){
+        return method.getReturnType().equals(Color.class);
     }
 
-    @Override
-    public void addMethod(Method method) {
-        if(method.getReturnType().equals(Color.class)){
-            setGetter(method);
-        } else {
-            setSetter(method);
-        }
+    public static boolean isSetter(Method method){
+        return method.getParameterTypes().length == 1 && method.getParameterTypes()[0].equals(Color.class);
     }
 
     @Override

@@ -17,18 +17,12 @@ public class FloatWidgetBuilder extends PropertyWidgetBuilder{
         super(component, title);
     }
 
-    public static boolean isFloatField(Method method){
-        return (method.getParameterTypes().length == 1 && method.getParameterTypes()[0].equals(float.class)) ||
-                (method.getReturnType().equals(float.class));
+    public static boolean isGetter(Method method){
+        return method.getReturnType().equals(float.class);
     }
 
-    @Override
-    public void addMethod(Method method) {
-        if(method.getReturnType().equals(float.class)){
-            setGetter(method);
-        } else {
-            setSetter(method);
-        }
+    public static boolean isSetter(Method method){
+        return method.getParameterTypes().length == 1 && method.getParameterTypes()[0].equals(float.class);
     }
 
     @Override

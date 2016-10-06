@@ -91,7 +91,7 @@ public class Core implements ApplicationListener {
         screenManager.render(batch, delta);
 
         tracker.update();
-        GLProfiler.reset();
+        //GLProfiler.reset();
     }
 
     @Override

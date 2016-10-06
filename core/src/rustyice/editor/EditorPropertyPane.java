@@ -92,15 +92,21 @@ public class EditorPropertyPane {
             if(propertyAnno != null){
                 String title = propertyAnno.title();
 
-                if(ColorWidgetBuilder.isColorField(method)){
-                    propertyMap.putIfAbsent(title, new ColorWidgetBuilder(comp, title));
-                } else if(FloatWidgetBuilder.isFloatField(method)){
-                    propertyMap.putIfAbsent(title, new FloatWidgetBuilder(comp, title));
-                } else if(BoolWidgetBuilder.isBoolField(method)){
-                    propertyMap.putIfAbsent(title, new BoolWidgetBuilder(comp, title));
+                if(ColorWidgetBuilder.isSetter(method)) {
+                    propertyMap.computeIfAbsent(title, s -> new ColorWidgetBuilder(comp, title)).setSetter(method);
+                } else if(ColorWidgetBuilder.isGetter(method)){
+                        propertyMap.computeIfAbsent(title, s -> new ColorWidgetBuilder(comp, title)).setGetter(method);
                 }
-
-                propertyMap.get(title).addMethod(method);
+                else if(FloatWidgetBuilder.isSetter(method)){
+                    propertyMap.computeIfAbsent(title, s -> new FloatWidgetBuilder(comp, title)).setSetter(method);
+                } else if(FloatWidgetBuilder.isGetter(method)) {
+                    propertyMap.computeIfAbsent(title, s -> new FloatWidgetBuilder(comp, title)).setGetter(method);
+                }
+                else if(BoolWidgetBuilder.isSetter(method)){
+                    propertyMap.computeIfAbsent(title, s -> new BoolWidgetBuilder(comp, title)).setSetter(method);
+                } else if(BoolWidgetBuilder.isGetter(method)){
+                    propertyMap.computeIfAbsent(title, s -> new BoolWidgetBuilder(comp, title)).setGetter(method);
+                }
             }
 
         }

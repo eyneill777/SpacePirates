@@ -32,10 +32,6 @@ public abstract class PropertyWidgetBuilder {
         return component;
     }
 
-    public void setComponent(Object component) {
-        this.component = component;
-    }
-
     public Method getGetter() {
         return getter;
     }
@@ -51,8 +47,6 @@ public abstract class PropertyWidgetBuilder {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    public abstract void addMethod(Method method);
 
     public abstract VisTable buildWidgets();
 }
