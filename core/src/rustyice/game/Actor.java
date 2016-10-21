@@ -2,11 +2,9 @@ package rustyice.game;
 
 import rustyice.editor.annotations.ComponentAccess;
 import rustyice.editor.annotations.ComponentProperty;
-import rustyice.game.GameObject;
-import rustyice.game.Section;
-import rustyice.game.physics.Collidable;
-import rustyice.game.physics.Collision;
-import rustyice.game.physics.components.PhysicsComponent;
+import rustyice.physics.Collidable;
+import rustyice.physics.Collision;
+import rustyice.physics.PhysicsComponent;
 import rustyice.resources.Resources;
 
 

@@ -1,12 +1,12 @@
-package rustyice.game.characters;
+package rustyice.game.actors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import rustyice.core.Core;
 import rustyice.game.Actor;
-import rustyice.game.characters.components.CharacterPhysics;
-import rustyice.game.physics.Collision;
+import rustyice.game.character.CharacterPhysics;
+import rustyice.physics.Collision;
 import rustyice.graphics.Camera;
 import rustyice.graphics.RenderFlags;
 import rustyice.input.Actions;

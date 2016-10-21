@@ -1,12 +1,10 @@
-package rustyice.game.lights.components;
+package rustyice.game.lights;
 
 import box2dLight.ConeLight;
 import box2dLight.Light;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.math.MathUtils;
 import rustyice.editor.annotations.ComponentProperty;
-import rustyice.game.GameObject;
-import rustyice.game.Actor;
 
 /**
  * @author gabek

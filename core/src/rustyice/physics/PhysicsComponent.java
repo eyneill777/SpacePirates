@@ -1,7 +1,7 @@
-package rustyice.game.physics.components;
+package rustyice.physics;
 
 import rustyice.game.GameObject;
-import rustyice.game.physics.Collision;
+import rustyice.physics.Collision;
 
 /**
  * Created by gabek

@@ -1,12 +1,12 @@
-package rustyice.game.physics.components;
+package rustyice.game.physics;
 
 import com.badlogic.gdx.physics.box2d.*;
 import rustyice.game.GameObject;
-import rustyice.game.Section;
-import rustyice.game.physics.Collision;
-import rustyice.game.physics.FillterFlags;
+import rustyice.physics.Collision;
+import rustyice.physics.FillterFlags;
 import rustyice.game.tiles.Tile;
 import rustyice.game.tiles.TileMap;
+import rustyice.physics.PhysicsComponent;
 
 /**
  * @author gabek

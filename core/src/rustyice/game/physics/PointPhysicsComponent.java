@@ -1,7 +1,8 @@
-package rustyice.game.physics.components;
+package rustyice.game.physics;
 
 import rustyice.game.GameObject;
-import rustyice.game.physics.Collision;
+import rustyice.physics.Collision;
+import rustyice.physics.PhysicsComponent;
 
 public class PointPhysicsComponent implements PhysicsComponent {
     private float x, y, rotation;

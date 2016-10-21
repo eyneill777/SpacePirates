@@ -7,10 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
-import rustyice.game.characters.Player;
+import rustyice.game.actors.Player;
 import rustyice.game.TestActor;
-import rustyice.game.lights.ConeLight;
-import rustyice.game.lights.PointLight;
+import rustyice.game.actors.ConeLight;
+import rustyice.game.actors.PointLight;
 import rustyice.game.tiles.*;
 
 /**

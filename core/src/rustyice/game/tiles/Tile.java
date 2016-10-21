@@ -3,11 +3,12 @@ package rustyice.game.tiles;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import rustyice.editor.annotations.ComponentProperty;
 import rustyice.game.GameObject;
 import rustyice.game.Section;
-import rustyice.game.physics.Collidable;
-import rustyice.game.physics.Collision;
-import rustyice.game.physics.components.PhysicsComponent;
+import rustyice.physics.Collidable;
+import rustyice.physics.Collision;
+import rustyice.physics.PhysicsComponent;
 import rustyice.graphics.Camera;
 import rustyice.graphics.RenderFlags;
 import rustyice.resources.Resources;
@@ -76,10 +77,14 @@ public abstract class Tile implements GameObject, Collidable {
 
     }
 
+    @Override
+    @ComponentProperty(title = "rotation")
     public float getRotation() {
         return rotation;
     }
 
+    @Override
+    @ComponentProperty(title = "rotation")
     public void setRotation(float rotation){
         this.rotation = MathUtils.round(rotation / 90) * 90;
     }

@@ -1,10 +1,10 @@
-package rustyice.game.characters.components;
+package rustyice.game.character;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import rustyice.game.GameObject;
 import rustyice.game.Actor;
-import rustyice.game.physics.FillterFlags;
-import rustyice.game.physics.components.SBPhysicsComponent;
+import rustyice.physics.FillterFlags;
+import rustyice.game.physics.SBPhysicsComponent;
 
 /**
  * @author gabek

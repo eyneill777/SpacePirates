@@ -1,4 +1,4 @@
-package rustyice.game.lights;
+package rustyice.game.actors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import rustyice.core.Core;
 import rustyice.editor.annotations.ComponentAccess;
 import rustyice.game.Actor;
-import rustyice.game.lights.components.ConeLightComponent;
-import rustyice.game.lights.components.LightComponent;
-import rustyice.game.lights.components.LightContainer;
-import rustyice.game.physics.components.PointPhysicsComponent;
+import rustyice.game.lights.ConeLightComponent;
+import rustyice.game.lights.LightComponent;
+import rustyice.game.lights.LightContainer;
+import rustyice.game.physics.PointPhysicsComponent;
 import rustyice.graphics.Camera;
 import rustyice.graphics.RenderFlags;
 

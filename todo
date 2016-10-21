@@ -1,0 +1,57 @@
+Triggers-
+    Area detection Triggers
+    Power Grid triggers
+    open doors/locks
+    toggle light
+    spawn monsters
+
+Level-
+    Tile Sprites
+    design basic level
+    basic procedural tunnels
+    breakable tiles
+
+Hud-
+    Display medical
+    Display Hunger
+
+Creates-
+    Open create
+    take items
+
+noise-
+    Partical effect
+    walking noisee
+    hearing stringth
+
+World Event timer-
+
+
+Screen effects-
+    Shake screen
+    Flicker lights
+
+Inventory-
+    Items gui
+    key cards
+    actionable Items
+
+Player-
+    walking animation
+    interact with environment
+
+Door
+    door animation
+    door locks/ triggers
+
+AI
+    Pathfinding
+    arousal level - sleep/wander/hunt/attack
+    Search for player algorithm
+    memory / comunication
+    notices things out of place
+
+Voice Acting
+    Audio logs
+
+Projectiles

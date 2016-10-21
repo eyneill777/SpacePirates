@@ -1,4 +1,4 @@
-package rustyice.game.physics;
+package rustyice.physics;
 
 public interface Collidable {
 

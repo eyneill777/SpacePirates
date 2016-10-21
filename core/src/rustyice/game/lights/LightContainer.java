@@ -1,4 +1,4 @@
-package rustyice.game.lights.components;
+package rustyice.game.lights;
 
 /**
  * @author gabek

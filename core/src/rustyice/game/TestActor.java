@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import rustyice.core.Core;
 import rustyice.editor.annotations.ComponentAccess;
-import rustyice.game.physics.FillterFlags;
-import rustyice.game.physics.components.SBPhysicsComponent;
+import rustyice.physics.FillterFlags;
+import rustyice.game.physics.SBPhysicsComponent;
 import rustyice.graphics.Camera;
 import rustyice.graphics.RenderFlags;
 

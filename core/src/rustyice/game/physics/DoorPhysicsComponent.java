@@ -1,4 +1,4 @@
-package rustyice.game.physics.components;
+package rustyice.game.physics;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -6,17 +6,16 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint;
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
 import rustyice.game.GameObject;
-import rustyice.game.Section;
-import rustyice.game.physics.Collision;
-import rustyice.game.physics.FillterFlags;
+import rustyice.physics.Collision;
+import rustyice.physics.FillterFlags;
 import rustyice.game.tiles.Tile;
 import rustyice.game.tiles.TileMap;
-import rustyice.graphics.RenderFlags;
+import rustyice.physics.PhysicsComponent;
 
 /**
  * @author gabek
  */
-public class DoorPhysicsComponent implements PhysicsComponent{
+public class DoorPhysicsComponent implements PhysicsComponent {
     private transient boolean initialized = false;
     private transient Tile parent;
     private transient Body sensorBody, doorLeftBody;

@@ -5,9 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import rustyice.editor.annotations.ComponentProperty;
-import rustyice.game.characters.Player;
-import rustyice.game.physics.Collision;
-import rustyice.game.physics.components.RectWallComponent;
+import rustyice.physics.Collision;
+import rustyice.game.physics.RectWallComponent;
 import rustyice.graphics.Camera;
 
 public class WallTile extends Tile {

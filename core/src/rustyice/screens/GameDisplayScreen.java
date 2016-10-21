@@ -13,7 +13,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import rustyice.game.Game;
-import rustyice.game.characters.Player;
+import rustyice.game.actors.Player;
 import rustyice.graphics.Camera;
 import rustyice.graphics.GameDisplay;
 import rustyice.graphics.RenderFlags;

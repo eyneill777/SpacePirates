@@ -2,7 +2,7 @@ package rustyice.game.tiles;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import rustyice.game.physics.components.RectWallComponent;
+import rustyice.game.physics.RectWallComponent;
 
 public class GlassTile extends Tile {
 

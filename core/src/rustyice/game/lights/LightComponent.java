@@ -1,11 +1,11 @@
-package rustyice.game.lights.components;
+package rustyice.game.lights;
 
 import box2dLight.Light;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.Color;
 import rustyice.editor.annotations.ComponentProperty;
 import rustyice.game.GameObject;
-import rustyice.game.physics.FillterFlags;
+import rustyice.physics.FillterFlags;
 
 public abstract class LightComponent {
     static final float LIGHT_RES = 1f;

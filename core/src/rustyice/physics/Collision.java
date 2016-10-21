@@ -1,6 +1,5 @@
-package rustyice.game.physics;
+package rustyice.physics;
 
-import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
 public class Collision {

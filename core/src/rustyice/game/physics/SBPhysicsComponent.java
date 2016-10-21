@@ -1,4 +1,4 @@
-package rustyice.game.physics.components;
+package rustyice.game.physics;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -7,7 +7,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import rustyice.editor.annotations.ComponentProperty;
 import rustyice.game.GameObject;
-import rustyice.game.physics.Collision;
+import rustyice.physics.Collision;
+import rustyice.physics.PhysicsComponent;
 
 /**
  * @author gabek Single body physics component
