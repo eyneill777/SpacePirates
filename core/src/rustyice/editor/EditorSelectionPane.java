@@ -129,7 +129,6 @@ class EditorSelectionPane {
             return (rustyice.game.Actor) actorClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
-            System.exit(-1);
             return null;
         }
     }
@@ -140,7 +139,6 @@ class EditorSelectionPane {
             return (Tile) tileClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e){
             e.printStackTrace();
-            System.exit(-1);
             return null;
         }
     }

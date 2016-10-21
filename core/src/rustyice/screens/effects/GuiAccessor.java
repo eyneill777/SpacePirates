@@ -24,6 +24,8 @@ public class GuiAccessor implements TweenAccessor<Actor> {
             case ALPHA:
                 target.getColor().a = newValues[0];
                 break;
+            default:
+                break;
         }
         assert false;
     }

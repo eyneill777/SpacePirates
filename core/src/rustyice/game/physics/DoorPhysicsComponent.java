@@ -16,6 +16,8 @@ import rustyice.physics.PhysicsComponent;
  * @author gabek
  */
 public class DoorPhysicsComponent implements PhysicsComponent {
+    private static final float SIZE_FACTOR = 1.1f;
+
     private transient boolean initialized = false;
     private transient Tile parent;
     private transient Body sensorBody, doorLeftBody;

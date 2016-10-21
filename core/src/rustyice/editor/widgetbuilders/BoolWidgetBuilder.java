@@ -36,7 +36,7 @@ public class BoolWidgetBuilder extends PropertyWidgetBuilder{
         selectBox.setItems(true, false);
 
         try {
-            selectBox.setSelected((boolean) getGetter().invoke(getComponent()));
+            selectBox.setSelected((Boolean) getGetter().invoke(getComponent()));
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
