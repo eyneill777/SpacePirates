@@ -20,7 +20,15 @@ public interface GameObject {
 
     float getX();
 
+    void setX(float x);
+
     float getY();
+
+    void setY(float y);
+
+    float getRotation();
+
+    void setRotation(float rotation);
 
     Section getSection();
 }

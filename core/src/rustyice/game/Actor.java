@@ -29,11 +29,13 @@ public abstract class Actor implements GameObject, Collidable {
         return physicsComponent.getY();
     }
 
+    @Override
     @ComponentProperty(title = "X")
     public void setX(float x) {
         physicsComponent.setX(x);
     }
 
+    @Override
     @ComponentProperty(title = "Y")
     public void setY(float y) {
         physicsComponent.setY(y);

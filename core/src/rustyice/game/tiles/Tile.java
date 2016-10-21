@@ -2,6 +2,7 @@ package rustyice.game.tiles;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import rustyice.game.GameObject;
 import rustyice.game.Section;
 import rustyice.game.physics.Collidable;
@@ -20,14 +21,13 @@ public abstract class Tile implements GameObject, Collidable {
     private boolean solid, opaque;
     private PhysicsComponent tilePhysics;
     private int x, y;
-    private TileDirection direction;
+    private float rotation;
 
     public Tile(){}
 
     public Tile(boolean solid, boolean opaque){
         this.solid = solid;
         this.opaque = opaque;
-        direction = TileDirection.EAST;
     }
 
     public void setSprite(Sprite sprite) {
@@ -66,12 +66,22 @@ public abstract class Tile implements GameObject, Collidable {
         return y * TileMap.TILE_SIZE;
     }
 
-    public TileDirection getDirection() {
-        return direction;
+    @Override
+    public void setX(float x){
+
     }
 
-    public void setDirection(TileDirection direction) {
-        this.direction = direction;
+    @Override
+    public void setY(float y){
+
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(float rotation){
+        this.rotation = MathUtils.round(rotation / 90) * 90;
     }
 
     public TileMap getTileMap() {

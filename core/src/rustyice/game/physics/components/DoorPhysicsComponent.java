@@ -40,7 +40,7 @@ public class DoorPhysicsComponent implements PhysicsComponent{
 
     @Override
     public float getRotation() {
-        return parent.getDirection().getDegrees();
+        return parent.getRotation();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class DoorPhysicsComponent implements PhysicsComponent{
 
             BodyDef sensorBodyDef = new BodyDef();
             sensorBodyDef.type = BodyDef.BodyType.StaticBody;
-            sensorBodyDef.angle = this.parent.getDirection().getRad();
+            sensorBodyDef.angle = MathUtils.degRad * getRotation();
             sensorBodyDef.position.set(parent.getX() + TileMap.TILE_SIZE/2, parent.getY() + TileMap.TILE_SIZE/2);
             sensorBody = parent.getSection().getWorld().createBody(sensorBodyDef);
 
@@ -90,7 +90,7 @@ public class DoorPhysicsComponent implements PhysicsComponent{
     private Body createDoorPanelBody(){
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.angle = parent.getDirection().getRad();
+        bodyDef.angle = MathUtils.degRad * getRotation();
         bodyDef.position.set(parent.getX() + TileMap.TILE_SIZE/2, parent.getY() + TileMap.TILE_SIZE/2);
 
         return parent.getSection().getWorld().createBody(bodyDef);
