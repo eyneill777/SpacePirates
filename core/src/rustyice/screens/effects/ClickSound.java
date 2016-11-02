@@ -5,6 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import rustyice.core.Core;
+import rustyice.core.GeneralSettings;
+import rustyice.resources.Resources;
 
 public class ClickSound extends ClickListener{
     private Sound effect;
@@ -12,7 +14,7 @@ public class ClickSound extends ClickListener{
     
     public static ClickSound getDefaultSound(){
         if(defaultSound == null){
-            defaultSound = new ClickSound(Core.resources.get("gui/sfx/click3.wav"));
+            defaultSound = new ClickSound(Resources.INSTANCE.get("gui/sfx/click3.wav"));
         }
         return defaultSound;
     }
@@ -28,6 +30,6 @@ public class ClickSound extends ClickListener{
     @Override
     public void clicked(InputEvent event, float x, float y) {
         super.clicked(event, x, y);
-        effect.play(Core.settings.getSoundVolume());
+        effect.play(GeneralSettings.INSTANCE.getSoundVolume());
     }
 }

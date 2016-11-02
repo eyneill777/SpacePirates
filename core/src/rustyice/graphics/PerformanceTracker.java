@@ -40,7 +40,7 @@ public class PerformanceTracker extends Widget {
     
     @Override
     public void draw(Batch batch, float alpha){
-        font.setColor(Color.RED);
+        font.setColor(Color.ORANGE);
         font.draw(batch, String.format("fps: %d", fps), getWidth() - 100, getHeight() - 20);
         
         if(glMoniter){

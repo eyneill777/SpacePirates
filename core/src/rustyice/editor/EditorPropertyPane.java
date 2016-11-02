@@ -90,7 +90,7 @@ public class EditorPropertyPane {
             ComponentProperty propertyAnno = getInheritedAnnotation(comp.getClass(), method, ComponentProperty.class);
 
             if(propertyAnno != null){
-                String title = propertyAnno.title();
+                String title = propertyAnno.value();
 
                 if(ColorWidgetBuilder.isSetter(method)) {
                     propertyMap.computeIfAbsent(title, s -> new ColorWidgetBuilder(comp, title)).setSetter(method);

@@ -3,19 +3,20 @@ package rustyice.editor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import rustyice.game.Game;
 import rustyice.game.Actor;
+import rustyice.game.Game;
 import rustyice.game.tiles.Tile;
-import rustyice.game.tiles.TileMap;
+import rustyice.game.tiles.TileConstsKt;
 import rustyice.graphics.Camera;
 import rustyice.graphics.GameDisplay;
-import rustyice.graphics.GraphicsUtils;
-import rustyice.graphics.RenderFlags;
+import rustyice.graphics.GraphicsUtilsKt;
+import rustyice.graphics.RenderFlagsKt;
 
 public class EditorGameView {
     private EditorSelectionPane selectionPane;
@@ -41,7 +42,7 @@ public class EditorGameView {
         camera = new Camera();
         camera.setWidth(20);
         camera.setHeight(20);
-        camera.enableFlag(RenderFlags.EDITOR);
+        camera.enableFlag(RenderFlagsKt.EDITOR);
 
         mouseDownPos = new Vector2();
         mouseDraggedPos = new Vector2();
@@ -52,13 +53,14 @@ public class EditorGameView {
         tileSelectEnd = new Vector2();
 
         display = new GameDisplay();
-        display.setTarget(game, camera);
+        display.setGame(game);
+        display.setCamera(camera);
 
         editorInput = new EditorInput();
         display.addListener(editorInput);
     }
 
-    public void render(SpriteBatch batch, float delta) {
+    public void render(Batch batch, float delta) {
         game.getCurrentSection().finishAddingActors();
 
         if (editorInput.moveUp) {
@@ -84,29 +86,29 @@ public class EditorGameView {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
-            camera.toggleFlag(RenderFlags.LIGHTING);
+            camera.toggleFlag(RenderFlagsKt.LIGHTING);
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
-            camera.toggleFlag(RenderFlags.POV);
+            camera.toggleFlag(RenderFlagsKt.POV);
         }
 
         display.render(batch, delta);
 
         if (selectionPane.isTileMode() && mouseDraging) {
-            display.getFBO().begin();
+            display.getFbo().begin();
             batch.begin();
 
             batch.setColor(Color.LIGHT_GRAY);
-            GraphicsUtils.drawRect(
-                    tileSelectStart.x * TileMap.TILE_SIZE,
-                    tileSelectStart.y  * TileMap.TILE_SIZE,
-                    (tileSelectEnd.x - tileSelectStart.x)  * TileMap.TILE_SIZE,
-                    (tileSelectEnd.y - tileSelectStart.y)  * TileMap.TILE_SIZE, 0.1f
+            GraphicsUtilsKt.drawRect(batch,
+                    tileSelectStart.x * TileConstsKt.TILE_SIZE,
+                    tileSelectStart.y  * TileConstsKt.TILE_SIZE,
+                    (tileSelectEnd.x - tileSelectStart.x)  * TileConstsKt.TILE_SIZE,
+                    (tileSelectEnd.y - tileSelectStart.y)  * TileConstsKt.TILE_SIZE, 0.1f
             );
 
             batch.end();
-            display.getFBO().end();
+            display.getFbo().end();
         }
     }
 
@@ -219,7 +221,7 @@ public class EditorGameView {
                     }
                 }
             } else {
-                Tile tile = game.getTiles().getTileAt(mouseDownPos.x, mouseDownPos.y);
+                Tile tile = game.getCurrentSection().getTiles().getTileAt(mouseDownPos.x, mouseDownPos.y);
                 if(tile != null){
                     propertyPane.setSelected(tile);
                 }
@@ -236,7 +238,7 @@ public class EditorGameView {
             if (selectionPane.hasSelectedTile() && mouseDraging) {
                 for (int i = (int) tileSelectStart.y; i < tileSelectEnd.y; i++) {
                     for (int j = (int) tileSelectStart.x; j < tileSelectEnd.x; j++) {
-                        game.getTiles().setTile(selectionPane.buildSelectedTile(), j, i);
+                        game.getCurrentSection().getTiles().setTile(selectionPane.buildSelectedTile(), j, i);
                     }
                 }
             }
@@ -277,11 +279,11 @@ public class EditorGameView {
         }
 
         private float tileFloor(float value){
-            return MathUtils.floor(value / TileMap.TILE_SIZE);
+            return MathUtils.floor(value / TileConstsKt.TILE_SIZE);
         }
 
         private float tileCeil(float value){
-            return MathUtils.ceil(value / TileMap.TILE_SIZE);
+            return MathUtils.ceil(value / TileConstsKt.TILE_SIZE);
         }
     }
 }

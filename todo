@@ -2,14 +2,14 @@ Triggers-
     Area detection Triggers
     Power Grid triggers
     open doors/locks
-    toggle light
+    toggle lightComponent
     spawn monsters
 
 Level-
     Tile Sprites
     design basic level
     basic procedural tunnels
-    breakable tiles
+    breakable tileMap
 
 Hud-
     Display medical

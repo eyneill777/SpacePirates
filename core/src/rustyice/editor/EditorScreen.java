@@ -1,6 +1,7 @@
 package rustyice.editor;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -43,10 +44,7 @@ public class EditorScreen extends Screen {
     public EditorScreen(Game game, Kryo kryo) {
         this.game = game;
         this.kryo = kryo;
-    }
 
-    @Override
-    public void load() {
         root = new VisTable();
         root.setFillParent(true);
 
@@ -101,7 +99,7 @@ public class EditorScreen extends Screen {
 
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
-                getManager().popScreen();
+                getScreenManager().popScreen();
             }
         });
 
@@ -159,18 +157,18 @@ public class EditorScreen extends Screen {
     }
 
     @Override
-    public void show(Stage stage) {
+    public void show() {
         // stage.addActor(root);
-        stage.addActor(root);
-        gameView.getDisplay().setSize(stage.getWidth(), stage.getHeight());
+        getStage().addActor(root);
+        gameView.getDisplay().setSize(getStage().getWidth(), getStage().getHeight());
 
 
         game.finishLoadingSection();
     }
 
     @Override
-    public void hide(Stage stage) {
-        stage.clear();
+    public void hide() {
+        getStage().clear();
         gameView.dispose();
     }
 
@@ -186,7 +184,7 @@ public class EditorScreen extends Screen {
     }
 
     @Override
-    public void render(SpriteBatch batch, float delta) {
+    public void render(Batch batch, float delta) {
         gameView.render(batch, delta);
     }
 }

@@ -8,7 +8,7 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import rustyice.game.actors.Player;
-import rustyice.game.TestActor;
+import rustyice.game.actors.TestActor;
 import rustyice.game.actors.ConeLight;
 import rustyice.game.actors.PointLight;
 import rustyice.game.tiles.*;
