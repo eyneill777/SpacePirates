@@ -2,7 +2,6 @@ package rustyice.game.physics
 
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef
@@ -12,7 +11,7 @@ import rustyice.graphics.Camera
 import rustyice.physics.*
 
 /**
- * @author gabek
+ * @author Gabriel Keith
  */
 class DoorPhysicsComponent: TilePhysicsComponent() {
     val SIZE_FACTOR = 1.1f
@@ -70,7 +69,6 @@ class DoorPhysicsComponent: TilePhysicsComponent() {
         this.doorLeftBody = doorLeftBody
 
         createDoorPanelOuter(doorLeftBody)
-        createDoorPanelInner(doorLeftBody)
 
         jointLeft = createHingJoint(world, sensorBody, doorLeftBody)
     }
@@ -90,25 +88,10 @@ class DoorPhysicsComponent: TilePhysicsComponent() {
         val fixtureDef = FixtureDef()
 
         fixtureDef.shape = polygonShape
-        fixtureDef.filter.categoryBits = (LARGE or OPAQUE).toShort()
-        fixtureDef.filter.maskBits = (LARGE or SMALL or LIGHT).toShort()
+        fixtureDef.filter.categoryBits = LARGE.toShort()
+        fixtureDef.filter.maskBits = (LARGE or SMALL).toShort()
         val fixture = parentBody.createFixture(fixtureDef)
         polygonShape.dispose()
-
-        return fixture
-    }
-
-    private fun createDoorPanelInner(parentBody: Body): Fixture{
-        val edgeShape = EdgeShape()
-        edgeShape.set(Vector2(-TILE_SIZE/2, 0f), Vector2(TILE_SIZE/2, 0f))
-
-        val fixtureDef = FixtureDef()
-
-        fixtureDef.shape = edgeShape
-        fixtureDef.filter.categoryBits = WALL.toShort()
-        fixtureDef.filter.maskBits = CAMERA_POV.toShort()
-        val fixture = parentBody.createFixture(fixtureDef)
-        edgeShape.dispose()
 
         return fixture
     }
@@ -165,7 +148,7 @@ class DoorPhysicsComponent: TilePhysicsComponent() {
         targetPercentOpen = if(clock.toInt() % 2 == 0) 0f else 1f
     }
 
-    override fun render(batch: Batch, camera: Camera, renderFlags: Int) {}
+    override fun render(batch: Batch, camera: Camera) {}
 
     override fun beginCollision(collision: Collision) {}
     override fun endCollision(collision: Collision) {}

@@ -7,11 +7,9 @@ import rustyengine.RustyEngine
 import rustyice.game.Actor
 import rustyice.game.character.CharacterPhysics
 import rustyice.graphics.Camera
-import rustyice.graphics.NORMAL
 import rustyice.input.Actions
 import rustyice.input.PlayerInput
 import rustyice.physics.Collision
-import rustyengine.resources.Resources
 
 class Player() : Actor() {
     private val characterPhysics: CharacterPhysics
@@ -64,16 +62,14 @@ class Player() : Actor() {
         count--
     }
 
-    override fun render(batch: Batch, camera: Camera, renderFlags: Int) {
-        if((renderFlags and NORMAL) == NORMAL){
-            val boxSprite = boxSprite
-            if(boxSprite != null){
-                boxSprite.x = x - width / 2
-                boxSprite.y = y - height / 2
-                boxSprite.rotation = rotation
+    override fun render(batch: Batch, camera: Camera) {
+        val boxSprite = boxSprite
+        if(boxSprite != null){
+            boxSprite.x = x - width / 2
+            boxSprite.y = y - height / 2
+            boxSprite.rotation = rotation
 
-                boxSprite.draw(batch)
-            }
+            boxSprite.draw(batch)
         }
     }
 

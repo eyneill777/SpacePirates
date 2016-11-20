@@ -1,6 +1,5 @@
 package rustyice.editor
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
@@ -11,7 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import rustyice.game.Actor
 import rustyice.game.Game
 import rustyice.game.tiles.TILE_SIZE
-import rustyice.graphics.*
+import rustyice.graphics.Camera
+import rustyice.graphics.GameDisplay
+import rustyice.graphics.drawRect
 
 class EditorGameView(val game: Game, val selectionPane: EditorSelectionPane, val propertyPane: EditorPropertyPane){
     val display: GameDisplay
@@ -32,7 +33,6 @@ class EditorGameView(val game: Game, val selectionPane: EditorSelectionPane, val
         camera = Camera()
         camera.width = 20f
         camera.height = 20f
-        camera.enableFlag(EDITOR)
 
         display = GameDisplay()
         display.game = game
@@ -67,15 +67,7 @@ class EditorGameView(val game: Game, val selectionPane: EditorSelectionPane, val
             camera.height *= (1 + 0.75f * delta)
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
-            camera.toggleFlag(LIGHTING)
-        }
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
-            camera.toggleFlag(POV)
-        }
-
-        display.render(batch, delta)
+        display.render(batch)
 
         if (selectionPane.isTileMode() && mouseDraging) {
             display.fbo!!.begin()

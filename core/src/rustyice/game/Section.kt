@@ -1,14 +1,11 @@
-package rustyice.game;
+package rustyice.game
 
-import box2dLight.RayHandler
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.physics.box2d.World
 import rustyice.game.tiles.TileMap
 import rustyice.graphics.Camera
 import java.util.*
 
-class Section: GameLifecycle {
+class Section: GameLifecycle() {
 
     val actors: ArrayList<Actor>
     val tiles: TileMap
@@ -20,7 +17,7 @@ class Section: GameLifecycle {
     @Transient
     private val removeList: ArrayList<Actor>
 
-    constructor() {
+    init {
         addList = ArrayList()
         removeList = ArrayList()
 
@@ -72,15 +69,15 @@ class Section: GameLifecycle {
         removeList.clear()
     }
 
-    override fun render(batch: Batch, camera: Camera, renderFlags: Int) {
-        tiles.render(batch, camera, renderFlags)
+    override fun render(batch: Batch, camera: Camera) {
+        tiles.render(batch, camera)
 
         for(actor in actors) {
             if(actor.x + actor.width / 2 > camera.x - camera.halfRenderSize
                     && actor.x - actor.width / 2 < camera.x + camera.halfRenderSize
                     && actor.y + actor.height / 2 > camera.y - camera.halfRenderSize
                     && actor.y - actor.height / 2 < camera.y + camera.halfRenderSize) {
-                actor.render(batch, camera, renderFlags)
+                actor.render(batch, camera)
             }
         }
     }

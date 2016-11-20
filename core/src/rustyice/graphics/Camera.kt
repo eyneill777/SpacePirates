@@ -19,7 +19,6 @@ class Camera {
     var width: Float = 0f
     var height: Float = 0f
     var halfRenderSize: Float  = 0f
-    var flags: Int  = 0
 
     var rotation: Float
         get() = _rotation
@@ -28,8 +27,6 @@ class Camera {
         }
 
     constructor() {
-        flags = NORMAL or LIGHTING
-
         target = null
         isTracking = false
         relativeRotation = false
@@ -38,26 +35,6 @@ class Camera {
     constructor(width: Float, height: Float): this(){
         this.width = width
         this.height = height
-    }
-
-    fun checkFlag(flag: Int): Boolean{
-        return (flags and flag) == flag
-    }
-
-    fun checkAnyFlag(flag: Int): Boolean{
-        return (flags and flag) != 0
-    }
-
-    fun enableFlag(flag: Int){
-        flags = flags or flag
-    }
-
-    fun disableFlag(flag: Int){
-        flags = flags and flag.inv()
-    }
-
-    fun toggleFlag(flag: Int){
-        flags = flags xor flag
     }
 
     fun setSize(width: Float, height: Float){

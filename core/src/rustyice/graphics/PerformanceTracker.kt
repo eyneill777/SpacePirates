@@ -8,22 +8,14 @@ import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 
-class PerformanceTracker : Widget {
+class PerformanceTracker(private val font: BitmapFont, private val glMoniter: Boolean) : Widget() {
 
-    private val font: BitmapFont
-    private val glMoniter: Boolean
     private var fps: Int = 0
     private var calls: Int = 0
     private var drawCalls: Int = 0
     private var switches: Int = 0
     private var bindings: Int = 0
     private var vertexCount: Int = 0
-
-    constructor(font: BitmapFont, glMoniter: Boolean): super() {
-        touchable = Touchable.disabled
-        this.font = font
-        this.glMoniter = glMoniter
-    }
 
     fun update() {
         fps = Gdx.graphics.framesPerSecond
@@ -47,5 +39,9 @@ class PerformanceTracker : Widget {
             font.draw(batch, String.format("bindings: %d", bindings), width - 100, height - 100)
             font.draw(batch, String.format("vertex: %d", vertexCount), width - 100, height - 120)
         }
+    }
+
+    init {
+        touchable = Touchable.disabled
     }
 }

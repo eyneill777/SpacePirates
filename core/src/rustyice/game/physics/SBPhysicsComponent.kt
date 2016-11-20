@@ -147,5 +147,5 @@ open class SBPhysicsComponent: PhysicsComponent() {
         return fix
     }
 
-    override fun render(batch: Batch, camera: Camera, renderFlags: Int) {}
+    override fun render(batch: Batch, camera: Camera) {}
 }

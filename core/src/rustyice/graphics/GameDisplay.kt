@@ -1,7 +1,5 @@
 package rustyice.graphics
 
-import box2dLight.PointLight
-import box2dLight.RayHandler
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.GL20
@@ -15,16 +13,10 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.scenes.scene2d.ui.Widget
 import com.esotericsoftware.minlog.Log
-import rustyengine.RustyEngine
 import rustyice.game.Game
-import rustyice.physics.*
-import rustyengine.resources.Resources
 
-class GameDisplay: Widget {
+class GameDisplay: Widget() {
     var isInitialized: Boolean = false
-
-    var povHandler: RayHandler? = null
-    var povCameraView: PointLight? = null
 
     var fbo: FrameBuffer? = null
     val ortho: OrthographicCamera
@@ -39,7 +31,7 @@ class GameDisplay: Widget {
 
     val mouseProj: Vector3
 
-    constructor(): super() {
+    init {
         ortho = OrthographicCamera()
         mouseProj = Vector3()
     }
@@ -61,33 +53,10 @@ class GameDisplay: Widget {
     private fun initFBO(width: Int, height: Int){
         val game = game!!
         val fbo: FrameBuffer
-        var povHandler = povHandler
 
         fbo = FrameBuffer(Format.RGBA8888, width, height, false)
         this.fbo = fbo
         fbo.colorBufferTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest)
-
-        game.lightingHandler.resizeFBO(width / 4, height / 4)
-        if(povHandler == null){
-            povHandler = RayHandler(game.world, width / 4, height / 4)
-            povHandler.lightMapTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest)
-            this.povHandler = povHandler
-
-            povHandler.setLightShader(RustyEngine.resorces.povShader)
-            povHandler.setBlur(false)
-            //povHandler.setShadows(false);
-
-            povHandler.setAmbientLight(0f, 0f, 0f, 0f)
-
-            val povCameraView = PointLight(povHandler, 200)
-            this.povCameraView = povCameraView
-            povCameraView.distance = 10f
-            povCameraView.isSoft = false
-            povCameraView.setContactFilter(CAMERA_POV.toShort(), 0, WALL.toShort())
-        } else {
-            povHandler.resizeFBO(width / 4, height / 4)
-            povHandler.lightMapTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest)
-        }
     }
 
     private fun resize() {
@@ -125,18 +94,13 @@ class GameDisplay: Widget {
         }
     }
 
-    fun render(batch: Batch, delta: Float) {
+    fun render(batch: Batch) {
         val camera = camera!!
         val game = game!!
-
-        val lighting = camera.checkFlag(LIGHTING)
-        val pov = camera.checkFlag(POV)
-        val postLighting = camera.checkAnyFlag(POST_LIGHT_FLAGS)
 
         if (!isInitialized) {
             init()
         }
-        val povCameraView = povCameraView!!
         val fbo = fbo!!
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.B)){
@@ -149,30 +113,7 @@ class GameDisplay: Widget {
         }
 
         updateProjection()
-        if (lighting) {
-            //game.getLightingHandler().setLightMapRendering(false);
-            game.lightingHandler.setAmbientLight(0f, 0f, 0f, 0.01f)
-            //game.getLightingHandler().setShadows(true);
-            //game.getLightingHandler().setBlur(true);
-            game.lightingHandler.setCombinedMatrix(ortho)
-            game.lightingHandler.update()
-            game.lightingHandler.prepareRender()
-            Gdx.gl20.glDisable(GL20.GL_BLEND)
-        }
 
-        val povHandler = povHandler
-        if (pov && povHandler != null){
-            if(povCameraView.x != camera.x || povCameraView.y != camera.y){
-                povCameraView.setPosition(camera.x, camera.y)
-            }
-
-            povHandler.setCombinedMatrix(ortho)
-            povHandler.update()
-            povHandler.prepareRender()
-            Gdx.gl20.glDisable(GL20.GL_BLEND)
-        }
-        
-        
         fbo.begin()
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
@@ -181,24 +122,8 @@ class GameDisplay: Widget {
         batch.transformMatrix = ortho.view
 
         batch.begin()
-        game.render(batch, camera, camera.flags and POST_LIGHT_FLAGS.inv())
+        game.render(batch, camera)
         batch.end()
-
-        if (lighting) {
-            Gdx.gl20.glEnable(GL20.GL_BLEND)
-            game.lightingHandler.renderOnly()
-        }
-
-        if (pov && povHandler != null){
-            Gdx.gl20.glEnable(GL20.GL_BLEND)
-            povHandler.renderOnly()
-        }
-
-        if(postLighting){
-            batch.begin()
-            game.render(batch, camera, camera.flags and POST_LIGHT_FLAGS)
-            batch.end()
-        }
 
         debugRenderer?.render(game.world, ortho.combined)
 
@@ -224,8 +149,6 @@ class GameDisplay: Widget {
     fun dispose() {
         if (isInitialized) {
             val fbo = fbo!!
-            val povHandler = povHandler!!
-
 
             fbo.dispose()
             //lightSharder.dispose();
@@ -235,8 +158,6 @@ class GameDisplay: Widget {
             //lightSharder = null;
             //lightMesh = null;
             isInitialized = false
-            povHandler.dispose()
-            this.povHandler = null
 
             debugRenderer?.dispose()
             debugRenderer = null

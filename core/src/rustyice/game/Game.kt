@@ -1,25 +1,19 @@
 package rustyice.game
 
-import box2dLight.RayHandler
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import rustyice.graphics.Camera
 import rustyice.input.PlayerInput
 import rustyice.physics.Collidable
 import rustyice.physics.Collision
-import rustyengine.resources.Resources
 import java.util.*
 
 class Game: ContactListener {
     private val UPDATE_RATE = 1/60f
 
-    val lightingHandler: RayHandler
-
     val playerInputs: MutableList<PlayerInput>
     val cameras: MutableList<Camera>
-    val povHandlers: MutableList<RayHandler>
 
     val world: World
 
@@ -32,14 +26,12 @@ class Game: ContactListener {
     private val collisions: ArrayList<Collision>
     private var leftOverTime: Float = 0f
 
-    constructor() {
+    init {
         world = World(Vector2.Zero, true)
         world.setContactListener(this)
 
-        lightingHandler = RayHandler(world)
         playerInputs = ArrayList()
         cameras = ArrayList()
-        povHandlers = ArrayList()
 
         sectionToLoad = Section()
 
@@ -93,15 +85,14 @@ class Game: ContactListener {
         }
     }
 
-    fun render(batch: Batch, camera: Camera, renderFlags: Int) {
-        currentSection?.render(batch, camera, renderFlags)
+    fun render(batch: Batch, camera: Camera) {
+        currentSection?.render(batch, camera)
     }
 
     fun dispose() {
         currentSection?.store()
 
         world.dispose()
-        lightingHandler.dispose()
     }
 
     fun resolveCollidable(fixture: Fixture): Collidable? {

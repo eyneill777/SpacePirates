@@ -27,5 +27,5 @@ abstract class GameLifecycle{
     }
 
     abstract fun update(delta: Float)
-    abstract fun render(batch: Batch, camera: Camera, renderFlags: Int)
+    abstract fun render(batch: Batch, camera: Camera)
 }

@@ -14,8 +14,6 @@ class Resources{
     lateinit var box: TextureRegion private set
     lateinit var circle: TextureRegion private set
 
-    lateinit var povShader: ShaderProgram private set
-
     val progress: Float get() = assetManager.progress
 
     fun init() {
@@ -36,7 +34,6 @@ class Resources{
 
     fun startLoading(){
         load("art.atlas", TextureAtlas::class)
-        load("shader/pov", ShaderProgram::class)
         load("gui/sfx/click3.wav", Sound::class)
     }
     
@@ -46,8 +43,6 @@ class Resources{
 
         box = gameArt.findRegion("rect")
         circle = gameArt.findRegion("circle")
-
-        povShader = get("shader/pov")
     }
 
     fun dispose() {

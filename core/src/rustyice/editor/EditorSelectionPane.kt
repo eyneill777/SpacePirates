@@ -7,9 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.kotcrab.vis.ui.widget.VisScrollPane
 import com.kotcrab.vis.ui.widget.VisTable
 import com.kotcrab.vis.ui.widget.VisTextButton
-import rustyice.game.actors.ConeLight
 import rustyice.game.actors.Player
-import rustyice.game.actors.PointLight
 import rustyice.game.actors.TestActor
 import rustyice.game.tiles.*
 import kotlin.reflect.KClass
@@ -72,11 +70,6 @@ class EditorSelectionPane {
     private fun buildActorTree(){
         actorTree.addLeaf("Player", Player::class)
         actorTree.addLeaf("Test Object", TestActor::class)
-
-        actorTree.pushBranch("Lights")
-        actorTree.addLeaf("Point Light", PointLight::class)
-        actorTree.addLeaf("Cone Light", ConeLight::class)
-        actorTree.popBranch()
     }
 
     private fun buildTileTree(){

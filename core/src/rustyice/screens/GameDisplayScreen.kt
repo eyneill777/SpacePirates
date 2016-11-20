@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.github.salomonbrys.kodein.instance
 import com.kotcrab.vis.ui.widget.VisTable
@@ -16,7 +15,6 @@ import rustyengine.RustyEngine
 import rustyice.game.Game
 import rustyice.graphics.Camera
 import rustyice.graphics.GameDisplay
-import rustyice.graphics.POV
 import rustyice.input.Actions
 import rustyice.input.PlayerInput
 
@@ -39,7 +37,7 @@ class GameDisplayScreen() : Screen() {
         if (!paused) {
             game.update(delta)
             camera.update(delta)
-            display.render(batch, delta)
+            display.render(batch)
         }
     }
 
@@ -83,7 +81,6 @@ class GameDisplayScreen() : Screen() {
     init {
         display = GameDisplay()
         camera = Camera(12f, 12f)
-        camera.enableFlag(POV)
         display.game = game
         display.camera = camera
         pauseWindow = VisWindow("Pause")

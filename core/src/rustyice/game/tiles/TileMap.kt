@@ -124,7 +124,7 @@ class TileMap: GameLifecycle() {
                        (y / TILE_SIZE - if(y<0) 1 else 0).toInt())
     }
 
-    override fun render(batch: Batch, camera: Camera, renderFlags: Int) {
+    override fun render(batch: Batch, camera: Camera) {
         val startX: Int = ((camera.x - camera.halfRenderSize) / TILE_SIZE).toInt() - 1
         val startY: Int = ((camera.y - camera.halfRenderSize) / TILE_SIZE).toInt() - 1
         val endX: Int = ((camera.x + camera.halfRenderSize) / TILE_SIZE).toInt() + 1
@@ -132,7 +132,7 @@ class TileMap: GameLifecycle() {
 
         for (y in startY .. endY) {
             for (x in startX .. endX) {
-                getTile(x, y)?.render(batch, camera, renderFlags)
+                getTile(x, y)?.render(batch, camera)
             }
         }
 

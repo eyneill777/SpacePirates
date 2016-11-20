@@ -15,17 +15,11 @@ import rustyice.physics.*
  * @author gabek
  */
 class RectWallComponent: TilePhysicsComponent() {
-    private val FIXTURES_SIZE = 10
+    private val FIXTURES_SIZE = 4
     private val N = 0
     private val S = 1
     private val E = 2
     private val W = 3
-    private val POVN = 4
-    private val POVS = 5
-    private val POVE = 6
-    private val POVW = 7
-    private val POVNS = 8
-    private val POVEW = 9
 
     @Transient private val fixtures = Array<Fixture?>(FIXTURES_SIZE, {null})
 
@@ -38,18 +32,13 @@ class RectWallComponent: TilePhysicsComponent() {
         return other != null && other.isSolid && (!parent.isOpaque || other.isOpaque)
     }
 
-    private fun checkTileOpaque(parent: Tile, tileMap: TileMap, rx: Int, ry: Int): Boolean{
-        val other = tileMap.getTile(parent.tileX + rx, parent.tileY + ry)
-        return other != null && other.isOpaque
-    }
-
     private fun initSolid(parent: Tile, tileMap: TileMap){
         val body = tileMap.body
 
         if(body != null) {
             val n = checkTileSolid(parent, tileMap, 0, 1)
-            val s = checkTileSolid(parent, tileMap,0, -1)
-            val e = checkTileSolid(parent, tileMap,1, 0)
+            val s = checkTileSolid(parent, tileMap, 0,-1)
+            val e = checkTileSolid(parent, tileMap, 1, 0)
             val w = checkTileSolid(parent, tileMap,-1, 0)
 
             if (!n || !s || !e || !w) {
@@ -58,12 +47,6 @@ class RectWallComponent: TilePhysicsComponent() {
                 fixtureDef.shape = edge
                 fixtureDef.filter.categoryBits = WALL.toShort()
                 fixtureDef.filter.maskBits = (LARGE or SMALL).toShort()
-
-
-                if (parent.isOpaque) {
-                    fixtureDef.filter.categoryBits = (fixtureDef.filter.categoryBits.toInt() or OPAQUE).toShort()
-                    fixtureDef.filter.maskBits = (fixtureDef.filter.maskBits.toInt() or LIGHT).toShort()
-                }
 
                 val x1 = TILE_SIZE * parent.tileX
                 val y1 = TILE_SIZE * parent.tileY
@@ -127,63 +110,6 @@ class RectWallComponent: TilePhysicsComponent() {
         }
     }
 
-    private fun initOpaque(parent: Tile, tileMap: TileMap){
-        val body = tileMap.body
-
-        if(body != null) {
-            val n = checkTileOpaque(parent, tileMap, 0, 1)
-            val s = checkTileOpaque(parent, tileMap, 0, -1)
-            val e = checkTileOpaque(parent, tileMap, 1, 0)
-            val w = checkTileOpaque(parent, tileMap, -1, 0)
-            val ne = checkTileOpaque(parent, tileMap, 1, 1)
-            val sw = checkTileOpaque(parent, tileMap, -1, -1)
-            val se = checkTileOpaque(parent, tileMap, 1, -1)
-            val nw = checkTileOpaque(parent, tileMap, -1, 1)
-
-
-            if (!n || !s || !e || !w || !ne || !nw || !se || !sw) {
-                val x1 = TILE_SIZE * parent.tileX
-                val y1 = TILE_SIZE * parent.tileY
-                val x2 = x1 + TILE_SIZE
-                val y2 = y1 + TILE_SIZE
-                val centreX = x1 + TILE_SIZE / 2
-                val centreY = y1 + TILE_SIZE / 2
-
-                val fixtureDef = FixtureDef()
-                val edge = EdgeShape()
-
-                fixtureDef.filter.categoryBits = WALL.toShort()
-                fixtureDef.filter.maskBits = CAMERA_POV.toShort()
-                fixtureDef.shape = edge
-
-                if (n && s) {
-                    edge.set(centreX, y1, centreX, y2)
-                    fixtures[POVNS] = buildFix(body, fixtureDef, parent)
-                } else if (n && (!ne || !nw || !w || !e)) {
-                    edge.set(centreX, centreY, centreX, y2)
-                    fixtures[POVN] = buildFix(body, fixtureDef, parent)
-                } else if (s && (!se || !sw || !w || !e)) {
-                    edge.set(centreX, y1, centreX, centreY)
-                    fixtures[POVS] = buildFix(body, fixtureDef, parent)
-                }
-
-
-                if (e && w) {
-                    edge.set(x1, centreY, x2, centreY)
-                    fixtures[POVEW] = buildFix(body, fixtureDef, parent)
-                } else if (e && (!ne || !se || !n || !s)) {
-                    edge.set(centreX, centreY, x2, centreY)
-                    fixtures[POVE] = buildFix(body, fixtureDef, parent)
-                } else if (w && (!nw || !sw || !n || !s)) {
-                    edge.set(x1, centreY, centreX, centreY)
-                    fixtures[POVW] = buildFix(body, fixtureDef, parent)
-                }
-
-                edge.dispose()
-            }
-        }
-    }
-
     private fun buildFix(body: Body, def: FixtureDef, master: Tile): Fixture{
         val newFix = body.createFixture(def)
         newFix.userData = master
@@ -199,10 +125,6 @@ class RectWallComponent: TilePhysicsComponent() {
 
         if(parentTile.isSolid){
             initSolid(parentTile, tileMap)
-        }
-
-        if(parentTile.isOpaque){
-            initOpaque(parentTile, tileMap)
         }
     }
 
@@ -224,7 +146,7 @@ class RectWallComponent: TilePhysicsComponent() {
 
     override fun update(delta: Float) { }
 
-    override fun render(batch: Batch, camera: Camera, renderFlags: Int) {}
+    override fun render(batch: Batch, camera: Camera) {}
 
     override fun beginCollision(collision: Collision) { }
 

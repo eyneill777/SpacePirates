@@ -7,12 +7,8 @@ import rustyengine.RustyEngine
 import rustyice.game.Actor
 import rustyice.game.physics.SBPhysicsComponent
 import rustyice.graphics.Camera
-import rustyice.graphics.NORMAL
 import rustyice.physics.LARGE
-import rustyice.physics.LIGHT
-import rustyice.physics.OPAQUE
 import rustyice.physics.WALL
-import rustyengine.resources.Resources
 
 /**
  * @author gabek
@@ -26,15 +22,13 @@ class TestActor() : Actor() {
         super.update(delta)
     }
 
-    override fun render(batch: Batch, camera: Camera, renderFlags: Int) {
-        if((renderFlags and NORMAL) == NORMAL){
-            val testSprite = testSprite
-            if(testSprite != null){
-                testSprite.x = x - width / 2
-                testSprite.y = y - height / 2
-                testSprite.rotation = rotation
-                testSprite.draw(batch)
-            }
+    override fun render(batch: Batch, camera: Camera) {
+        val testSprite = testSprite
+        if(testSprite != null){
+            testSprite.x = x - width / 2
+            testSprite.y = y - height / 2
+            testSprite.rotation = rotation
+            testSprite.draw(batch)
         }
     }
 
@@ -43,10 +37,9 @@ class TestActor() : Actor() {
 
         val fixtureDef = FixtureDef()
         fixtureDef.density = 1f
-        fixtureDef.filter.categoryBits = (LARGE or OPAQUE).toShort()
+        fixtureDef.filter.categoryBits = LARGE.toShort()
         fixtureDef.filter.maskBits = (LARGE or
-                                      WALL or
-                                      LIGHT).toShort()
+                                      WALL).toShort()
         sbPhysicsComponent.addRectangle(width, height, fixtureDef)
 
 
