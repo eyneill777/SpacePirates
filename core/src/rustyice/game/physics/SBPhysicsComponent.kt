@@ -19,9 +19,10 @@ open class SBPhysicsComponent: PhysicsComponent() {
         private set
 
     var bodyType = BodyType.DynamicBody
+
+    @ComponentProperty
     var flying = false
-        @ComponentProperty("Flying") get
-        @ComponentProperty("Flying") set(value) {
+        set(value) {
             field = value
             body?.let{ it.linearDamping = if(flying) 0f  else it.mass * groundFriction}
         }

@@ -1,14 +1,12 @@
 buildscript {
-    ext.kotlin_version = "1.0.4"
-
-
+    ext.kotlinVersion = "1.0.5"
 
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
 
@@ -21,12 +19,14 @@ allprojects {
         appName = "RustyIce"
         gdxVersion = '1.9.4'
         box2DLightsVersion = '1.5-SNAPSHOT'
-        ashleyVersion = '1.7.3'
         aiVersion = '1.8.0'
         kryoVersion = '4.0.0'
         visuiVersion = '1.2.4'
         visuslVersion = '0.2.1'
         ktxVersion = '1.9.4-b2'
+        lmlVersion = '1.8'
+        kodeinVersion = '3.1.0'
+        artemisVersion = '2.0.0'
     }
 
     repositories {
@@ -37,7 +37,6 @@ allprojects {
 }
 
 project(":desktop") {
-    apply plugin: "java"
     apply plugin: "kotlin"
 
     dependencies {
@@ -53,25 +52,34 @@ project(":desktop") {
 }
 
 project(":core") {
-    apply plugin: "java"
     apply plugin: "kotlin"
 
     dependencies {
-        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-        compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-        compile "com.github.salomonbrys.kodein:kodein:3.1.0"
+        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+
+        compile "com.github.salomonbrys.kodein:kodein:$kodeinVersion"
+        compile "com.github.salomonbrys.kodein:kodein-conf:$kodeinVersion"
+
+
         compile "com.github.czyzby:ktx-vis:$ktxVersion"
         compile "com.github.czyzby:ktx-actors:$ktxVersion"
+        //compile "com.github.czyzby:gdx-lml-vis:$lmlVersion.$gdxVersion"
 
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+
         compile "com.esotericsoftware:kryo:$kryoVersion"
+        compile "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
+        compile "net.onedaybeard.artemis:artemis-odb-serializer-kryo:$artemisVersion"
+
         compile "com.kotcrab.vis:vis-ui:$visuiVersion"
+
         compile "com.github.czyzby:noise4j:0.1.0"
-        compile fileTree(dir: 'libs', include: '*.jar')
         //compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     }
 }

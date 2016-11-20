@@ -1,21 +1,12 @@
 package rustyice.screens.menus
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.kotcrab.vis.ui.widget.VisTable
-import com.kotcrab.vis.ui.widget.VisTextButton
-import ktx.actors.onChange
 import ktx.actors.onClick
-import ktx.vis.KButton
-import ktx.vis.KVisTable
 import ktx.vis.KVisTextButton
 import ktx.vis.table
 import rustyice.screens.Screen
-import rustyice.screens.effects.ClickSound
-import rustyice.screens.effects.GuiEffects
-import rustyice.screens.util.ButtonPressed
 
 /**
  * The menu that greets the player when they start the program.
@@ -23,7 +14,7 @@ import rustyice.screens.util.ButtonPressed
  * @author gabek
  * 
  */
-class MainMenu: Screen {
+class MainMenu() : Screen() {
 
     /**
      * width of the buttons in the central table.
@@ -34,7 +25,17 @@ class MainMenu: Screen {
     
     private val root: VisTable
 
-    constructor(){
+    override fun show() {
+        stage.addActor(root)
+    }
+
+    override fun hide() {
+        //stage.getActors().removeValue(root, true);
+
+        stage.actors.removeValue(root, true)
+    }
+
+    init {
         root = table {
             setFillParent(true)
             textButton("New Game"){
@@ -68,31 +69,4 @@ class MainMenu: Screen {
             }.pad(PAD).prefWidth(BUTT_WIDTH)
         }
     }
-
-    override fun render(batch: Batch, delta: Float) {
-        //batch.setShader(badBackground);
-        //batch.begin();
-
-        //batch.draw(getResources().box, 0, 0, 400, 400);
-        
-        //batch.end();
-        //batch.setShader(null);
-    }
-
-    override fun resize(width: Int, height: Int) {}
-
-    override fun show() {
-        stage.addActor(root)
-        GuiEffects.fadeIn(root, FADE_DURATION).start(tweenManager)
-    }
-
-    override fun hide() {
-        //stage.getActors().removeValue(root, true);
-        
-        GuiEffects.fadeOut(root, FADE_DURATION, {
-            stage.actors.removeValue(root, true)
-        }).start(tweenManager)
-    }
-
-    override fun dispose(){}
 }

@@ -3,6 +3,7 @@ package rustyice.game.actors
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.physics.box2d.FixtureDef
+import rustyengine.RustyEngine
 import rustyice.game.Actor
 import rustyice.game.physics.SBPhysicsComponent
 import rustyice.graphics.Camera
@@ -11,23 +12,15 @@ import rustyice.physics.LARGE
 import rustyice.physics.LIGHT
 import rustyice.physics.OPAQUE
 import rustyice.physics.WALL
-import rustyice.resources.Resources
+import rustyengine.resources.Resources
 
 /**
  * @author gabek
  */
-class TestActor : Actor {
+class TestActor() : Actor() {
     @Transient private var testSprite: Sprite? = null
 
     val sbPhysicsComponent: SBPhysicsComponent
-
-    constructor(): super(){
-        sbPhysicsComponent = SBPhysicsComponent()
-        physicsComponent = sbPhysicsComponent
-
-        width = 1.9f
-        height = 1.9f
-    }
 
     override fun update(delta: Float) {
         super.update(delta)
@@ -57,10 +50,17 @@ class TestActor : Actor {
         sbPhysicsComponent.addRectangle(width, height, fixtureDef)
 
 
-        val testSprite = Sprite(Resources.box)
+        val testSprite = Sprite(RustyEngine.resorces.box)
         this.testSprite = testSprite
 
         testSprite.setSize(width, height)
         testSprite.setOrigin(width/2, height/2)
+    }
+
+    init {
+        sbPhysicsComponent = SBPhysicsComponent()
+        physicsComponent = sbPhysicsComponent
+        width = 1.9f
+        height = 1.9f
     }
 }

@@ -3,21 +3,22 @@ package rustyice.game.actors
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.Sprite
+import rustyengine.RustyEngine
 import rustyice.editor.annotations.ComponentAccess
 import rustyice.game.Actor
 import rustyice.game.lights.ConeLightComponent
 import rustyice.game.lights.LightComponent
 import rustyice.graphics.Camera
 import rustyice.graphics.EDITOR
-import rustyice.resources.Resources
+import rustyengine.resources.Resources
 
 /**
  * @author gabek
  */
-class ConeLight: Actor, LightComponent.LightContainer {
+class ConeLight() : Actor(), LightComponent.LightContainer {
     @Transient private var icon: Sprite? = null
+    @ComponentAccess
     override val lightComponent = ConeLightComponent()
-        @ComponentAccess get
 
     override var x: Float
         get() = super.x
@@ -40,15 +41,11 @@ class ConeLight: Actor, LightComponent.LightContainer {
             lightComponent.direction = value
         }
 
-    constructor(): super(){
-        setSize(1f, 1f)
-    }
-
     override fun render(batch: Batch, camera: Camera, renderFlags: Int) {
         lightComponent.render(batch, camera, renderFlags)
 
         if((renderFlags and EDITOR) == EDITOR){
-            val icon = icon ?: Resources.gameArt.createSprite("EditorLight")
+            val icon = icon ?: RustyEngine.resorces.gameArt.createSprite("EditorLight")
             this.icon = icon
 
             icon.setBounds(x - width/2, y - height/2, width, height)
@@ -75,5 +72,9 @@ class ConeLight: Actor, LightComponent.LightContainer {
     override fun store() {
         super.store()
         lightComponent.store()
+    }
+
+    init {
+        setSize(1f, 1f)
     }
 }

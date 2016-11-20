@@ -3,7 +3,7 @@ package rustyice.desktop
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.badlogic.gdx.backends.lwjgl.LwjglPreferences
-import rustyice.core.Core
+import rustyice.Core
 import rustyice.core.GeneralSettings
 
 fun main(args: Array<String>) {

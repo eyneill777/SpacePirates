@@ -7,13 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.kotcrab.vis.ui.widget.*
+import ktx.actors.onClick
 import rustyice.core.GeneralSettings
 import rustyice.screens.Screen
-import rustyice.screens.effects.ClickSound
-import rustyice.screens.effects.GuiEffects
-import rustyice.screens.util.ButtonPressed
 
-class SettingsScreen: Screen {
+class SettingsScreen: Screen() {
     private val BUTT_WIDTH = 150f
     private val PAD = 5f
     private val FADE_DURATION = 0.5f
@@ -38,7 +36,7 @@ class SettingsScreen: Screen {
     private val audioButt: TextButton
     private val inputButt: TextButton
 
-    constructor(): super(){
+    init{
         root = VisTable()
         root.setFillParent(true)
 
@@ -47,34 +45,29 @@ class SettingsScreen: Screen {
         bottemPane = VisTable()
 
         videoButt = VisTextButton("Video", "toggle")
-        videoButt.addListener(ButtonPressed{
+        videoButt.onClick { inputEvent, textButton ->
             switchToVideo()
-        })
-        ClickSound.addDefault(videoButt)
+        }
 
         audioButt = VisTextButton("Audio", "toggle")
-        audioButt.addListener(ButtonPressed{
+        audioButt.onClick { inputEvent, textButton ->
                 switchAudio()
-        })
-        ClickSound.addDefault(audioButt)
-        
+        }
+
         inputButt = VisTextButton("Input", "toggle")
-        inputButt.addListener(ButtonPressed {
+        inputButt.onClick { inputEvent, textButton ->
             switchInput()
-        })
-        ClickSound.addDefault(inputButt)
+        }
 
         val backButt = VisTextButton("Back")
-        backButt.addListener(ButtonPressed {
+        backButt.onClick { inputEvent, visTextButton ->
             screenManager.popScreen()
-        })
-        ClickSound.addDefault(backButt)
+        }
 
         val applyButt = VisTextButton("Apply")
-        applyButt.addListener(ButtonPressed {
+        applyButt.onClick { inputEvent, visTextButton ->
                 applySettings()
-        })
-        ClickSound.addDefault(applyButt)
+        }
 
         catButtions = ButtonGroup(videoButt, audioButt, inputButt)
         catButtions.setMinCheckCount(1)
@@ -83,11 +76,9 @@ class SettingsScreen: Screen {
         // <video>
         fullscreenCheck = VisCheckBox("Fullscreen")
         fullscreenCheck.isChecked = GeneralSettings.fullscreen
-        ClickSound.addDefault(fullscreenCheck)
 
         vsyncCheck = VisCheckBox("VSync")
         vsyncCheck.isChecked = GeneralSettings.vsync
-        ClickSound.addDefault(vsyncCheck)
         // </video>
         // <audio>
         soundSlider = VisSlider(0f, 1f, 0.1f, false)
@@ -99,7 +90,7 @@ class SettingsScreen: Screen {
                 soundLevelLabel.setText("${(soundSlider.value * 100).toInt()}%")
                 GeneralSettings.soundVolume = soundSlider.value
             }
-        });
+        })
 
         musicSlider = VisSlider(0f, 1f, 0.1f, false)
         musicLabel = VisLabel("Music: ")
@@ -173,15 +164,11 @@ class SettingsScreen: Screen {
     }
 
     override fun show() {
-        stage.addActor(root);
-
-        GuiEffects.fadeIn(root, FADE_DURATION).start(tweenManager)
+        stage.addActor(root)
     }
 
     override fun hide() {
-        GuiEffects.fadeOut(root, FADE_DURATION, {
-            stage.actors.removeValue(root, true)
-        }).start(tweenManager)
+        stage.actors.removeValue(root, true)
     }
 
     override fun dispose() {}

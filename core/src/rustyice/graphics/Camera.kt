@@ -1,9 +1,7 @@
-package rustyice.graphics;
+package rustyice.graphics
 
-import com.badlogic.gdx.math.MathUtils;
-
-import rustyice.game.Actor;
-import rustyice.game.GameObject
+import com.badlogic.gdx.math.MathUtils
+import rustyice.game.Actor
 
 /**
  * @author gabek

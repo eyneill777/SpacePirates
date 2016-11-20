@@ -1,4 +1,4 @@
-package rustyice.resources;
+package rustyengine.resources;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;

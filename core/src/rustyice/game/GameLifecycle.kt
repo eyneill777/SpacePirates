@@ -20,8 +20,10 @@ abstract class GameLifecycle{
     }
 
     fun reInit(){
-        store()
-        init()
+        if(isInitialized){
+            store()
+            init()
+        }
     }
 
     abstract fun update(delta: Float)

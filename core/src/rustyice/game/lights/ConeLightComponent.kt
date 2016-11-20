@@ -10,9 +10,8 @@ import rustyice.editor.annotations.ComponentProperty
  * @author gabek
  */
 class ConeLightComponent: LightComponent{
+    @ComponentProperty
     var coneDegree: Float
-        @ComponentProperty("Cone Degree") get
-        @ComponentProperty("Cone Degree")
         set(value) {
             field = value
             if(isInitialized){

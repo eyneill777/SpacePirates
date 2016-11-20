@@ -3,6 +3,7 @@ package rustyice.game.actors
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.Sprite
+import rustyengine.RustyEngine
 import rustyice.game.Actor
 import rustyice.game.character.CharacterPhysics
 import rustyice.graphics.Camera
@@ -10,9 +11,9 @@ import rustyice.graphics.NORMAL
 import rustyice.input.Actions
 import rustyice.input.PlayerInput
 import rustyice.physics.Collision
-import rustyice.resources.Resources
+import rustyengine.resources.Resources
 
-class Player: Actor{
+class Player() : Actor() {
     private val characterPhysics: CharacterPhysics
 
     @Transient var playerInput: PlayerInput? = null
@@ -21,17 +22,10 @@ class Player: Actor{
     var speed: Float
     @Transient private var count = 0
 
-    constructor(): super(){
-        characterPhysics = CharacterPhysics()
-        physicsComponent = characterPhysics
-
-        width = 0.98f
-        height = 0.98f
-        speed = 6f
-    }
-
     override fun update(delta: Float) {
         super.update(delta)
+        updateControls()
+
         var fx = 0f
         var fy = 0f
 
@@ -83,14 +77,40 @@ class Player: Actor{
         }
     }
 
+    private fun updateControls(){
+        val game = game
+        if(game != null){
+            if(game.playerInputs.isNotEmpty()){
+                playerInput = game.playerInputs[0]
+            } else {
+                playerInput = null
+            }
+            if(game.cameras.isNotEmpty()){
+                game.cameras[0].target = this
+                game.cameras[0].isTracking = true
+            }
+        } else {
+            playerInput = null
+        }
+    }
+
     override fun init() {
         super.init()
-        val boxSprite = Sprite(Resources.circle)
+
+        val boxSprite = Sprite(RustyEngine.resorces.circle)
         this.boxSprite = boxSprite
 
         boxSprite.color = Color.CYAN
 
         boxSprite.setSize(width, height)
         boxSprite.setOrigin(width / 2, height / 2)
+    }
+
+    init {
+        characterPhysics = CharacterPhysics()
+        physicsComponent = characterPhysics
+        width = 0.98f
+        height = 0.98f
+        speed = 6f
     }
 }

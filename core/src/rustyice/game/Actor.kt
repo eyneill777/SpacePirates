@@ -7,27 +7,30 @@ import rustyice.physics.Collidable
 import rustyice.physics.Collision
 import rustyice.physics.PhysicsComponent
 import rustyice.physics.PointPhysicsComponent
-import rustyice.resources.Resources
+import rustyengine.resources.Resources
 
 abstract class Actor : GameObject(), Collidable {
     override var section: Section? = null
         internal set
 
+    @ComponentAccess
     var physicsComponent: PhysicsComponent = PointPhysicsComponent()
-        @ComponentAccess get
         protected set
 
+    @ComponentProperty
     override var x: Float
-        @ComponentProperty("X") get() = physicsComponent.x
-        @ComponentProperty("X") set(value) { physicsComponent.x = value }
+        get() = physicsComponent.x
+        set(value) { physicsComponent.x = value }
 
+    @ComponentProperty
     override var y: Float
-        @ComponentProperty("Y") get() = physicsComponent.y
-        @ComponentProperty("Y") set(value) { physicsComponent.y = value }
+        get() = physicsComponent.y
+        set(value) { physicsComponent.y = value }
 
+    @ComponentProperty
     override var rotation: Float
-        @ComponentProperty("Rotation") get() = physicsComponent.rotation
-        @ComponentProperty("Rotation") set(value) { physicsComponent.rotation = value }
+        get() = physicsComponent.rotation
+        set(value) { physicsComponent.rotation = value }
 
     var width = 0f
     var height = 0f

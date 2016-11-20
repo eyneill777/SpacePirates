@@ -89,7 +89,7 @@ class TileMap: GameLifecycle() {
         }
     }
     
-    private fun resize(minX: Int, minY: Int, w: Int, h: Int) {
+    fun resize(minX: Int, minY: Int, w: Int, h: Int) {
         if (minX < offsetX || minY < offsetY || w > mapW || h > mapH) {
             Log.debug(String.format("resize %d %d %d %d", minX, minY, w, h))
             val newMap = Array<Tile?>(w * h, { i -> null })

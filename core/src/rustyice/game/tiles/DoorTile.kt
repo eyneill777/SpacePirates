@@ -6,8 +6,8 @@ import rustyice.physics.PhysicsComponent
 /**
  * @author gabek
  */
-class DoorTile: Tile {
-    constructor(): super(false, true){
+class DoorTile() : Tile(false, true) {
+    init {
         tilePhysics = DoorPhysicsComponent()
     }
 }

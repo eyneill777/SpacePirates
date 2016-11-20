@@ -51,9 +51,9 @@ abstract class Tile: GameObject, Collidable {
         get() = tileY * TILE_SIZE
         set(value) {}
 
+    @ComponentProperty
     override var rotation: Float = 0f
-        @ComponentProperty("Rotation") get
-        @ComponentProperty("Rotation") set(value) {
+        set(value) {
             field = MathUtils.round(value / 90f) * 90f
             tilePhysics?.rotation = value
         }

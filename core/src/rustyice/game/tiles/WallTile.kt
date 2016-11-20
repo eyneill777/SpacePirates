@@ -2,19 +2,17 @@ package rustyice.game.tiles
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Sprite
-import rustyice.core.Core
+import rustyengine.RustyEngine
+import rustyice.Core
 import rustyice.editor.annotations.ComponentProperty
 import rustyice.game.physics.RectWallComponent
-import rustyice.resources.Resources
+import rustyengine.resources.Resources
 
-class WallTile: Tile {
-    constructor(): super(true, true){
-        tilePhysics = RectWallComponent()
-    }
+class WallTile() : Tile(true, true) {
 
+    @ComponentProperty
     var color = Color.BLUE
-        @ComponentProperty("Color") get
-        @ComponentProperty("Color") set(value) {
+        set(value) {
             field = value
             sprite?.color = color
         }
@@ -22,9 +20,13 @@ class WallTile: Tile {
     override fun init() {
         super.init()
 
-        val sprite = Sprite(Resources.box)
+        val sprite = Sprite(RustyEngine.resorces.box)
         sprite.color = color
 
         this.sprite = sprite
+    }
+
+    init {
+        tilePhysics = RectWallComponent()
     }
 }

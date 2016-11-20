@@ -20,29 +20,30 @@ abstract class LightComponent: GameLifecycle() {
     @Transient private var light: Light? = null
     @Transient var parent: GameObject? = null
 
+    @ComponentProperty
     var color = DEFAULT_COLOR
-        @ComponentProperty("Color") get
-        @ComponentProperty("Color") set(value) {
+        set(value) {
             field = value
             light?.color = value
         }
 
+    @ComponentProperty
     var static = false
-        @ComponentProperty("Static") get
-        @ComponentProperty("Static") set(value){
+        set(value){
             field = value
             light?.isStaticLight = value
         }
 
+    @ComponentProperty
     var xRay = false
-        @ComponentProperty("XRay") get
-        @ComponentProperty("XRay") set(value){
+        set(value){
             field = value
             light?.isXray = value
         }
+
+    @ComponentProperty
     var distance = 10f
-        @ComponentProperty("Distance") get
-        @ComponentProperty("Distance") set(value){
+        set(value){
             field = value
             reInit()
         }
@@ -74,7 +75,7 @@ abstract class LightComponent: GameLifecycle() {
     override fun init(){
         super.init()
 
-        val rayHandler = parent?.game?.rayHandler
+        val rayHandler = parent?.game?.lightingHandler
             ?: throw MissingParentReference("Game")
 
         val light = buildLight(rayHandler)
@@ -102,6 +103,7 @@ abstract class LightComponent: GameLifecycle() {
     }
 
     interface LightContainer{
-        val lightComponent: LightComponent @ComponentAccess get
+        @ComponentAccess
+        val lightComponent: LightComponent
     }
 }

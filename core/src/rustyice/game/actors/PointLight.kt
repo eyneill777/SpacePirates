@@ -3,22 +3,23 @@ package rustyice.game.actors
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.Sprite
+import rustyengine.RustyEngine
 import rustyice.editor.annotations.ComponentAccess
 import rustyice.game.Actor
 import rustyice.game.lights.LightComponent
 import rustyice.game.lights.PointLightComponent
 import rustyice.graphics.Camera
 import rustyice.graphics.EDITOR
-import rustyice.resources.Resources
+import rustyengine.resources.Resources
 
 
 /**
  * @author gabek
  */
-class PointLight : Actor, LightComponent.LightContainer {
+class PointLight() : Actor(), LightComponent.LightContainer {
     @Transient private var icon: Sprite? = null
+    @ComponentAccess
     override val lightComponent = PointLightComponent()
-        @ComponentAccess get
 
     override var x: Float
         get() = super.x
@@ -34,16 +35,12 @@ class PointLight : Actor, LightComponent.LightContainer {
             lightComponent.y = value
         }
 
-    constructor(): super() {
-        setSize(1f, 1f)
-    }
-
     override fun render(batch: Batch, camera: Camera, renderFlags: Int) {
         lightComponent.render(batch, camera, renderFlags)
 
         if ((renderFlags or EDITOR) == EDITOR) {
             if (icon == null) {
-                icon = Resources.gameArt.createSprite("EditorLight")
+                icon = RustyEngine.resorces.gameArt.createSprite("EditorLight")
             }
 
             icon?.let {
@@ -71,5 +68,9 @@ class PointLight : Actor, LightComponent.LightContainer {
     override fun store() {
         super.store()
         lightComponent.store()
+    }
+
+    init {
+        setSize(1f, 1f)
     }
 }

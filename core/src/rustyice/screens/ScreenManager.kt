@@ -1,43 +1,24 @@
-package rustyice.screens;
+package rustyice.screens
 
-import java.util.HashMap;
-import java.util.Stack;
-
-import aurelienribon.tweenengine.TweenManager;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import rustyice.graphics.PerformanceTracker;
-import rustyice.resources.Resources;
+import com.badlogic.gdx.scenes.scene2d.Stage
+import rustyengine.RustyEngine
+import rustyice.graphics.PerformanceTracker
+import java.util.*
 
 /**
  * Manages which screens are currently active and displays them.
  */
-class ScreenManager {
+class ScreenManager(val tracker: PerformanceTracker? = null){
     val stage: Stage
 
     private val screens: HashMap<String, LazyScreen>
     private val screenHistory: Stack<Screen>
     private var currentScreen: Screen?
 
-    val tweenManager: TweenManager
-    
-    private val tracker: PerformanceTracker?
-
-    /**
-     * @param batch the Sprite batch all the rendering is done on
-     */
-    constructor(batch: SpriteBatch, tracker: PerformanceTracker? = null) {
-        this.tracker = tracker
-
-        val viewport = ScreenViewport()
-        viewport.unitsPerPixel = 0.5f
-
-        stage = Stage(viewport, batch)
-
-        tweenManager = TweenManager()
+    init {
+        stage = Stage(RustyEngine.viewport, RustyEngine.batch)
 
         currentScreen = null
         screens = HashMap()
@@ -126,8 +107,6 @@ class ScreenManager {
      * @param delta in seconds
      */
     fun render(batch: Batch, delta: Float) {
-        tweenManager.update(delta)
-        
         currentScreen?.render(batch, delta)
         stage.act(delta)
         stage.draw()

@@ -15,9 +15,10 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.scenes.scene2d.ui.Widget
 import com.esotericsoftware.minlog.Log
+import rustyengine.RustyEngine
 import rustyice.game.Game
 import rustyice.physics.*
-import rustyice.resources.Resources
+import rustyengine.resources.Resources
 
 class GameDisplay: Widget {
     var isInitialized: Boolean = false
@@ -66,12 +67,13 @@ class GameDisplay: Widget {
         this.fbo = fbo
         fbo.colorBufferTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest)
 
-        game.rayHandler.resizeFBO(width / 4, height / 4)
+        game.lightingHandler.resizeFBO(width / 4, height / 4)
         if(povHandler == null){
             povHandler = RayHandler(game.world, width / 4, height / 4)
+            povHandler.lightMapTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest)
             this.povHandler = povHandler
 
-            povHandler.setLightShader(Resources.povShader)
+            povHandler.setLightShader(RustyEngine.resorces.povShader)
             povHandler.setBlur(false)
             //povHandler.setShadows(false);
 
@@ -83,7 +85,8 @@ class GameDisplay: Widget {
             povCameraView.isSoft = false
             povCameraView.setContactFilter(CAMERA_POV.toShort(), 0, WALL.toShort())
         } else {
-            povHandler.resizeFBO(width / 4, height / 4);
+            povHandler.resizeFBO(width / 4, height / 4)
+            povHandler.lightMapTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest)
         }
     }
 
@@ -147,13 +150,13 @@ class GameDisplay: Widget {
 
         updateProjection()
         if (lighting) {
-            //game.getRayHandler().setLightMapRendering(false);
-            game.rayHandler.setAmbientLight(0f, 0f, 0f, 0.01f)
-            //game.getRayHandler().setShadows(true);
-            //game.getRayHandler().setBlur(true);
-            game.rayHandler.setCombinedMatrix(ortho)
-            game.rayHandler.update()
-            game.rayHandler.prepareRender()
+            //game.getLightingHandler().setLightMapRendering(false);
+            game.lightingHandler.setAmbientLight(0f, 0f, 0f, 0.01f)
+            //game.getLightingHandler().setShadows(true);
+            //game.getLightingHandler().setBlur(true);
+            game.lightingHandler.setCombinedMatrix(ortho)
+            game.lightingHandler.update()
+            game.lightingHandler.prepareRender()
             Gdx.gl20.glDisable(GL20.GL_BLEND)
         }
 
@@ -183,7 +186,7 @@ class GameDisplay: Widget {
 
         if (lighting) {
             Gdx.gl20.glEnable(GL20.GL_BLEND)
-            game.rayHandler.renderOnly()
+            game.lightingHandler.renderOnly()
         }
 
         if (pov && povHandler != null){
