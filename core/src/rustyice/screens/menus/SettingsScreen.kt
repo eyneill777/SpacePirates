@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.kotcrab.vis.ui.widget.*
 import ktx.actors.onClick
-import rustyice.core.GeneralSettings
+import rustyengine.GeneralSettings
 import rustyice.screens.Screen
 
 class SettingsScreen: Screen() {

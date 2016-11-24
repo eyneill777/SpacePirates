@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.github.salomonbrys.kodein.instance
+import rustyengine.RustyEngine
 import rustyice.game.Actor
 import rustyice.game.Game
 import rustyice.game.tiles.TILE_SIZE

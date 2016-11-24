@@ -25,7 +25,6 @@ allprojects {
         ktxVersion = '1.9.4-b2'
         lmlVersion = '1.8'
         kodeinVersion = '3.1.0'
-        artemisVersion = '2.0.0'
     }
 
     repositories {
@@ -60,7 +59,6 @@ project(":core") {
         compile "com.github.salomonbrys.kodein:kodein:$kodeinVersion"
         compile "com.github.salomonbrys.kodein:kodein-conf:$kodeinVersion"
 
-
         compile "com.github.czyzby:ktx-vis:$ktxVersion"
         compile "com.github.czyzby:ktx-actors:$ktxVersion"
         //compile "com.github.czyzby:gdx-lml-vis:$lmlVersion.$gdxVersion"
@@ -71,8 +69,6 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
 
         compile "com.esotericsoftware:kryo:$kryoVersion"
-        compile "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
-        compile "net.onedaybeard.artemis:artemis-odb-serializer-kryo:$artemisVersion"
 
         compile "com.kotcrab.vis:vis-ui:$visuiVersion"
 

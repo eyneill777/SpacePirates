@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.*
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import rustyice.editor.annotations.ComponentProperty
 import rustyice.graphics.Camera
+import rustyice.graphics.RenderLayer
 import rustyice.physics.Collision
 import rustyice.physics.PhysicsComponent
 
@@ -147,5 +148,5 @@ open class SBPhysicsComponent: PhysicsComponent() {
         return fix
     }
 
-    override fun render(batch: Batch, camera: Camera) {}
+    override fun render(batch: Batch, camera: Camera, layer: RenderLayer) {}
 }

@@ -2,6 +2,7 @@ package rustyice.game
 
 import com.badlogic.gdx.graphics.g2d.Batch
 import rustyice.graphics.Camera
+import rustyice.graphics.RenderLayer
 
 abstract class GameLifecycle{
     @Transient
@@ -27,5 +28,5 @@ abstract class GameLifecycle{
     }
 
     abstract fun update(delta: Float)
-    abstract fun render(batch: Batch, camera: Camera)
+    abstract fun render(batch: Batch, camera: Camera, layer: RenderLayer)
 }

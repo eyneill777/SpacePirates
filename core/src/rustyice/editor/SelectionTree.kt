@@ -3,6 +3,7 @@ package rustyice.editor
 import com.badlogic.gdx.scenes.scene2d.ui.Tree
 import com.kotcrab.vis.ui.widget.VisLabel
 import com.kotcrab.vis.ui.widget.VisTree
+import rustyice.game.GameObject
 
 import java.util.LinkedList
 import kotlin.reflect.KClass
@@ -20,7 +21,7 @@ class SelectionTree{
         nodeStack = LinkedList()
     }
 
-    fun addLeaf(title: String, data: KClass<*>){
+    fun addLeaf(title: String, data: () -> GameObject){
         val node = Tree.Node(VisLabel(title))
         node.`object` = data
         if(nodeStack.isEmpty()){

@@ -5,9 +5,9 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.*
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef
-import rustyice.game.MissingParentReference
 import rustyice.game.tiles.TILE_SIZE
 import rustyice.graphics.Camera
+import rustyice.graphics.RenderLayer
 import rustyice.physics.*
 
 /**
@@ -40,12 +40,8 @@ class DoorPhysicsComponent: TilePhysicsComponent() {
     override fun init() {
         super.init()
 
-        val parentTile = parentTile
-            ?: throw MissingParentReference("Tile")
-
-        val world = parentTile.section?.game?.world
-                ?: throw MissingParentReference("Game")
-
+        val parentTile = parentTile!!
+        val world = parentTile.section!!.game!!.world
 
         val sensorBodyDef = BodyDef()
         sensorBodyDef.type = BodyDef.BodyType.StaticBody
@@ -115,8 +111,7 @@ class DoorPhysicsComponent: TilePhysicsComponent() {
 
     override fun store() {
         super.store()
-        val world = parent?.game?.world
-            ?: throw MissingParentReference("Game")
+        val world = parent!!.game!!.world
 
         world.destroyJoint(jointLeft)
         jointLeft = null
@@ -148,7 +143,7 @@ class DoorPhysicsComponent: TilePhysicsComponent() {
         targetPercentOpen = if(clock.toInt() % 2 == 0) 0f else 1f
     }
 
-    override fun render(batch: Batch, camera: Camera) {}
+    override fun render(batch: Batch, camera: Camera, layer: RenderLayer) {}
 
     override fun beginCollision(collision: Collision) {}
     override fun endCollision(collision: Collision) {}

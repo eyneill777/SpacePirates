@@ -21,8 +21,8 @@ class GameDisplay: Widget() {
     var fbo: FrameBuffer? = null
     val ortho: OrthographicCamera
 
-    var camera: Camera? = null
     var game: Game? = null
+    var camera: Camera? = null
 
     var debugRenderer: Box2DDebugRenderer? = null
 
@@ -51,7 +51,6 @@ class GameDisplay: Widget() {
     }
 
     private fun initFBO(width: Int, height: Int){
-        val game = game!!
         val fbo: FrameBuffer
 
         fbo = FrameBuffer(Format.RGBA8888, width, height, false)
@@ -94,14 +93,10 @@ class GameDisplay: Widget() {
         }
     }
 
-    fun render(batch: Batch) {
-        val camera = camera!!
-        val game = game!!
-
+    fun prepareRender(){
         if (!isInitialized) {
             init()
         }
-        val fbo = fbo!!
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.B)){
             if(debugRenderer == null){
@@ -113,16 +108,24 @@ class GameDisplay: Widget() {
         }
 
         updateProjection()
+    }
+
+    fun render(batch: Batch) {
+        prepareRender()
+
+        val fbo = fbo!!
+        val game = game!!
+        val camera = camera!!
+
+        batch.projectionMatrix = ortho.projection
+        batch.transformMatrix = ortho.view
 
         fbo.begin()
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        batch.projectionMatrix = ortho.projection
-        batch.transformMatrix = ortho.view
-
         batch.begin()
-        game.render(batch, camera)
+        game.render(batch, camera, RenderLayer.ACTORS)
         batch.end()
 
         debugRenderer?.render(game.world, ortho.combined)
@@ -151,12 +154,8 @@ class GameDisplay: Widget() {
             val fbo = fbo!!
 
             fbo.dispose()
-            //lightSharder.dispose();
-            //lightMesh.dispose();
 
             this.fbo = null
-            //lightSharder = null;
-            //lightMesh = null;
             isInitialized = false
 
             debugRenderer?.dispose()

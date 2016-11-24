@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import rustyice.graphics.Camera
+import rustyice.graphics.RenderLayer
 import rustyice.input.PlayerInput
 import rustyice.physics.Collidable
 import rustyice.physics.Collision
@@ -12,26 +13,18 @@ import java.util.*
 class Game: ContactListener {
     private val UPDATE_RATE = 1/60f
 
-    val playerInputs: MutableList<PlayerInput>
-    val cameras: MutableList<Camera>
-
     val world: World
-
-
 
     var currentSection: Section? = null
         private set
 
     private var sectionToLoad: Section? = null
     private val collisions: ArrayList<Collision>
-    private var leftOverTime: Float = 0f
+    private var timeAccumulator: Float = 0f
 
     init {
         world = World(Vector2.Zero, true)
         world.setContactListener(this)
-
-        playerInputs = ArrayList()
-        cameras = ArrayList()
 
         sectionToLoad = Section()
 
@@ -65,10 +58,10 @@ class Game: ContactListener {
     fun update(delta: Float) {
         finishLoadingSection()
         
-        leftOverTime += delta
+        timeAccumulator += delta
 
-        while (leftOverTime > 0) {
-            leftOverTime -= UPDATE_RATE
+        while (timeAccumulator > 0) {
+            timeAccumulator -= UPDATE_RATE
 
             world.step(UPDATE_RATE, 6, 2)
 
@@ -85,8 +78,8 @@ class Game: ContactListener {
         }
     }
 
-    fun render(batch: Batch, camera: Camera) {
-        currentSection?.render(batch, camera)
+    fun render(batch: Batch, camera: Camera, layer: RenderLayer) {
+        currentSection?.render(batch, camera, layer)
     }
 
     fun dispose() {

@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.Array
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.io.Input
 import com.esotericsoftware.kryo.io.Output
-import com.github.salomonbrys.kodein.instance
 import com.kotcrab.vis.ui.widget.MenuBar
 import com.kotcrab.vis.ui.widget.MenuItem
 import com.kotcrab.vis.ui.widget.VisTable
@@ -31,8 +30,8 @@ import java.util.zip.InflaterInputStream
  * @author Gabriel Keith
  */
 class EditorScreen() : Screen() {
-    val game: Game = RustyEngine.instance()
-    val kryo: Kryo = RustyEngine.instance()
+    val game: Game = RustyEngine.game
+    val kryo: Kryo = RustyEngine.kryo
 
     private val root: VisTable
 

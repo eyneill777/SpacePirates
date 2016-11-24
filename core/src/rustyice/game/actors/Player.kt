@@ -7,6 +7,7 @@ import rustyengine.RustyEngine
 import rustyice.game.Actor
 import rustyice.game.character.CharacterPhysics
 import rustyice.graphics.Camera
+import rustyice.graphics.RenderLayer
 import rustyice.input.Actions
 import rustyice.input.PlayerInput
 import rustyice.physics.Collision
@@ -62,7 +63,7 @@ class Player() : Actor() {
         count--
     }
 
-    override fun render(batch: Batch, camera: Camera) {
+    override fun render(batch: Batch, camera: Camera, layer: RenderLayer) {
         val boxSprite = boxSprite
         if(boxSprite != null){
             boxSprite.x = x - width / 2

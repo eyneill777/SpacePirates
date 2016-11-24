@@ -7,6 +7,7 @@ import rustyengine.RustyEngine
 import rustyice.game.Actor
 import rustyice.game.physics.SBPhysicsComponent
 import rustyice.graphics.Camera
+import rustyice.graphics.RenderLayer
 import rustyice.physics.LARGE
 import rustyice.physics.WALL
 
@@ -22,7 +23,7 @@ class TestActor() : Actor() {
         super.update(delta)
     }
 
-    override fun render(batch: Batch, camera: Camera) {
+    override fun render(batch: Batch, camera: Camera, layer: RenderLayer) {
         val testSprite = testSprite
         if(testSprite != null){
             testSprite.x = x - width / 2

@@ -3,6 +3,7 @@ package rustyice.game
 import com.badlogic.gdx.graphics.g2d.Batch
 import rustyice.game.tiles.TileMap
 import rustyice.graphics.Camera
+import rustyice.graphics.RenderLayer
 import java.util.*
 
 class Section: GameLifecycle() {
@@ -69,15 +70,15 @@ class Section: GameLifecycle() {
         removeList.clear()
     }
 
-    override fun render(batch: Batch, camera: Camera) {
-        tiles.render(batch, camera)
+    override fun render(batch: Batch, camera: Camera, layer: RenderLayer) {
+        tiles.render(batch, camera, layer)
 
         for(actor in actors) {
             if(actor.x + actor.width / 2 > camera.x - camera.halfRenderSize
                     && actor.x - actor.width / 2 < camera.x + camera.halfRenderSize
                     && actor.y + actor.height / 2 > camera.y - camera.halfRenderSize
                     && actor.y - actor.height / 2 < camera.y + camera.halfRenderSize) {
-                actor.render(batch, camera)
+                actor.render(batch, camera, layer)
             }
         }
     }

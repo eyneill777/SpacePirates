@@ -7,6 +7,7 @@ import rustyice.editor.annotations.ComponentProperty
 import rustyice.game.GameObject
 import rustyice.game.Section
 import rustyice.graphics.Camera
+import rustyice.graphics.RenderLayer
 import rustyice.physics.*
 
 abstract class Tile: GameObject, Collidable {
@@ -72,7 +73,7 @@ abstract class Tile: GameObject, Collidable {
         tilePhysics?.update(delta)
     }
 
-    override fun render(batch: Batch, camera: Camera) {
+    override fun render(batch: Batch, camera: Camera, layer: RenderLayer) {
         sprite?.draw(batch)
     }
 

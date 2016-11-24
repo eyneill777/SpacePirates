@@ -4,12 +4,14 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.badlogic.gdx.backends.lwjgl.LwjglPreferences
 import rustyice.Core
-import rustyice.core.GeneralSettings
+import rustyengine.GeneralSettings
 
 fun main(args: Array<String>) {
     //Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-    //config.useOpenGL3(true, 3, 2);
+
     val config = LwjglApplicationConfiguration()
+    config.useGL30 = true
+
 
     GeneralSettings.preferences =  LwjglPreferences("setting.perf", ".rustyice")
 

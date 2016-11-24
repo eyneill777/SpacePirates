@@ -68,22 +68,34 @@ class EditorSelectionPane {
     }
 
     private fun buildActorTree(){
-        actorTree.addLeaf("Player", Player::class)
-        actorTree.addLeaf("Test Object", TestActor::class)
+        actorTree.addLeaf("Player"){
+            Player()
+        }
+        actorTree.addLeaf("Test Object"){
+            TestActor()
+        }
     }
 
     private fun buildTileTree(){
         tileTree.pushBranch("Floors")
-        tileTree.addLeaf("Boarding", FloorTile::class)
+        tileTree.addLeaf("Boarding"){
+            FloorTile()
+        }
         tileTree.popBranch()
 
         tileTree.pushBranch("Walls")
-        tileTree.addLeaf("Wall", WallTile::class)
-        tileTree.addLeaf("Glass", GlassTile::class)
+        tileTree.addLeaf("Wall"){
+            WallTile()
+        }
+        tileTree.addLeaf("Glass"){
+            GlassTile()
+        }
         tileTree.popBranch()
 
         tileTree.pushBranch("Machine")
-        tileTree.addLeaf("Door", DoorTile::class)
+        tileTree.addLeaf("Door"){
+            DoorTile()
+        }
         tileTree.popBranch()
     }
 

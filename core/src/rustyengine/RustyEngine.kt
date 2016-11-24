@@ -7,22 +7,19 @@ import com.badlogic.gdx.physics.box2d.Box2D
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.esotericsoftware.kryo.Kryo
-import com.esotericsoftware.kryo.serializers.CompatibleFieldSerializer
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.KodeinAware
-import com.github.salomonbrys.kodein.conf.ConfigurableKodein
 import com.kotcrab.vis.ui.widget.file.FileChooser
 import rustyengine.resources.Resources
 import rustyice.game.Game
 import rustyice.graphics.PerformanceTracker
 import rustyice.screens.ScreenManager
 
-object RustyEngine: KodeinAware{
-    override val kodein: ConfigurableKodein = ConfigurableKodein()
-
+object RustyEngine{
     lateinit var appid: String
 
     lateinit var resorces: Resources private set
+    lateinit var game: Game private set
+    lateinit var kryo: Kryo private set
+
     lateinit var batch: SpriteBatch private set
     lateinit var viewport: Viewport private set
     lateinit var screenManager: ScreenManager private set
@@ -33,11 +30,12 @@ object RustyEngine: KodeinAware{
     fun init(appid: String, tracker: PerformanceTracker? = null){
         this.appid = appid
 
+        Box2D.init()
+
         this.tracker = tracker
 
         resorces = Resources()
         resorces.init()
-        resorces.startLoading()
         batch = SpriteBatch()
 
         val viewport = ScreenViewport()
@@ -47,6 +45,9 @@ object RustyEngine: KodeinAware{
         FileChooser.setDefaultPrefsName("$appid.filechooser")
         screenManager = ScreenManager(tracker)
         Gdx.input.inputProcessor = screenManager.stage
+
+        kryo = Kryo()
+        game = Game()
     }
 
     fun resize(w: Int, h: Int){
@@ -66,6 +67,10 @@ object RustyEngine: KodeinAware{
     fun dispose(){
         batch.dispose()
         screenManager.dispose()
+    }
+
+    fun initKryo(onInit: Kryo.() -> Unit){
+        onInit(kryo)
     }
 
     fun initScreens(onInit: ScreenManager.() -> Unit ){

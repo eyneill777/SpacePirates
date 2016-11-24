@@ -13,7 +13,7 @@ import com.github.salomonbrys.kodein.singleton
 import com.kotcrab.vis.ui.VisUI
 import rustyengine.RustyEngine
 import rustyengine.resources.Resources
-import rustyice.core.GeneralSettings
+import rustyengine.GeneralSettings
 import rustyice.editor.EditorScreen
 import rustyice.game.Game
 import rustyice.graphics.PerformanceTracker
@@ -36,16 +36,6 @@ object Core: ApplicationListener {
         tracker = PerformanceTracker(VisUI.getSkin().getFont("default-font"), false)
 
         Box2D.init()
-        val coreModule = Kodein.Module {
-            bind<Game>() with singleton { Game() }
-            bind<Kryo>() with singleton {
-                val kryo = Kryo()
-                kryo.setDefaultSerializer(CompatibleFieldSerializer::class.java)
-                return@singleton kryo
-            }
-        }
-
-        RustyEngine.kodein.addImport(coreModule, false)
 
         RustyEngine.init("rustyice", tracker)
         RustyEngine.initScreens {
@@ -81,7 +71,6 @@ object Core: ApplicationListener {
 
     override fun dispose() {
         RustyEngine.dispose()
-        RustyEngine.instance<Game>().dispose()
 
         GeneralSettings.save()
     }

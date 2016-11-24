@@ -1,16 +1,14 @@
 package rustyice.game.tiles
 
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.esotericsoftware.minlog.Log
 import rustyice.game.GameLifecycle
-import rustyice.game.MissingParentReference
-
 import rustyice.game.Section
 import rustyice.graphics.Camera
+import rustyice.graphics.RenderLayer
 
 class TileMap: GameLifecycle() {
     @Transient
@@ -124,7 +122,7 @@ class TileMap: GameLifecycle() {
                        (y / TILE_SIZE - if(y<0) 1 else 0).toInt())
     }
 
-    override fun render(batch: Batch, camera: Camera) {
+    override fun render(batch: Batch, camera: Camera, layer: RenderLayer) {
         val startX: Int = ((camera.x - camera.halfRenderSize) / TILE_SIZE).toInt() - 1
         val startY: Int = ((camera.y - camera.halfRenderSize) / TILE_SIZE).toInt() - 1
         val endX: Int = ((camera.x + camera.halfRenderSize) / TILE_SIZE).toInt() + 1
@@ -132,7 +130,7 @@ class TileMap: GameLifecycle() {
 
         for (y in startY .. endY) {
             for (x in startX .. endX) {
-                getTile(x, y)?.render(batch, camera)
+                getTile(x, y)?.render(batch, camera, layer)
             }
         }
 
@@ -147,7 +145,7 @@ class TileMap: GameLifecycle() {
     override fun init() {
         super.init()
 
-        val world = section.game?.world ?: throw MissingParentReference("Game")
+        val world = section.game!!.world
 
         val bodyDef = BodyDef()
         bodyDef.type = BodyType.StaticBody

@@ -9,6 +9,7 @@ import rustyice.game.tiles.TILE_SIZE
 import rustyice.game.tiles.Tile
 import rustyice.game.tiles.TileMap
 import rustyice.graphics.Camera
+import rustyice.graphics.RenderLayer
 import rustyice.physics.*
 
 /**
@@ -146,7 +147,7 @@ class RectWallComponent: TilePhysicsComponent() {
 
     override fun update(delta: Float) { }
 
-    override fun render(batch: Batch, camera: Camera) {}
+    override fun render(batch: Batch, camera: Camera, layer: RenderLayer) {}
 
     override fun beginCollision(collision: Collision) { }
 

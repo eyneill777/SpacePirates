@@ -56,14 +56,6 @@ class GameDisplayScreen() : Screen() {
     override fun show() {
         stage.addActor(root)
         root.pack()
-
-        game.playerInputs.clear()
-        game.playerInputs.add(Actions.desktopDefault())
-
-        game.cameras.clear()
-        game.cameras.add(camera)
-
-        game.finishLoadingSection()
     }
 
     override fun hide() {
@@ -83,6 +75,7 @@ class GameDisplayScreen() : Screen() {
         camera = Camera(12f, 12f)
         display.game = game
         display.camera = camera
+
         pauseWindow = VisWindow("Pause")
         val pad = 5f
         val prefWidth = 180f
